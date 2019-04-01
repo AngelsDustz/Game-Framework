@@ -4,8 +4,7 @@ import group3.griddie.game.Game;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public class App extends Application {
-
+public class Griddie extends Application {
     private Game game;
 
     @Override
