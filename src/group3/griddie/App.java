@@ -1,7 +1,9 @@
 package group3.griddie;
 
-import group3.griddie.view.RootView;
+import group3.griddie.controller.menu.MainMenuController;
+import group3.griddie.game.Game;
 import group3.griddie.view.View;
+import group3.griddie.view.menu.main.MainMenuView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -15,7 +17,11 @@ public class App extends Application {
         stage = primaryStage;
         stage.show();
 
-        newScene(new RootView());
+        newScene(new MainMenuView());
+    }
+
+    public void launchGame(Game game) {
+        game.init();
     }
 
     public static void newScene(View view) {

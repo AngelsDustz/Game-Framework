@@ -1,6 +1,8 @@
 package group3.griddie.model.board;
 
-public class Board {
+import group3.griddie.model.Model;
+
+public class Board extends Model {
 
     private int width;
     private int height;

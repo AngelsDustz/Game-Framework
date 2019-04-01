@@ -4,14 +4,17 @@ import group3.griddie.model.board.Board;
 
 public abstract class Game {
 
-    private Board board;
+    protected Board board;
 
-    public Game() {
+    private String title;
 
+    public Game(String title) {
+        this.title = title;
     }
 
-    protected void init(int width, int height) {
-        this.board = new Board(width, height);
-    }
+    public abstract void init();
 
+    public String getTitle() {
+        return title;
+    }
 }
