@@ -1,8 +1,8 @@
 package group3.griddie.model.board;
 
-public class Node {
+public class Cell {
 
-    public Node() {
+    public Cell() {
 
     }
 
