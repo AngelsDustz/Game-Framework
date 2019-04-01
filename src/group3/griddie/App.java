@@ -11,16 +11,18 @@ import javafx.stage.Stage;
 public class App extends Application {
 
     private static Stage stage;
+    private static Game game;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
         stage.show();
 
-        newScene(new MainMenuView());
+        newScene((new MainMenuController()).getView());
     }
 
-    public void launchGame(Game game) {
+    public static void launchGame(Game game) {
+        App.game = game;
         game.init();
     }
 

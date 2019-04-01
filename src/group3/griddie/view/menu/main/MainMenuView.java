@@ -11,24 +11,19 @@ public class MainMenuView extends View {
     private GameButton ortelloButton;
     private GameButton ticTacToeButton;
 
-    public MainMenuView() {
-        super(null, new VBox());
+    public MainMenuView(MainMenuController controller) {
+        super(controller, null, new VBox());
     }
 
     @Override
-    protected Controller createController() {
-        return new MainMenuController(this);
-    }
-
-    @Override
-    protected void createView() {
+    public void initializeView() {
         VBox root = (VBox) getParent();
         root.getChildren().add(ortelloButton = new GameButton("Ortello"));
         root.getChildren().add(ticTacToeButton = new GameButton("TicTacToe"));
     }
 
     @Override
-    protected void createControls() {
+    public void initializeControls() {
         MainMenuController controller = (MainMenuController) getController();
         ortelloButton.setOnMouseClicked(event -> controller.startOrtello());
         ticTacToeButton.setOnMouseClicked(event -> controller.startTicTacToe());

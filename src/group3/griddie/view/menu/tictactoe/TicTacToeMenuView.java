@@ -11,24 +11,19 @@ public class TicTacToeMenuView extends View {
     private MenuButton startButton;
     private MenuButton quitButton;
 
-    public TicTacToeMenuView() {
-        super(null, new VBox());
+    public TicTacToeMenuView(TicTacToeMenuController controller) {
+        super(controller, null, new VBox());
     }
 
     @Override
-    protected Controller createController() {
-        return new TicTacToeMenuController(this);
-    }
-
-    @Override
-    protected void createView() {
+    public void initializeView() {
         VBox root = (VBox) getParent();
         root.getChildren().add(startButton = new MenuButton("Start"));
         root.getChildren().add(quitButton = new MenuButton("Quit"));
     }
 
     @Override
-    protected void createControls() {
+    public void initializeControls() {
         TicTacToeMenuController controller = (TicTacToeMenuController) getController();
     }
 }

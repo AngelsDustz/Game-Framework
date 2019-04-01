@@ -5,8 +5,24 @@ import group3.griddie.view.View;
 
 public abstract class Controller {
 
-    public Controller(View view, Model model) {
+    private Model model;
+    private View view;
 
+    public Controller(Model model) {
+        this.model = model;
+        view = createView();
+
+        view.initializeView();
+        view.initializeControls();
     }
 
+    protected abstract View createView();
+
+    public Model getModel() {
+        return model;
+    }
+
+    public View getView() {
+        return view;
+    }
 }

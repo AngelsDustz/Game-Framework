@@ -1,28 +1,24 @@
 package group3.griddie.view.board;
 
-import group3.griddie.controller.Controller;
-import group3.griddie.model.Model;
+import group3.griddie.controller.board.BoardController;
+import group3.griddie.model.board.Board;
 import group3.griddie.view.View;
+import javafx.scene.Parent;
 import javafx.scene.layout.GridPane;
 
 public class BoardView extends View {
 
-    public BoardView(Model model) {
-        super(model, new GridPane());
+    public BoardView(BoardController controller, Board board) {
+        super(controller, board, new GridPane());
     }
 
     @Override
-    protected Controller createController() {
-        return null;
-    }
-
-    @Override
-    protected void createView() {
+    public void initializeView() {
 
     }
 
     @Override
-    protected void createControls() {
+    public void initializeControls() {
 
     }
 }
