@@ -12,6 +12,7 @@ public class TicTacToe extends Game {
 
     @Override
     public void init() {
-        setBoard(new Board(3, 3, Board.Pattern.NONE));
+        System.out.println("Initializing tic tac toe");
+        setBoard(new Board(3, 3, Board.Pattern.CHECKER));
     }
 }

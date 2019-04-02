@@ -19,8 +19,7 @@ public abstract class Game {
     public abstract void init();
 
     protected void setBoard(Board board) {
-        this.board = board;
-        pane.setCenter((new BoardController(board)).getView().getParent());
+        pane.setCenter((new BoardController(this.board = board)).getView().getParent());
     }
 
     public String getTitle() {

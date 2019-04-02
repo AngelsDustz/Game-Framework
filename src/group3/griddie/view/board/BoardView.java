@@ -15,6 +15,7 @@ public class BoardView extends View {
 
     @Override
     public void initializeView() {
+        System.out.println("Initializing board view");
         Board board = (Board) getModel();
         GridPane root = (GridPane) getParent();
 
