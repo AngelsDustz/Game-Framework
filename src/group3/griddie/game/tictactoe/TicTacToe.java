@@ -4,14 +4,18 @@ import group3.griddie.game.Game;
 import group3.griddie.model.board.Board;
 
 public class TicTacToe extends Game {
+    private Board board;
 
-    public TicTacToe()
-    {
+    public TicTacToe() {
         super("Tic Tac Toe");
     }
 
     @Override
     public void init() {
-        setBoard(new Board(3, 3, Board.Pattern.NONE));
+        if (this.board == null) {
+            this.board = new Board(3, 3, Board.Pattern.NONE);
+        }
+
+        setBoard(this.board);
     }
 }

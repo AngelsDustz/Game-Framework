@@ -5,10 +5,9 @@ import group3.griddie.model.board.Board;
 import javafx.scene.layout.BorderPane;
 
 public abstract class Game {
-
-    private String title;
-    private BorderPane pane;
-    private Board board;
+    private String          title;
+    private BorderPane      pane;
+    private BoardController controller;
 
     public Game(String title) {
         this.title = title;
@@ -19,8 +18,8 @@ public abstract class Game {
     public abstract void init();
 
     protected void setBoard(Board board) {
-        this.board = board;
-        pane.setCenter((new BoardController(board)).getView().getParent());
+        this.controller = new BoardController(board);
+        pane.setCenter(this.controller.getView().getParent());
     }
 
     public String getTitle() {
