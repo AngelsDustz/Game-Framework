@@ -1,4 +1,7 @@
 package group3.griddie.model;
 
-public abstract  class Model {
+import java.util.Observable;
+
+public abstract class Model extends Observable {
+
 }
