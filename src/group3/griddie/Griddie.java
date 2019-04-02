@@ -1,20 +1,29 @@
 package group3.griddie;
 
-import group3.griddie.view.RootView;
+import group3.griddie.controller.menu.MainMenuController;
+import group3.griddie.game.Game;
 import group3.griddie.view.View;
+import group3.griddie.view.menu.main.MainMenuView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Griddie extends Application {
     private static Stage stage;
+    private static Game game;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
         stage.show();
 
-        newScene(new RootView());
+        newScene((new MainMenuController()).getView());
+    }
+
+    public static void launchGame(Game game) {
+        App.game = game;
+        stage.setScene(new Scene(game.getPane()));
+        game.init();
     }
 
     public static void newScene(View view) {

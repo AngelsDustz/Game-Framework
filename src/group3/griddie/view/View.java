@@ -18,6 +18,10 @@ public abstract class View<C extends Controller> {
         return controller;
     }
 
+    public Model getModel() {
+        return model;
+    }
+
     public void setController(C controller) {
         this.controller = controller;
     }
@@ -25,4 +29,8 @@ public abstract class View<C extends Controller> {
     public Parent getParent() {
         return parent;
     }
+
+    public abstract void initializeView();
+
+    public abstract void initializeControls();
 }
