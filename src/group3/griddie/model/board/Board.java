@@ -12,14 +12,22 @@ public class Board extends Model {
     private int width;
     private int height;
     private Pattern pattern;
-    private Grid grid;
+    private Cell[][] cells;
 
     public Board(int width, int height, Pattern pattern) {
         this.width = width;
         this.height = height;
         this.pattern = pattern;
 
-        grid = new Grid(width, height);
+        cells = new Cell[width][height];
+    }
+
+    public Cell getCell(int column, int row) {
+        return cells[column][row];
+    }
+
+    public void setCell(Cell cell, int column, int row) {
+        cells[column][row] = cell;
     }
 
     public int getWidth() {

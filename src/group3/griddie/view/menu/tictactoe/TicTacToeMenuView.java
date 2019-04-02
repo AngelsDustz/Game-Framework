@@ -1,11 +1,11 @@
 package group3.griddie.view.menu.tictactoe;
 
 import group3.griddie.controller.menu.TicTacToeMenuController;
-import group3.griddie.view.View;
+import group3.griddie.view.RootView;
 import group3.griddie.view.menu.tictactoe.component.MenuButton;
 import javafx.scene.layout.VBox;
 
-public class TicTacToeMenuView extends View<TicTacToeMenuController> {
+public class TicTacToeMenuView extends RootView<TicTacToeMenuController> {
     private MenuButton startButton;
     private MenuButton quitButton;
 

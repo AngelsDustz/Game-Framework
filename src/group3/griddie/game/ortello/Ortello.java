@@ -10,7 +10,12 @@ public class Ortello extends Game {
     }
 
     @Override
+    public Board createBoard() {
+        return null;
+    }
+
+    @Override
     public void init() {
-        setBoard(new Board(10, 10, Board.Pattern.CHECKER));
+
     }
 }
