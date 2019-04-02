@@ -10,7 +10,6 @@ import javafx.scene.paint.Color;
 public class BoardView extends View<BoardController> {
     public BoardView(BoardController controller, Board board) {
         super(board, new GridPane());
-
         this.setController(controller);
     }
 
@@ -20,25 +19,17 @@ public class BoardView extends View<BoardController> {
         Board board = (Board) getModel();
         GridPane root = (GridPane) getParent();
 
-        switch (board.getPattern()) {
-            case NONE:
-
-                for (int c = 0; c < board.getHeight(); c++) {
-                    for (int r = 0; r < board.getWidth(); r++) {
+        for (int c = 0; c < board.getHeight(); c++) {
+            for (int r = 0; r < board.getWidth(); r++) {
+                switch (board.getPattern()) {
+                    case NONE:
                         root.add(new CellView(Color.WHITE), c, r);
-                    }
-                }
-
-                break;
-            case CHECKER:
-
-                for (int c = 0; c < board.getHeight(); c++) {
-                    for (int r = 0; r < board.getWidth(); r++) {
+                        break;
+                    case CHECKER:
                         root.add(new CellView((c + r) % 2 == 0 ? Color.WHITE : Color.BLACK), c, r);
-                    }
+                        break;
                 }
-
-                break;
+            }
         }
     }
 

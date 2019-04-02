@@ -5,6 +5,7 @@ import group3.griddie.model.Model;
 import javafx.scene.Parent;
 
 public abstract class View<C extends Controller> {
+
     private C controller;
     private Model model;
     private Parent parent;
