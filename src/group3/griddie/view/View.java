@@ -20,6 +20,10 @@ public abstract class View {
         return controller;
     }
 
+    public Model getModel() {
+        return model;
+    }
+
     public Parent getParent() {
         return parent;
     }

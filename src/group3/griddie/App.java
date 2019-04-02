@@ -23,6 +23,7 @@ public class App extends Application {
 
     public static void launchGame(Game game) {
         App.game = game;
+        stage.setScene(new Scene(game.getPane()));
         game.init();
     }
 
