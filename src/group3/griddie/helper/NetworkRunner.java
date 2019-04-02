@@ -25,7 +25,7 @@ public class NetworkRunner {
     private Timer timer1;
 
     //commands for sending to the server
-    public enum Commands {LOGIN("login"), LOGOUT("logout"), SUBSCRIBE_REVERSI("subscribe reversi"),
+    public enum Commands {LOGIN("login"), LOGOUT("logout"), SUBSCRIBE_REVERSI("subscribe Reversi"),
         SUBSCRIBE_TICTACTOE("subscribe Tic-tac-toe"), MOVE("move"), CHALLENGE("challenge"),
         CHALLENGE_ACCEPT("challenge accept"), GET("get"), FORFEIT("forfeit"), HELP("help"),
         ;
