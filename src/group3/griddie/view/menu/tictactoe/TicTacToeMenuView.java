@@ -1,18 +1,18 @@
 package group3.griddie.view.menu.tictactoe;
 
-import group3.griddie.controller.Controller;
 import group3.griddie.controller.menu.TicTacToeMenuController;
 import group3.griddie.view.View;
 import group3.griddie.view.menu.tictactoe.component.MenuButton;
 import javafx.scene.layout.VBox;
 
-public class TicTacToeMenuView extends View {
-
+public class TicTacToeMenuView extends View<TicTacToeMenuController> {
     private MenuButton startButton;
     private MenuButton quitButton;
 
     public TicTacToeMenuView(TicTacToeMenuController controller) {
-        super(controller, null, new VBox());
+        super(null, new VBox());
+
+        this.setController(controller);
     }
 
     @Override
@@ -24,6 +24,6 @@ public class TicTacToeMenuView extends View {
 
     @Override
     public void initializeControls() {
-        TicTacToeMenuController controller = (TicTacToeMenuController) getController();
+        TicTacToeMenuController controller = getController();
     }
 }

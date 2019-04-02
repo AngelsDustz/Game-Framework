@@ -1,4 +1,6 @@
 package group3.griddie.model.game;
 
-public class Score {
+import group3.griddie.model.Model;
+
+public class Score extends Model {
 }

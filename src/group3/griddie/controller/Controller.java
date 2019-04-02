@@ -3,12 +3,11 @@ package group3.griddie.controller;
 import group3.griddie.model.Model;
 import group3.griddie.view.View;
 
-public abstract class Controller {
-
-    private Model model;
+public abstract class Controller<M extends Model> {
+    private M model;
     private View view;
 
-    public Controller(Model model) {
+    public Controller(M model) {
         this.model = model;
         view = createView();
 

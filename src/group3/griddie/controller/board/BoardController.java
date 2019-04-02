@@ -5,10 +5,9 @@ import group3.griddie.model.board.Board;
 import group3.griddie.view.View;
 import group3.griddie.view.board.BoardView;
 
-public class BoardController extends Controller {
-
-    public BoardController(Board board) {
-        super(board);
+public class BoardController extends Controller<Board> {
+    public BoardController(Board model) {
+        super(model);
     }
 
     @Override

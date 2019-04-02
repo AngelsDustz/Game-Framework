@@ -7,10 +7,11 @@ import group3.griddie.view.board.component.CellView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
-public class BoardView extends View {
-
+public class BoardView extends View<BoardController> {
     public BoardView(BoardController controller, Board board) {
-        super(controller, board, new GridPane());
+        super(board, new GridPane());
+
+        this.setController(controller);
     }
 
     @Override

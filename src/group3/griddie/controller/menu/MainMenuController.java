@@ -1,6 +1,6 @@
 package group3.griddie.controller.menu;
 
-import group3.griddie.App;
+import group3.griddie.Griddie;
 import group3.griddie.controller.Controller;
 import group3.griddie.game.ortello.Ortello;
 import group3.griddie.game.tictactoe.TicTacToe;
@@ -21,12 +21,12 @@ public class MainMenuController extends Controller {
     public void startOrtello() {
         System.out.println("Starting ortello");
 
-        App.launchGame(new Ortello());
+        Griddie.launchGame(new Ortello());
     }
 
     public void startTicTacToe() {
         System.out.println("Starting tic tac toe");
 
-        App.launchGame(new TicTacToe());
+        Griddie.launchGame(new TicTacToe());
     }
 }
