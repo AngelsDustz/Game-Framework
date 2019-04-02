@@ -2,6 +2,7 @@ package group3.griddie.controller.board;
 
 import group3.griddie.controller.Controller;
 import group3.griddie.model.board.Cell;
+import group3.griddie.model.board.actor.TicTacToeActor;
 import group3.griddie.view.View;
 import group3.griddie.view.board.CellView;
 
@@ -17,7 +18,9 @@ public class CellController extends Controller<Cell> {
     }
 
     public void onClick() {
-        System.out.println("Cell clicked");
+        Cell cell = getModel();
+
+        cell.setOccupant(new TicTacToeActor(TicTacToeActor.Type.O));
     }
 
 }

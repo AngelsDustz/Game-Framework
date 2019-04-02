@@ -20,14 +20,16 @@ public class Board extends Model {
         this.pattern = pattern;
 
         cells = new Cell[width][height];
+
+        for (int c = 0; c < width; c++) {
+            for (int r = 0; r < height; r++) {
+                cells[c][r] = new Cell();
+            }
+        }
     }
 
     public Cell getCell(int column, int row) {
         return cells[column][row];
-    }
-
-    public void setCell(Cell cell, int column, int row) {
-        cells[column][row] = cell;
     }
 
     public int getWidth() {

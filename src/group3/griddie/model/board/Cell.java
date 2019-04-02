@@ -18,6 +18,7 @@ public class Cell extends Model {
     public void setOccupant(Actor occupant) {
         this.occupant = occupant;
 
+        setChanged();
         notifyObservers();
     }
 
