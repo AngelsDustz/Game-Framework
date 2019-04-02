@@ -22,7 +22,7 @@ public class NetworkRunner {
     private Boolean connectedrun;
     private BufferedReader scanner = new BufferedReader(new InputStreamReader(System.in));
     private Timer timer;
-
+    private Timer timer1;
 
     //commands for sending to the server
     public enum Commands {LOGIN("login"), LOGOUT("logout"), SUBSCRIBE_REVERSI("subscribe reversi"),
@@ -57,13 +57,21 @@ public class NetworkRunner {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                System.out.println("not out");
                 try {
                     putInBufferOut(scanner.readLine());
                 } catch (IOException e) {
+
                 }
             }
         }, 1000, 10);
+
+        timer1 = new Timer();
+        timer1.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                isConnected(); // checks if the server is online
+            }
+        }, 1000, 10000);
     }
 
     //checks the BufferReader and puts into the LinkedListQueue
@@ -104,10 +112,10 @@ public class NetworkRunner {
         Socket isConnectedSocket = new Socket();
         Boolean connected = true;
         try{
-            isConnectedSocket.connect(address, 10000);
+            isConnectedSocket.connect(address, 5000);
         }
-
         catch(IOException e){
+            timer1.cancel();
             connected = false;
         }
 
@@ -139,7 +147,6 @@ public class NetworkRunner {
             checkCommand(); //send the commands that are in the buffer
             checkPutInBufferIn(); // puts the commands from the socketbuffer in the linkedlistqueue
             printAll();
-            isConnected(); // checks if the server is online
         }
 
         //prints out the socket closed if closed
