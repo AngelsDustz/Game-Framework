@@ -11,7 +11,7 @@ public class Ortello extends Game {
 
     @Override
     public Board createBoard() {
-        return null;
+        return new Board(8, 8);
     }
 
     @Override

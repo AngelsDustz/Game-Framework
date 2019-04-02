@@ -4,20 +4,13 @@ import group3.griddie.model.Model;
 
 public class Board extends Model {
 
-    public enum Pattern {
-        CHECKER,
-        NONE,
-    }
-
     private int width;
     private int height;
-    private Pattern pattern;
     private Cell[][] cells;
 
-    public Board(int width, int height, Pattern pattern) {
+    public Board(int width, int height) {
         this.width = width;
         this.height = height;
-        this.pattern = pattern;
 
         cells = new Cell[width][height];
 
@@ -38,10 +31,6 @@ public class Board extends Model {
 
     public int getHeight() {
         return height;
-    }
-
-    public Pattern getPattern() {
-        return pattern;
     }
 
 }

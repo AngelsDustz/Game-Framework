@@ -13,7 +13,7 @@ public class TicTacToe extends Game {
 
     @Override
     public Board createBoard() {
-        return new Board(3, 3, Board.Pattern.NONE);
+        return new Board(3, 3);
     }
 
     @Override
