@@ -3,7 +3,6 @@ package group3.griddie;
 import group3.griddie.controller.menu.MainMenuController;
 import group3.griddie.game.Game;
 import group3.griddie.view.View;
-import group3.griddie.view.menu.main.MainMenuView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -21,7 +20,7 @@ public class Griddie extends Application {
     }
 
     public static void launchGame(Game game) {
-        App.game = game;
+        Griddie.game = game;
         stage.setScene(new Scene(game.getPane()));
         game.init();
     }
