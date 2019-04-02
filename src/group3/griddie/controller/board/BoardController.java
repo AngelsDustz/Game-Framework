@@ -12,6 +12,6 @@ public class BoardController extends Controller<Board> {
 
     @Override
     protected View createView() {
-        return new BoardView(this, (Board) getModel());
+        return new BoardView(this, getModel());
     }
 }

@@ -7,10 +7,14 @@ import group3.griddie.view.board.component.CellView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
-public class BoardView extends View<BoardController> {
+import java.util.Observable;
+import java.util.Observer;
+
+public class BoardView extends View<BoardController> implements Observer {
     public BoardView(BoardController controller, Board board) {
         super(board, new GridPane());
         this.setController(controller);
+        board.addObserver(this);
     }
 
     @Override
@@ -36,5 +40,10 @@ public class BoardView extends View<BoardController> {
     @Override
     public void initializeControls() {
 
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        System.out.println("Hello from BoarcView, we received an update!");
     }
 }

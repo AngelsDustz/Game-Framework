@@ -17,7 +17,7 @@ public abstract class Controller<M extends Model> {
 
     protected abstract View createView();
 
-    public Model getModel() {
+    public M getModel() {
         return model;
     }
 
