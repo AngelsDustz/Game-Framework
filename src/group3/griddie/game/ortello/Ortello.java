@@ -5,17 +5,28 @@ import group3.griddie.model.board.Board;
 
 public class Ortello extends Game {
 
-    public Ortello() {
-        super("Ortello");
+    @Override
+    protected Board createBoard() {
+        return new Board(8,8);
     }
 
     @Override
-    public Board createBoard() {
-        return new Board(8, 8);
+    protected void onInit() {
+
     }
 
     @Override
-    public void init() {
+    protected void onStart() {
+
+    }
+
+    @Override
+    protected void onStop() {
+
+    }
+
+    @Override
+    protected void onTick() {
 
     }
 }

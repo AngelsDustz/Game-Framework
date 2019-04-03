@@ -20,7 +20,6 @@ public class BoardView extends RootView<BoardController> implements Observer {
 
     @Override
     public void initializeView() {
-        System.out.println("Initializing board view");
         Board board = (Board) getModel();
         GridPane root = (GridPane) getParent();
 

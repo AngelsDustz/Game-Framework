@@ -61,6 +61,8 @@ public class CellView extends View<CellController> implements Observer {
 
     @Override
     public void initializeView() {
+        System.out.println("Initializing cell view");
+
         StackPane stackPane = (StackPane) getNode();
 
         GraphicsContext gc = canvas.getGraphicsContext2D();

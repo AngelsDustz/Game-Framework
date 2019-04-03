@@ -12,4 +12,9 @@ public abstract class Player extends Model {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    protected void onTick() {
+
+    }
 }

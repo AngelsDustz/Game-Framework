@@ -11,6 +11,11 @@ public class Cell extends Model {
 
     }
 
+    @Override
+    protected void onTick() {
+
+    }
+
     public Actor getOccupant() {
         return occupant;
     }

@@ -22,8 +22,8 @@ public class Griddie extends Application {
 
     public static void launchGame(Game game) {
         Griddie.game = game;
-        stage.setScene(new Scene(game.getPane()));
         game.init();
+        stage.setScene(game);
     }
 
     public static void newScene(RootView view) {

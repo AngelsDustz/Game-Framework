@@ -5,19 +5,32 @@ import group3.griddie.model.board.Board;
 
 public class TicTacToe extends Game {
 
-    private Board board;
-
     public TicTacToe() {
-        super("Tic Tac Toe");
+
     }
 
     @Override
-    public Board createBoard() {
+    protected Board createBoard() {
         return new Board(3, 3);
     }
 
     @Override
-    public void init() {
+    protected void onInit() {
+
+    }
+
+    @Override
+    protected void onStart() {
+
+    }
+
+    @Override
+    protected void onStop() {
+
+    }
+
+    @Override
+    protected void onTick() {
 
     }
 

@@ -1,7 +1,12 @@
 package group3.griddie.model.board.actor;
 
-public abstract class Actor {
+import group3.griddie.model.Model;
 
-    
+public abstract class Actor extends Model {
+
+    @Override
+    protected void onTick() {
+
+    }
 
 }
