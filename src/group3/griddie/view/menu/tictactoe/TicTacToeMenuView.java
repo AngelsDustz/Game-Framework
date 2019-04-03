@@ -9,10 +9,8 @@ public class TicTacToeMenuView extends RootView<TicTacToeMenuController> {
     private MenuButton startButton;
     private MenuButton quitButton;
 
-    public TicTacToeMenuView(TicTacToeMenuController controller) {
+    public TicTacToeMenuView() {
         super(null, new VBox());
-
-        this.setController(controller);
     }
 
     @Override

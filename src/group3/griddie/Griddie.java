@@ -3,6 +3,8 @@ package group3.griddie;
 import group3.griddie.controller.menu.MainMenuController;
 import group3.griddie.game.Game;
 import group3.griddie.view.RootView;
+import group3.griddie.view.View;
+import group3.griddie.view.menu.main.MainMenuView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -20,7 +22,12 @@ public class Griddie extends Application {
         stage = primaryStage;
         stage.show();
 
-        newScene((RootView) (new MainMenuController()).getView());
+        MainMenuView menu = new MainMenuView();
+        menu.init();
+
+        menu.setController(new MainMenuController());
+
+        stage.setScene(new Scene(menu.getParent()));
     }
 
     public static void launchGame(Game game) {
@@ -34,9 +41,4 @@ public class Griddie extends Application {
             e.printStackTrace();
         }
     }
-
-    public static void newScene(RootView view) {
-        stage.setScene(new Scene(view.getParent()));
-    }
-
 }

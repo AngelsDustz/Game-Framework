@@ -5,8 +5,8 @@ import group3.griddie.model.board.Cell;
 
 public class HumanPlayer extends Player {
 
-    public HumanPlayer(Game game) {
-        super(game);
+    public HumanPlayer(Game game, String name) {
+        super(game, name);
     }
 
     @Override
@@ -24,6 +24,11 @@ public class HumanPlayer extends Player {
                 });
             }
         }
+    }
+
+    @Override
+    protected void onTick() {
+
     }
 
     @Override

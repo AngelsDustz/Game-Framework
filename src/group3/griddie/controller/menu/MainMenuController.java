@@ -13,11 +13,6 @@ public class MainMenuController extends Controller {
         super(null);
     }
 
-    @Override
-    protected View createView() {
-        return new MainMenuView(this);
-    }
-
     public void startOrtello() {
         System.out.println("Starting ortello");
 
