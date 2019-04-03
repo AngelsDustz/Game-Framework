@@ -9,9 +9,8 @@ public class MainMenuView extends RootView<MainMenuController> {
     private GameButton ortelloButton;
     private GameButton ticTacToeButton;
 
-    public MainMenuView(MainMenuController controller) {
+    public MainMenuView() {
         super(null, new VBox());
-        this.setController(controller);
     }
 
     @Override

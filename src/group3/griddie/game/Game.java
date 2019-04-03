@@ -5,6 +5,7 @@ import group3.griddie.game.player.AI_TEST_player;
 import group3.griddie.model.board.Board;
 import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.player.Player;
+import group3.griddie.view.board.BoardView;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
@@ -31,7 +32,13 @@ public abstract class Game extends Scene {
         board = createBoard();
 
         BorderPane root = (BorderPane) getRoot();
-        root.setCenter(new BoardController(board).getView().getNode());
+
+        BoardView boardView = new BoardView(board);
+        boardView.init();
+
+        boardView.setController(new BoardController(board));
+
+        root.setCenter(boardView.getNode());
 
         for (Player player : players) {
             player.init();

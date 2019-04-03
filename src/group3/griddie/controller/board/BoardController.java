@@ -9,9 +9,4 @@ public class BoardController extends Controller<Board> {
     public BoardController(Board model) {
         super(model);
     }
-
-    @Override
-    protected View createView() {
-        return new BoardView(this, getModel());
-    }
 }

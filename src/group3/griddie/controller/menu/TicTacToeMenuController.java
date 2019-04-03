@@ -10,8 +10,4 @@ public class TicTacToeMenuController extends Controller {
         super(null);
     }
 
-    @Override
-    protected View createView() {
-        return new TicTacToeMenuView(this);
-    }
 }

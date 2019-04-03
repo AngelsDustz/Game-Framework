@@ -12,9 +12,8 @@ import java.util.Observer;
 
 public class BoardView extends RootView<BoardController> implements Observer {
 
-    public BoardView(BoardController controller, Board board) {
+    public BoardView(Board board) {
         super(board, new GridPane());
-        this.setController(controller);
         board.addObserver(this);
     }
 
@@ -27,8 +26,12 @@ public class BoardView extends RootView<BoardController> implements Observer {
             for (int r = 0; r < board.getWidth(); r++) {
                 Cell cell = board.getCell(c, r);
 
-                CellController cellController = new CellController(cell);
-                root.add(cellController.getView().getNode(), c, r);
+                CellView cellView = new CellView(cell);
+                cellView.init();
+
+                cellView.setController(new CellController(cell));
+
+                root.add(cellView.getNode(), c, r);
             }
         }
     }

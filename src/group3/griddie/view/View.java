@@ -15,6 +15,10 @@ public abstract class View<C extends Controller> {
         this.node = node;
     }
 
+    public void init() {
+        initializeView();
+    }
+
     public C getController() {
         return controller;
     }
@@ -25,12 +29,14 @@ public abstract class View<C extends Controller> {
 
     public void setController(C controller) {
         this.controller = controller;
+
+        initializeControls();
     }
 
     public Node getNode() {
         return node;
     }
 
-    public abstract void initializeView();
-    public abstract void initializeControls();
+    protected abstract void initializeView();
+    protected abstract void initializeControls();
 }
