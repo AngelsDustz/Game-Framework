@@ -72,7 +72,7 @@ public class NetworkRunner {
     }
 
     //reads the pops the top of the buffer
-    public String readBufferIn() {
+    public synchronized String readBufferIn() {
         return client.readBufferIn();
     }
 
