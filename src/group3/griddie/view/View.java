@@ -27,6 +27,12 @@ public abstract class View<C extends Controller> {
         return model;
     }
 
+    public void setModel(Model model) {
+        this.model = model;
+
+        initializeView();
+    }
+
     public void setController(C controller) {
         this.controller = controller;
 

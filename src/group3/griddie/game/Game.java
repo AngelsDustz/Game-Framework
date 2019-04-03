@@ -5,7 +5,7 @@ import group3.griddie.game.player.AI_TEST_player;
 import group3.griddie.model.board.Board;
 import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.player.Player;
-import group3.griddie.view.board.BoardView;
+import group3.griddie.view.View;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
@@ -29,13 +29,11 @@ public abstract class Game extends Scene {
     }
 
     public final void init() {
-        board = createBoard();
-
         BorderPane root = (BorderPane) getRoot();
 
-        BoardView boardView = new BoardView(board);
+        board = createBoard();
+        View<BoardController> boardView = createBoardView(board);
         boardView.init();
-
         boardView.setController(new BoardController(board));
 
         root.setCenter(boardView.getNode());
@@ -118,6 +116,8 @@ public abstract class Game extends Scene {
     protected abstract boolean onPlayerMove(Player player, int column, int row);
 
     protected abstract Board createBoard();
+
+    protected abstract View<BoardController> createBoardView(Board board);
 
     protected abstract void onInit();
 
