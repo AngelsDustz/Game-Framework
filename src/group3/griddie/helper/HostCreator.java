@@ -6,6 +6,7 @@ import java.net.Socket;
 public class HostCreator {
     private Socket socket;
 
+    //checks if the host is available
     private Boolean hostAvailabilityCheck(String IP, int PORT) {
         try (Socket s = new Socket(IP, PORT)) {
             return true;
@@ -15,6 +16,7 @@ public class HostCreator {
         return false;
     }
 
+    //generates the socket recursively
     public Socket generateSocket(String IP, int PORT) {
         Socket generatedSocket = null;
         if (hostAvailabilityCheck(IP, PORT)) {
@@ -27,9 +29,9 @@ public class HostCreator {
         }
 
         return generateSocket(IP, PORT);
-
     }
 
+    //get the last made socket
     public Socket getSocket() {
         return socket;
     }

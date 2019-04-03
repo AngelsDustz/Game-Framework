@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class CommandInvoker {
+    //list of commands in case of redo's
     private final List<Command> commandOperations = new ArrayList<>();
 
     public void executeCommand(Command command){
