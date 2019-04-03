@@ -1,13 +1,13 @@
 package group3.griddie.helper.commands;
 
-import group3.griddie.helper.NetworkRunner;
+import group3.griddie.helper.NetworkMain;
 
 public class SendForfeit implements Command {
     //access for the whole class
-    private NetworkRunner runner;
+    private NetworkMain runner;
 
     //initialize the class
-    public SendForfeit(NetworkRunner runner) {
+    public SendForfeit(NetworkMain runner) {
         this.runner = runner;
     }
 

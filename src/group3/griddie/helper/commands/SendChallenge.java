@@ -1,15 +1,15 @@
 package group3.griddie.helper.commands;
 
-import group3.griddie.helper.NetworkRunner;
+import group3.griddie.helper.NetworkMain;
 
 public class SendChallenge implements Command {
     //access for the whole class
-    private NetworkRunner runner;
+    private NetworkMain runner;
     private String nameEnemy;
     private String game;
 
     //initialize the class
-    public SendChallenge(NetworkRunner runner, String nameEnemy, String game) {
+    public SendChallenge(NetworkMain runner, String nameEnemy, String game) {
         this.runner = runner;
         this.nameEnemy = nameEnemy;
         this.game = game;

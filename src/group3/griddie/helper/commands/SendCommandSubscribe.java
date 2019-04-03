@@ -1,14 +1,14 @@
 package group3.griddie.helper.commands;
 
-import group3.griddie.helper.NetworkRunner;
+import group3.griddie.helper.NetworkMain;
 
 public class SendCommandSubscribe implements Command {
     //access for the whole class
-    private NetworkRunner runner;
+    private NetworkMain runner;
     private String game;
 
     //initialize the class
-    public SendCommandSubscribe(NetworkRunner runner, String game) {
+    public SendCommandSubscribe(NetworkMain runner, String game) {
         this.game = game;
         this.runner = runner;
     }

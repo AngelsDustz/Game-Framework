@@ -1,14 +1,14 @@
 package group3.griddie.helper.commands;
 
-import group3.griddie.helper.NetworkRunner;
+import group3.griddie.helper.NetworkMain;
 
 public class SendCommandMove implements Command {
     //access for the whole class
-    private NetworkRunner runner;
+    private NetworkMain runner;
     private int number;
 
     //initialize the class
-    public SendCommandMove(NetworkRunner runner, int number) {
+    public SendCommandMove(NetworkMain runner, int number) {
         this.number = number;
         this.runner = runner;
     }

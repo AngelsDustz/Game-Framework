@@ -1,14 +1,14 @@
 package group3.griddie.helper.commands;
 
-import group3.griddie.helper.NetworkRunner;
+import group3.griddie.helper.NetworkMain;
 
 public class GetInformation implements Command {
     //access to the class
     private String returnString;
-    private NetworkRunner runner;
+    private NetworkMain runner;
 
     //initialize the class
-    public GetInformation(NetworkRunner runner) {
+    public GetInformation(NetworkMain runner) {
         this.returnString = new String();
         this.runner = runner;
     }

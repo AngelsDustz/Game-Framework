@@ -1,16 +1,16 @@
 package group3.griddie.helper.commands;
 
-import group3.griddie.helper.NetworkRunner;
+import group3.griddie.helper.NetworkMain;
 
 import java.util.LinkedList;
 
 public class GetAllInformation implements Command {
     //access to the class
     private LinkedList<String> returnList;
-    private NetworkRunner runner;
+    private NetworkMain runner;
 
     //initialize the class
-    public GetAllInformation(NetworkRunner runner){
+    public GetAllInformation(NetworkMain runner){
         this.returnList = new LinkedList<>();
         this.runner = runner;
     }

@@ -1,13 +1,13 @@
 package group3.griddie.helper.commands;
 
-import group3.griddie.helper.NetworkRunner;
+import group3.griddie.helper.NetworkMain;
 
 public class SendLogout implements Command {
     //access for the whole class
-    private NetworkRunner runner;
+    private NetworkMain runner;
 
     //initialize the class
-    public SendLogout(NetworkRunner runner) {
+    public SendLogout(NetworkMain runner) {
         this.runner = runner;
     }
 

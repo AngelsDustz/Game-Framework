@@ -11,10 +11,10 @@ import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class NetworkRunner {
+public class NetworkMain {
     //setups the IP adress en PORT
-    private static final String IP = "127.0.0.1";
-    private static final int PORT = 7789;
+    private final String IP;
+    private final int PORT;
     //variables access for the class only
     //creates a client and a hostcreator
     private Client client = new Client();
@@ -27,9 +27,11 @@ public class NetworkRunner {
     private Timer timer;
 
 
-    //init of the NetworkRunner
-    public NetworkRunner() {
-        socket = host.generateSocket(IP, PORT); //generates socket
+    //init of the NetworkMain
+    public NetworkMain(final String IP, final int PORT) {
+        this.IP = IP;
+        this.PORT = PORT;
+        socket = host.generateSocket(this.IP, this.PORT); //generates socket
         connectedrun = true; //if it can generate a socket sets it to true
         setupStreams();//for the input
         setupStartTimer();
@@ -89,7 +91,7 @@ public class NetworkRunner {
 
     //checks if the server is reachable
     private void isConnected() {
-        SocketAddress address = new InetSocketAddress(IP, PORT);
+        SocketAddress address = new InetSocketAddress(this.IP, this.PORT);
         Socket isConnectedSocket = new Socket();
         Boolean connected = true;
         try {
@@ -119,9 +121,7 @@ public class NetworkRunner {
 
     public void main() {
         //print the current connection
-        System.out.println(socket);
-        checkPutInBufferIn();
-        printAll();
+        System.out.println("opened: " + socket);
         while (connectedrun) {
             checkCommand(); //send the commands that are in the buffer
             checkPutInBufferIn(); // puts the commands from the socketbuffer in the linkedlistqueue

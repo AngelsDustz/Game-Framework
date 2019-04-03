@@ -1,14 +1,14 @@
 package group3.griddie.helper.commands;
 
-import group3.griddie.helper.NetworkRunner;
+import group3.griddie.helper.NetworkMain;
 
 public class SendAcceptChallenge implements Command {
     //access for the whole class
-    private NetworkRunner runner;
+    private NetworkMain runner;
     private int challengeNumber;
 
     //initialize the class
-    public SendAcceptChallenge(NetworkRunner runner, int challengeNumber) {
+    public SendAcceptChallenge(NetworkMain runner, int challengeNumber) {
         this.runner = runner;
         this.challengeNumber = challengeNumber;
     }
