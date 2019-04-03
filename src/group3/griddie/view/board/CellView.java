@@ -47,7 +47,7 @@ public class CellView extends View<CellController> implements Observer {
 
             switch (((TicTacToeActor) occupant).getType()) {
                 case O:
-                    image = new Image("assets/images/x.png");
+                    image = new Image("assets/images/o.png");
                     break;
 
                 case X:

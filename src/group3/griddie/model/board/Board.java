@@ -16,9 +16,13 @@ public class Board extends Model {
 
         for (int c = 0; c < width; c++) {
             for (int r = 0; r < height; r++) {
-                cells[c][r] = new Cell();
+                cells[c][r] = addChild(new Cell());
             }
         }
+    }
+
+    public Cell[][] getCells() {
+        return cells;
     }
 
     public Cell getCell(int column, int row) {
@@ -31,6 +35,11 @@ public class Board extends Model {
 
     public int getHeight() {
         return height;
+    }
+
+    @Override
+    protected void onTick() {
+
     }
 
 }
