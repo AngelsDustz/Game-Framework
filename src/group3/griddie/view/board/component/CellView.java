@@ -5,16 +5,15 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class CellView extends Canvas {
-
-    private static final int WIDTH = 50;
-    private static final int HEIGHT = 50;
+    private static final int WIDTH  = 75;
+    private static final int HEIGHT = 75;
 
     public CellView(Color color) {
         super(WIDTH, HEIGHT);
 
-        GraphicsContext gc = getGraphicsContext2D();
-        gc.setFill(color);
-        gc.fillRect(0, 0, WIDTH, HEIGHT);
+        GraphicsContext graphicsContext = getGraphicsContext2D();
+        graphicsContext.setFill(color);
+        graphicsContext.fillRect(0, 0, WIDTH, HEIGHT);
     }
 
 }
