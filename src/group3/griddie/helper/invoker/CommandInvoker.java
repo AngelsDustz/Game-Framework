@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommandInvoker {
-    //list of commands in case of redo's
+    //list of commands in case of wanting it to do it again
     private final List<Command> commandOperations = new ArrayList<>();
 
     public void executeCommand(Command command){

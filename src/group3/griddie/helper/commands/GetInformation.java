@@ -8,18 +8,19 @@ public class GetInformation implements Command {
     private NetworkRunner runner;
 
     //initialize the class
-    public GetInformation(NetworkRunner runner){
+    public GetInformation(NetworkRunner runner) {
         this.returnString = new String();
         this.runner = runner;
     }
+
     //execute method
     @Override
     public void execute() {
         this.returnString = this.runner.readBufferIn();
     }
 
-    //return the String 
-    public String getReturnString(){
+    //return the String
+    public String getReturnString() {
         return this.returnString;
     }
 }

@@ -7,7 +7,7 @@ public class SendLogout implements Command {
     private NetworkRunner runner;
 
     //initialize the class
-    public SendLogout(NetworkRunner runner){
+    public SendLogout(NetworkRunner runner) {
         this.runner = runner;
     }
 

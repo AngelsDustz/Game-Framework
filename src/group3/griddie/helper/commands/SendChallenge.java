@@ -9,7 +9,7 @@ public class SendChallenge implements Command {
     private String game;
 
     //initialize the class
-    public SendChallenge(NetworkRunner runner, String nameEnemy, String game){
+    public SendChallenge(NetworkRunner runner, String nameEnemy, String game) {
         this.runner = runner;
         this.nameEnemy = nameEnemy;
         this.game = game;

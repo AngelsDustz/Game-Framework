@@ -7,7 +7,7 @@ public class SendForfeit implements Command {
     private NetworkRunner runner;
 
     //initialize the class
-    public SendForfeit(NetworkRunner runner){
+    public SendForfeit(NetworkRunner runner) {
         this.runner = runner;
     }
 

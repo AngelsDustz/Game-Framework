@@ -8,7 +8,7 @@ public class SendCommandMove implements Command {
     private int number;
 
     //initialize the class
-    public SendCommandMove(NetworkRunner runner, int number){
+    public SendCommandMove(NetworkRunner runner, int number) {
         this.number = number;
         this.runner = runner;
     }
@@ -16,11 +16,11 @@ public class SendCommandMove implements Command {
     //execute the command
     @Override
     public void execute() {
-        this.runner.putInBufferOut("move " + this.number);
+        this.runner.putInBufferOut(String.format("move %s", this.number));
     }
 
     //set the move number
-    public void setMove(int number){
+    public void setMove(int number) {
         this.number = number;
     }
 }

@@ -8,19 +8,19 @@ public class SendCommandLogin implements Command {
     private String name;
 
     //initialize the class
-    public SendCommandLogin(NetworkRunner runner, String name){
+    public SendCommandLogin(NetworkRunner runner, String name) {
         this.name = name;
         this.runner = runner;
     }
 
     //execute the command
     @Override
-    public void execute(){
-        this.runner.putInBufferOut("login " + this.name);
+    public void execute() {
+        this.runner.putInBufferOut(String.format("login %s", this.name));
     }
 
     //set the name for login
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
 }

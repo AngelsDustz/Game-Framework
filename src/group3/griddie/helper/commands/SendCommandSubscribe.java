@@ -8,7 +8,7 @@ public class SendCommandSubscribe implements Command {
     private String game;
 
     //initialize the class
-    public SendCommandSubscribe(NetworkRunner runner, String game){
+    public SendCommandSubscribe(NetworkRunner runner, String game) {
         this.game = game;
         this.runner = runner;
     }
@@ -16,11 +16,11 @@ public class SendCommandSubscribe implements Command {
     //execute the command
     @Override
     public void execute() {
-        this.runner.putInBufferOut("subscribe " + this.game);
+        this.runner.putInBufferOut(String.format("subscribe %s", this.game));
     }
 
     //set the game string
-    public void setGame(String game){
+    public void setGame(String game) {
         this.game = game;
     }
 }

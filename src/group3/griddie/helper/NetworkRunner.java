@@ -1,5 +1,7 @@
 package group3.griddie.helper;
 
+import group3.griddie.helper.producer.HostCreator;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,56 +12,49 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class NetworkRunner {
+    //setups the IP adress en PORT
+    private static final String IP = "127.0.0.1";
+    private static final int PORT = 7789;
     //variables access for the class only
     //creates a client and a hostcreator
     private Client client = new Client();
     private HostCreator host = new HostCreator();
-
-    //setups the IP adress en PORT
-    private static final String IP = "127.0.0.1";
-    private static final int PORT = 7789;
-
     //variables the streams for input and output
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
     private Boolean connectedrun;
-    private BufferedReader scanner = new BufferedReader(new InputStreamReader(System.in));
     private Timer timer;
-    private Timer timer1;
 
 
     //init of the NetworkRunner
     public NetworkRunner() {
         socket = host.generateSocket(IP, PORT); //generates socket
         connectedrun = true; //if it can generate a socket sets it to true
+        setupStreams();//for the input
+        setupStartTimer();
+    }
+
+    //setups the timer
+    private void setupStartTimer() {
+        //schedules a method
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                isConnected(); // checks if the server is online
+            }
+        }, 1000, 10000);
+    }
+
+    //sets up the stream
+    private void setupStreams() {
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream())); // makes input stream
             out = new PrintWriter(socket.getOutputStream(), true); //makes output stream
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //for the input
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    putInBufferOut(scanner.readLine());
-                } catch (IOException e) {
-
-                }
-            }
-        }, 1000, 10);
-
-        //schedules a method
-        timer1 = new Timer();
-        timer1.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                isConnected(); // checks if the server is online
-            }
-        }, 1000, 10000);
     }
 
     //checks the BufferReader and puts into the LinkedListQueue
@@ -100,7 +95,7 @@ public class NetworkRunner {
         try {
             isConnectedSocket.connect(address, 5000);
         } catch (IOException e) {
-            timer1.cancel();
+            timer.cancel();
             connected = false;
         } finally {
             try {
@@ -130,7 +125,7 @@ public class NetworkRunner {
         while (connectedrun) {
             checkCommand(); //send the commands that are in the buffer
             checkPutInBufferIn(); // puts the commands from the socketbuffer in the linkedlistqueue
-            for(String value: printAll()){
+            for (String value : printAll()) {
                 System.out.println(value);
             }
         }
@@ -141,9 +136,7 @@ public class NetworkRunner {
         out.close(); // closes the out bufferedReader
         try {
             socket.close(); // closes the Socket
-            scanner.close();
             in.close(); // closes the Printwriter
-            timer.cancel();
         } catch (IOException e) {
             e.printStackTrace(); //catches errors if any
         }

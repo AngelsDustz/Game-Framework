@@ -8,7 +8,7 @@ public class SendAcceptChallenge implements Command {
     private int challengeNumber;
 
     //initialize the class
-    public SendAcceptChallenge(NetworkRunner runner, int challengeNumber){
+    public SendAcceptChallenge(NetworkRunner runner, int challengeNumber) {
         this.runner = runner;
         this.challengeNumber = challengeNumber;
     }

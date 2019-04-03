@@ -1,4 +1,4 @@
-package group3.griddie.helper;
+package group3.griddie.helper.producer;
 
 import java.io.IOException;
 import java.net.Socket;
