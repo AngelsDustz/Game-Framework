@@ -21,6 +21,10 @@ public class Board extends Model {
         }
     }
 
+    public Cell[][] getCells() {
+        return cells;
+    }
+
     public Cell getCell(int column, int row) {
         return cells[column][row];
     }
