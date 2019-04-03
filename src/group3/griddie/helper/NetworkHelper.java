@@ -9,15 +9,15 @@ import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.Stack;
 
-public class NetworkHelper implements Runnable{
+public class NetworkHelper implements Runnable {
     private NetworkRunner looper = new NetworkRunner();
 
     @Override
     public void run() {
-       looper.main();
+        looper.main();
     }
 
-    public NetworkRunner getNetworkRunner(){
+    public NetworkRunner getNetworkRunner() {
         return looper;
     }
 }

@@ -7,12 +7,12 @@ public class Client {
     public LinkedBlockingQueue<String> bufferIn;
     public LinkedBlockingQueue<String> bufferOut;
 
-    public Client(){
+    public Client() {
         bufferIn = new LinkedBlockingQueue<>();
         bufferOut = new LinkedBlockingQueue<>();
     }
 
-    public void sendCommand(String command){
+    public void sendCommand(String command) {
         try {
             bufferOut.put(command);
         } catch (InterruptedException e) {
@@ -20,40 +20,38 @@ public class Client {
         }
     }
 
-    public String peekBufferOut(){
+    public String peekBufferOut() {
         String peek = bufferOut.peek();
         return peek;
     }
 
-    public String readBufferOut(){
+    public String readBufferOut() {
         String peek = null;
-        if(bufferOut.size() > 0) {
+        if (bufferOut.size() > 0) {
             peek = bufferOut.peek();
             bufferOut.poll();
         }
         return peek;
     }
 
-    public String peekBufferIn(){
+    public String peekBufferIn() {
         String peek = bufferIn.peek();
         return peek;
     }
 
-    public String readBufferIn(){
+    public String readBufferIn() {
         String peek = null;
-        while(bufferIn.size() > 0) {
+        while (bufferIn.size() > 0) {
             peek = bufferIn.peek();
             bufferIn.poll();
         }
         return peek;
     }
 
-    public void putInBufferIn(String command){
+    public void putInBufferIn(String command) {
         try {
             bufferIn.put(command);
-        }
-
-        catch (InterruptedException e){
+        } catch (InterruptedException e) {
 
         }
     }

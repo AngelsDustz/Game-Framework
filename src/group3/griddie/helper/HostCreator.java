@@ -6,20 +6,18 @@ import java.net.Socket;
 public class HostCreator {
     private Socket socket;
 
-    private Boolean hostAvailabilityCheck(String IP, int PORT){
-        try(Socket s = new Socket(IP, PORT)){
+    private Boolean hostAvailabilityCheck(String IP, int PORT) {
+        try (Socket s = new Socket(IP, PORT)) {
             return true;
-        }
-
-        catch(IOException e){
+        } catch (IOException e) {
 
         }
         return false;
     }
 
-    public Socket generateSocket(String IP, int PORT){
+    public Socket generateSocket(String IP, int PORT) {
         Socket generatedSocket = null;
-        if(hostAvailabilityCheck(IP, PORT)) {
+        if (hostAvailabilityCheck(IP, PORT)) {
             try {
                 generatedSocket = new Socket(IP, PORT);
                 return generatedSocket;
@@ -32,7 +30,7 @@ public class HostCreator {
 
     }
 
-    public Socket getSocket(){
+    public Socket getSocket() {
         return socket;
     }
 }

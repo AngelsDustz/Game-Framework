@@ -24,35 +24,18 @@ public class NetworkRunner {
     private Timer timer;
     private Timer timer1;
 
-    //commands for sending to the server
-    public enum Commands {LOGIN("login"), LOGOUT("logout"), SUBSCRIBE_REVERSI("subscribe Reversi"),
-        SUBSCRIBE_TICTACTOE("subscribe Tic-tac-toe"), MOVE("move"), CHALLENGE("challenge"),
-        CHALLENGE_ACCEPT("challenge accept"), GET("get"), FORFEIT("forfeit"), HELP("help"),
-        ;
-        private final String text;
-
-        Commands(final String text){
-            this.text = text;
-        }
-
-        @Override
-        public String toString(){
-            return text;
-        }
-    }
 
     //init of the NetworkRunner
-    public NetworkRunner(){
+    public NetworkRunner() {
         socket = host.generateSocket(IP, PORT); //generates socket
         connectedrun = true; //if it can generate a socket sets it to true
-        try{
+        try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream())); // makes input stream
             out = new PrintWriter(socket.getOutputStream(), true); //makes output stream
-        }
-
-        catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
+        //for the input
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -65,6 +48,7 @@ public class NetworkRunner {
             }
         }, 1000, 10);
 
+        //schedules a method
         timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -75,75 +59,68 @@ public class NetworkRunner {
     }
 
     //checks the BufferReader and puts into the LinkedListQueue
-    private void checkPutInBufferIn(){
+    private void checkPutInBufferIn() {
         String input = null;
         try {
-            if(in.ready()) {
+            if (in.ready()) {
                 input = in.readLine();
                 client.putInBufferIn(input);
             }
-        }
-
-        catch(IOException e){
+        } catch (IOException e) {
 
         }
     }
 
     //reads the pops the top of the buffer
-    public String readBufferIn(){
+    public String readBufferIn() {
         return client.readBufferIn();
     }
 
     //puts a command in the buffer
-    public void putInBufferOut(String command){
+    public void putInBufferOut(String command) {
         client.sendCommand(command);
     }
 
     //sends the command that has been put into the buffer
-    private void checkCommand(){
-        if(client.bufferOut.size() > 0){
+    private void checkCommand() {
+        if (client.bufferOut.size() > 0) {
             out.println(client.readBufferOut());
         }
     }
 
     //checks if the server is reachable
-    private void isConnected(){
+    private void isConnected() {
         SocketAddress address = new InetSocketAddress(IP, PORT);
         Socket isConnectedSocket = new Socket();
         Boolean connected = true;
-        try{
+        try {
             isConnectedSocket.connect(address, 5000);
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             timer1.cancel();
             connected = false;
-        }
-
-        finally {
-            try{
+        } finally {
+            try {
                 isConnectedSocket.close();
-            }
-
-            catch (IOException e){
+            } catch (IOException e) {
                 connected = false;
             }
         }
         connectedrun = connected;
     }
 
-    private void printAll(){
-        while(client.bufferIn.size() > 0){
+    private void printAll() {
+        while (client.bufferIn.size() > 0) {
             System.out.println(readBufferIn());
         }
     }
 
 
-    public void main(){
+    public void main() {
         //print the current connection
         System.out.println(socket);
         checkPutInBufferIn();
         printAll();
-        while(connectedrun) {
+        while (connectedrun) {
             checkCommand(); //send the commands that are in the buffer
             checkPutInBufferIn(); // puts the commands from the socketbuffer in the linkedlistqueue
             printAll();
