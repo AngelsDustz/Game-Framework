@@ -5,17 +5,21 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.*;
+import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class NetworkRunner {
-
+    //variables access for the class only
+    //creates a client and a hostcreator
     private Client client = new Client();
     private HostCreator host = new HostCreator();
 
+    //setups the IP adress en PORT
     private static final String IP = "127.0.0.1";
     private static final int PORT = 7789;
 
+    //variables the streams for input and output
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
@@ -108,10 +112,13 @@ public class NetworkRunner {
         connectedrun = connected;
     }
 
-    private void printAll() {
+    //returns linked list if you want all the returns for sevrers
+    public LinkedList<String> printAll() {
+        LinkedList<String> buffer = new LinkedList<>();
         while (client.bufferIn.size() > 0) {
-            System.out.println(readBufferIn());
+            buffer.add(readBufferIn());
         }
+        return buffer;
     }
 
 
@@ -123,7 +130,9 @@ public class NetworkRunner {
         while (connectedrun) {
             checkCommand(); //send the commands that are in the buffer
             checkPutInBufferIn(); // puts the commands from the socketbuffer in the linkedlistqueue
-            printAll();
+            for(String value: printAll()){
+                System.out.println(value);
+            }
         }
 
         //prints out the socket closed if closed
