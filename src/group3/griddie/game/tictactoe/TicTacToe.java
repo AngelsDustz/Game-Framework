@@ -23,7 +23,9 @@ public class TicTacToe extends Game {
         int index = getPlayers().indexOf(player);
 
         TicTacToeActor actor = new TicTacToeActor(
-                index % 2 == 0 ? TicTacToeActor.Type.O : TicTacToeActor.Type.X
+                index % 2 == 0 ? TicTacToeActor.Type.O : TicTacToeActor.Type.X,
+                column,
+                row
         );
 
         player.registerActor(actor);

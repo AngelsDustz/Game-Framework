@@ -18,14 +18,6 @@ public abstract class Model extends Observable {
         this.children = new ArrayList<>();
     }
 
-    public void tick() {
-        for (Model child : children) {
-            child.tick();
-        }
-
-        onTick();
-    }
-
     public void interact() {
         for (InteractListener listener : interactListeners) {
             listener.onInteract();
@@ -35,9 +27,6 @@ public abstract class Model extends Observable {
     public <T extends Model> void addInteractListener(InteractListener listener) {
         interactListeners.add(listener);
     }
-
-    protected abstract void onTick();
-
     public <T extends Model> T addChild(T model) {
         children.add(model);
         return model;

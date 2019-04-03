@@ -7,14 +7,14 @@ public class Cell extends Model {
 
     private Actor occupant;
     private boolean disabled;
+    private int x;
+    private int y;
 
-    public Cell() {
+    public Cell(int x, int y) {
+        this.x = x;
+        this.y = y;
+
         disabled = false;
-    }
-
-    @Override
-    protected void onTick() {
-
     }
 
     public boolean isOccupied() {
@@ -42,5 +42,13 @@ public class Cell extends Model {
 
     public void setDisabled(boolean disabled) {
         this.disabled = disabled;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }

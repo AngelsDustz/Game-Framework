@@ -24,8 +24,8 @@ public class AIPlayer extends Player {
         DIFFICULTY_HARD
     }
 
-    public AIPlayer(Game game) {
-        super(game);
+    public AIPlayer(Game game, String name) {
+        super(game, name);
         this.difficulty = Difficulty.DIFFICULTY_EASY;
     }
 
@@ -34,8 +34,13 @@ public class AIPlayer extends Player {
 
     }
 
+    @Override
+    protected void onTick() {
+
+    }
+
     public AIPlayer(Game game, Difficulty difficulty) {
-        super(game);
+        super(game, "AI");
         this.difficulty = difficulty;
     }
 

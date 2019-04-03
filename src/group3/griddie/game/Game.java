@@ -1,6 +1,7 @@
 package group3.griddie.game;
 
 import group3.griddie.controller.board.BoardController;
+import group3.griddie.game.player.AI_TEST_player;
 import group3.griddie.model.board.Board;
 import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.player.Player;
@@ -22,8 +23,8 @@ public abstract class Game extends Scene {
         players = new ArrayList<>();
 
         //JUST FOR TESTING
-        addPlayer(new HumanPlayer(this));
-        addPlayer(new HumanPlayer(this));
+        addPlayer(new HumanPlayer(this, "Player 1"));
+        addPlayer(new AI_TEST_player(this, "Player 2"));
     }
 
     public final void init() {
@@ -46,10 +47,9 @@ public abstract class Game extends Scene {
 
         started = true;
 
-        playerOnTurn = players.get(0);
-        playerOnTurn.startTurn();
-
         onStart();
+
+        nextTurn();
     }
 
     public final void stop() {
@@ -59,8 +59,32 @@ public abstract class Game extends Scene {
     }
 
     public final void tick() {
-        playerOnTurn = getNextPlayer();
+        for (Player player : players) {
+            player.tick();
+        }
+
         onTick();
+    }
+
+    public void nextTurn() {
+        if (playerOnTurn != null) {
+            playerOnTurn.endTurn();
+        }
+
+        playerOnTurn = getNextPlayer();
+        playerOnTurn.startTurn();
+
+        tick();
+    }
+
+    public void playerMove(Player player, int column, int row) {
+        if (playerOnTurn != player) {
+            return;
+        }
+
+        if (onPlayerMove(player, column, row)) {
+            nextTurn();
+        }
     }
 
     public Board getBoard() {
@@ -80,19 +104,8 @@ public abstract class Game extends Scene {
     }
 
     private Player getNextPlayer() {
-        int index = players.indexOf(playerOnTurn);
-
+        int index = playerOnTurn == null ? 0 : players.indexOf(playerOnTurn);
         return index >= players.size() - 1 ? players.get(0) : players.get(index + 1);
-    }
-
-    public void playerMove(Player player, int column, int row) {
-        if (playerOnTurn != player) {
-            return;
-        }
-
-        if (onPlayerMove(player, column, row)) {
-            tick();
-        }
     }
 
     protected abstract boolean onPlayerMove(Player player, int column, int row);

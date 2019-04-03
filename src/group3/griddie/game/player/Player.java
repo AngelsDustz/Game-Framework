@@ -10,17 +10,42 @@ public abstract class Player {
     private boolean onTurn;
     private Game game;
     private ArrayList<Actor> actors;
+    private String name;
 
-    public Player(Game game) {
+    public Player(Game game, String name) {
         this.game = game;
         actors = new ArrayList<>();
+        this.name = name;
     }
 
     public void init() {
+        System.out.println(name + " initialized");
+
         onInit();
     }
 
-    protected abstract void onInit();
+    public void tick() {
+        System.out.println(name + " ticked");
+
+        onTick();
+    }
+
+    public void startTurn() {
+        System.out.println(name + " turn started");
+
+        onTurn = true;
+
+        onStartTurn();
+    }
+
+    public void endTurn() {
+        System.out.println(name + " turn ended");
+
+        onTurn = false;
+
+        onEndTurn();
+    }
+
 
     public void registerActor(Actor actor) {
         actors.add(actor);
@@ -28,14 +53,6 @@ public abstract class Player {
 
     public void unregisterActor(Actor actor) {
         actors.remove(actor);
-    }
-
-    public void startTurn() {
-        onTurn = true;
-    }
-
-    public void endTurn() {
-        onTurn = false;
     }
 
     public boolean isOnTurn() {
@@ -48,5 +65,7 @@ public abstract class Player {
 
     protected abstract void onStartTurn();
     protected abstract void onEndTurn();
+    protected abstract void onInit();
+    protected abstract void onTick();
 
 }
