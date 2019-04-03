@@ -13,7 +13,7 @@ public class SendCommandMove implements Command {
 
     @Override
     public void execute() {
-        this.runner.putInBufferOut("move " + number);
+        this.runner.putInBufferOut("move " + this.number);
     }
 
     public void setMove(int number){

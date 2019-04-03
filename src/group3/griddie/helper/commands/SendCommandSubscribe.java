@@ -13,7 +13,7 @@ public class SendCommandSubscribe implements Command {
 
     @Override
     public void execute() {
-        this.runner.putInBufferOut("subscribe " + game);
+        this.runner.putInBufferOut("subscribe " + this.game);
     }
 
     public void setGame(String game){
