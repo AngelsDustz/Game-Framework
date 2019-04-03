@@ -9,8 +9,9 @@ public abstract class Controller<M extends Model> {
 
     public Controller(M model) {
         this.model = model;
-        view = createView();
 
+        view = createView();
+        view.setController(this);
         view.initializeView();
         view.initializeControls();
     }

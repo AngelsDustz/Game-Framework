@@ -1,7 +1,19 @@
-package group3.griddie.model.player;
+package group3.griddie.game.player;
+
+import group3.griddie.game.Game;
 
 public class AIPlayer extends Player {
     private Difficulty difficulty;
+
+    @Override
+    protected void onStartTurn() {
+
+    }
+
+    @Override
+    protected void onEndTurn() {
+
+    }
 
     /**
      * Difficulty ENUMs.
@@ -12,15 +24,19 @@ public class AIPlayer extends Player {
         DIFFICULTY_HARD
     }
 
-    public AIPlayer() {
+    public AIPlayer(Game game) {
+        super(game);
         this.difficulty = Difficulty.DIFFICULTY_EASY;
-
-        this.setName("Easy AI");
     }
 
-    public AIPlayer(Difficulty difficulty) {
+    @Override
+    protected void onInit() {
+
+    }
+
+    public AIPlayer(Game game, Difficulty difficulty) {
+        super(game);
         this.difficulty = difficulty;
-        this.setName("AI");
     }
 
     public Difficulty getDifficulty() {

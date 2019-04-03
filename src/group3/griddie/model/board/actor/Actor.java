@@ -1,10 +1,12 @@
-package group3.griddie.model.game;
+package group3.griddie.model.board.actor;
 
 import group3.griddie.model.Model;
 
-public class Score extends Model {
+public abstract class Actor extends Model {
+
     @Override
     protected void onTick() {
 
     }
+
 }

@@ -2,6 +2,7 @@ package group3.griddie;
 
 import group3.griddie.controller.menu.MainMenuController;
 import group3.griddie.game.Game;
+import group3.griddie.view.RootView;
 import group3.griddie.view.View;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -16,16 +17,22 @@ public class Griddie extends Application {
         stage = primaryStage;
         stage.show();
 
-        newScene((new MainMenuController()).getView());
+        newScene((RootView) (new MainMenuController()).getView());
     }
 
     public static void launchGame(Game game) {
         Griddie.game = game;
-        stage.setScene(new Scene(game.getPane()));
         game.init();
+        stage.setScene(game);
+
+        try {
+            game.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public static void newScene(View view) {
+    public static void newScene(RootView view) {
         stage.setScene(new Scene(view.getParent()));
     }
 

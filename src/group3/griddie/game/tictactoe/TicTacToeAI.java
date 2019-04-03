@@ -1,7 +1,7 @@
 package group3.griddie.game.tictactoe;
 
 import group3.griddie.game.Game;
-import group3.griddie.model.player.Player;
+import group3.griddie.game.player.Player;
 
 public class TicTacToeAI {
     private Game    game;

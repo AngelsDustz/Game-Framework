@@ -2,16 +2,17 @@ package group3.griddie.view;
 
 import group3.griddie.controller.Controller;
 import group3.griddie.model.Model;
-import javafx.scene.Parent;
+import javafx.scene.Node;
 
 public abstract class View<C extends Controller> {
+
     private C controller;
     private Model model;
-    private Parent parent;
+    private Node node;
 
-    public View(Model model, Parent parent) {
+    public View(Model model, Node node) {
         this.model = model;
-        this.parent = parent;
+        this.node = node;
     }
 
     public C getController() {
@@ -26,11 +27,10 @@ public abstract class View<C extends Controller> {
         this.controller = controller;
     }
 
-    public Parent getParent() {
-        return parent;
+    public Node getNode() {
+        return node;
     }
 
     public abstract void initializeView();
-
     public abstract void initializeControls();
 }
