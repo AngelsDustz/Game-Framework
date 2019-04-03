@@ -2,6 +2,7 @@ package group3.griddie.game.tictactoe;
 
 import group3.griddie.controller.board.BoardController;
 import group3.griddie.game.Game;
+import group3.griddie.game.player.AIPlayer;
 import group3.griddie.game.player.Player;
 import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;
@@ -10,9 +11,11 @@ import group3.griddie.view.View;
 import group3.griddie.view.board.tictactoe.TicTacToeBoardView;
 
 public class TicTacToe extends Game {
-
     public TicTacToe() {
+        super();
 
+        AIPlayer aiPlayer = new AIPlayer(this, "AI Player");
+        this.addPlayer(aiPlayer);
     }
 
     @Override
@@ -66,7 +69,13 @@ public class TicTacToe extends Game {
 
     @Override
     protected void onTick() {
+        Board board = this.getBoard();
+        for (int col=0;col<board.getWidth();col++) {
+            for (int row=0;row<board.getHeight();row++) {
+                Cell cell = board.getCell(col, row);
 
+                System.out.println();
+            }
+        }
     }
-
 }
