@@ -9,14 +9,7 @@ public abstract class Controller<M extends Model> {
 
     public Controller(M model) {
         this.model = model;
-
-        view = createView();
-        view.setController(this);
-        view.initializeView();
-        view.initializeControls();
     }
-
-    protected abstract View createView();
 
     public M getModel() {
         return model;
@@ -24,5 +17,9 @@ public abstract class Controller<M extends Model> {
 
     public View getView() {
         return view;
+    }
+
+    public void setView(View view) {
+        this.view = view;
     }
 }

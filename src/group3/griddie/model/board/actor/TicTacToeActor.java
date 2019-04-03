@@ -9,7 +9,8 @@ public class TicTacToeActor extends Actor {
 
     private Type type;
 
-    public TicTacToeActor(Type type) {
+    public TicTacToeActor(Type type, int x, int y) {
+        super(x, y);
         this.type = type;
     }
 

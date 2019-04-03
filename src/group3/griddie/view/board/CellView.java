@@ -3,7 +3,6 @@ package group3.griddie.view.board;
 import group3.griddie.controller.board.CellController;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
-import group3.griddie.model.board.actor.TicTacToeActor;
 import group3.griddie.view.View;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -20,42 +19,24 @@ public class CellView extends View<CellController> implements Observer {
     private static final int WIDTH = 64;
     private static final int HEIGHT = 64;
 
-    private Canvas canvas;
-    private ImageView imageView;
+    private ActorView actorView;
 
-    public CellView(Cell cell) {
+    public CellView(Cell cell, ActorView actorView) {
         super(cell, new StackPane());
 
         cell.addObserver(this);
 
-        canvas = new Canvas(WIDTH, HEIGHT);
-        imageView = new ImageView();
+        this.actorView = actorView;
     }
 
     @Override
     public void update(Observable o, Object arg) {
+        StackPane root = (StackPane) getNode();
+
         if (o instanceof Cell) {
             Actor occupant = ((Cell) o).getOccupant();
 
-            drawOccupant(occupant);
-        }
-    }
-
-    private void drawOccupant(Actor occupant) {
-        if (occupant instanceof TicTacToeActor) {
-            Image image = null;
-
-            switch (((TicTacToeActor) occupant).getType()) {
-                case O:
-                    image = new Image("assets/images/o.png");
-                    break;
-
-                case X:
-                    image = new Image("assets/images/x.png");
-                    break;
-            }
-
-            imageView.setImage(image);
+            actorView.setModel(occupant);
         }
     }
 
@@ -63,12 +44,8 @@ public class CellView extends View<CellController> implements Observer {
     public void initializeView() {
         StackPane stackPane = (StackPane) getNode();
 
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.setFill(Color.YELLOW);
-        gc.fillRect(0, 0, WIDTH, HEIGHT);
-
-        stackPane.getChildren().add(canvas);
-        stackPane.getChildren().add(imageView);
+        stackPane.getChildren().add(new ImageView(new Image("assets/images/node.png")));
+        stackPane.getChildren().add(actorView.getNode());
     }
 
     @Override
