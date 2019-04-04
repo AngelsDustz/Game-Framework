@@ -67,15 +67,90 @@ public class TicTacToe extends Game {
 
     }
 
+    /**
+     * Win situations:
+     * 789
+     */
     @Override
     protected void onTick() {
         Board board = this.getBoard();
-        for (int col=0;col<board.getWidth();col++) {
-            for (int row=0;row<board.getHeight();row++) {
-                Cell cell = board.getCell(col, row);
 
-                System.out.println();
+        this.checkIfColumnWon(this, board);
+        this.checkIfRowWon(this, board);
+        this.checkIfDiagonalWon(this, board);
+    }
+
+    private void checkIfColumnWon(Game game, Board board) {
+        boolean won = false;
+
+        for (int i=0;i<board.getWidth();i++) {
+            Cell toCheck            = board.getCell(i, 0);
+            TicTacToeActor toActor  = (TicTacToeActor) toCheck.getOccupant();
+            boolean check           = true;
+            if (toActor == null) {
+                continue;
+            }
+
+            for (int c=1;c<board.getHeight();c++) {
+                Cell nextCheck              = board.getCell(i, c);
+                TicTacToeActor nextActor    = (TicTacToeActor) nextCheck.getOccupant();
+                if (nextActor == null) {
+                    check = false;
+                    continue;
+                }
+
+                if (toActor.getType() != nextActor.getType()) {
+                    check = false;
+                }
+            }
+
+            if (check) {
+                won = true;
             }
         }
+
+        if (won) {
+            System.out.println("Column win!");
+            game.stop();
+        }
+    }
+
+    private void checkIfRowWon(Game game, Board board) {
+        boolean won = false;
+
+        for (int i=0;i<board.getWidth();i++) {
+            Cell toCheck            = board.getCell(0, i);
+            TicTacToeActor toActor  = (TicTacToeActor) toCheck.getOccupant();
+            boolean check           = true;
+            if (toActor == null) {
+                continue;
+            }
+
+            for (int c=1;c<board.getHeight();c++) {
+                Cell nextCheck              = board.getCell(c, i);
+                TicTacToeActor nextActor    = (TicTacToeActor) nextCheck.getOccupant();
+                if (nextActor == null) {
+                    check = false;
+                    continue;
+                }
+
+                if (toActor.getType() != nextActor.getType()) {
+                    check = false;
+                }
+            }
+
+            if (check) {
+                won = true;
+            }
+        }
+
+        if (won) {
+            System.out.println("Row win!");
+            game.stop();
+        }
+    }
+
+    private void checkIfDiagonalWon(Game game, Board board) {
+        // todo
     }
 }
