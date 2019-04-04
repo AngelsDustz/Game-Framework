@@ -1,8 +1,6 @@
 package group3.griddie.game;
 
 import group3.griddie.controller.board.BoardController;
-import group3.griddie.game.player.AI_TEST_player;
-import group3.griddie.game.player.ai_test_player_jonathan;
 import group3.griddie.model.board.Board;
 import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.player.Player;
@@ -13,7 +11,6 @@ import javafx.scene.layout.BorderPane;
 import java.util.ArrayList;
 
 public abstract class Game extends Scene {
-
     private Board board;
     private boolean started;
     private ArrayList<Player> players;
