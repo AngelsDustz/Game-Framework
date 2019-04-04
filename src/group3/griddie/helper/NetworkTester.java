@@ -1,7 +1,7 @@
 package group3.griddie.helper;
 
 public class NetworkTester {
-    private String IP = "127.0.0.1";
+    private String IP = "145.33.225.170";
     private int PORT = 7789;
 
     NetworkHelperThread access = new NetworkHelperThread(IP, PORT);
