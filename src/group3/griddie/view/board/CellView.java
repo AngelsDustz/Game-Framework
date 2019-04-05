@@ -14,7 +14,7 @@ import javafx.scene.paint.Color;
 import java.util.Observable;
 import java.util.Observer;
 
-public class CellView extends View<CellController> implements Observer {
+public class CellView extends View<Cell> implements Observer {
 
     private static final int WIDTH = 64;
     private static final int HEIGHT = 64;
@@ -50,6 +50,7 @@ public class CellView extends View<CellController> implements Observer {
 
     @Override
     public void initializeControls() {
-        getNode().setOnMouseClicked(event -> getController().onClick());
+        CellController controller = (CellController) getController();
+        getNode().setOnMouseClicked(event -> controller.onClick());
     }
 }

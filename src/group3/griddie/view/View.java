@@ -4,9 +4,9 @@ import group3.griddie.controller.Controller;
 import group3.griddie.model.Model;
 import javafx.scene.Node;
 
-public abstract class View<C extends Controller> {
+public abstract class View<M extends Model> {
 
-    private C controller;
+    private Controller<M> controller;
     private Model model;
     private Node node;
 
@@ -19,7 +19,7 @@ public abstract class View<C extends Controller> {
         initializeView();
     }
 
-    public C getController() {
+    public Controller<M> getController() {
         return controller;
     }
 
@@ -33,7 +33,7 @@ public abstract class View<C extends Controller> {
         initializeView();
     }
 
-    public void setController(C controller) {
+    public void setController(Controller<M> controller) {
         this.controller = controller;
 
         initializeControls();

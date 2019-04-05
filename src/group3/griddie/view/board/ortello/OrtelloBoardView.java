@@ -15,7 +15,7 @@ import javafx.scene.layout.StackPane;
 import java.util.Observable;
 import java.util.Observer;
 
-public class OrtelloBoardView extends RootView<BoardController> implements Observer {
+public class OrtelloBoardView extends RootView<Board> implements Observer {
 
     public OrtelloBoardView(Board board) {
         super(board, new StackPane());

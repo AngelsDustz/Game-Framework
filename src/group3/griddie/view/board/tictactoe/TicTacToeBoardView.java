@@ -11,7 +11,7 @@ import javafx.scene.layout.GridPane;
 import java.util.Observable;
 import java.util.Observer;
 
-public class TicTacToeBoardView extends RootView<BoardController> implements Observer {
+public class TicTacToeBoardView extends RootView<Board> implements Observer {
 
     public TicTacToeBoardView(Board board) {
         super(board, new GridPane());

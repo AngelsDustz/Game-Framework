@@ -20,7 +20,7 @@ public class Ortello extends Game {
     }
 
     @Override
-    protected View<BoardController> createBoardView(Board board) {
+    protected View<Board> createBoardView(Board board) {
         return new OrtelloBoardView(board);
     }
 
