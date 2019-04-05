@@ -5,7 +5,8 @@ import group3.griddie.view.RootView;
 import group3.griddie.view.menu.main.component.GameButton;
 import javafx.scene.layout.VBox;
 
-public class MainMenuView extends RootView<MainMenuController> {
+public class MainMenuView extends RootView {
+
     private GameButton ortelloButton;
     private GameButton ticTacToeButton;
 
@@ -22,7 +23,9 @@ public class MainMenuView extends RootView<MainMenuController> {
 
     @Override
     public void initializeControls() {
-        ortelloButton.setOnMouseClicked(event -> getController().startOrtello());
-        ticTacToeButton.setOnMouseClicked(event -> getController().startTicTacToe());
+        MainMenuController controller = (MainMenuController) getController();
+
+        ortelloButton.setOnMouseClicked(event -> controller.startOrtello());
+        ticTacToeButton.setOnMouseClicked(event -> controller.startTicTacToe());
     }
 }
