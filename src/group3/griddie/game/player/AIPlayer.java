@@ -5,6 +5,7 @@ import group3.griddie.game.tictactoe.TicTacToeAI;
 import group3.griddie.model.board.Cell;
 
 public class AIPlayer extends Player {
+
     private Difficulty difficulty;
     private TicTacToeAI tttAI;
 
