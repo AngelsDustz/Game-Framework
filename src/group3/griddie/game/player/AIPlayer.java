@@ -1,19 +1,12 @@
 package group3.griddie.game.player;
 
 import group3.griddie.game.Game;
+import group3.griddie.game.tictactoe.TicTacToeAI;
+import group3.griddie.model.board.Cell;
 
 public class AIPlayer extends Player {
     private Difficulty difficulty;
-
-    @Override
-    protected void onStartTurn() {
-
-    }
-
-    @Override
-    protected void onEndTurn() {
-
-    }
+    private TicTacToeAI tttAI;
 
     /**
      * Difficulty ENUMs.
@@ -29,15 +22,6 @@ public class AIPlayer extends Player {
         this.difficulty = Difficulty.DIFFICULTY_EASY;
     }
 
-    @Override
-    protected void onInit() {
-
-    }
-
-    @Override
-    protected void onTick() {
-
-    }
 
     public AIPlayer(Game game, Difficulty difficulty) {
         super(game, "AI");
@@ -46,5 +30,31 @@ public class AIPlayer extends Player {
 
     public Difficulty getDifficulty() {
         return difficulty;
+    }
+
+    public TicTacToeAI getTicTacToeAI() {
+        if (this.tttAI == null) {
+            this.tttAI = new TicTacToeAI(this.getGame(), this);
+        }
+
+        return this.tttAI;
+    }
+
+    @Override
+    protected void onInit() {
+    }
+
+    @Override
+    protected void onTick() {
+    }
+
+    @Override
+    protected void onStartTurn() {
+        Cell predicted = this.getTicTacToeAI().predictMove();
+        this.getGame().playerMove(this, predicted.getX(), predicted.getY());
+    }
+
+    @Override
+    protected void onEndTurn() {
     }
 }

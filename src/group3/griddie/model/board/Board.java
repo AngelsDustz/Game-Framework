@@ -2,8 +2,9 @@ package group3.griddie.model.board;
 
 import group3.griddie.model.Model;
 
-public class Board extends Model {
+import java.util.ArrayList;
 
+public class Board extends Model {
     private int width;
     private int height;
     private Cell[][] cells;
@@ -37,4 +38,21 @@ public class Board extends Model {
         return height;
     }
 
+    public int getSize() {
+        return width*height;
+    }
+
+    public ArrayList<Cell> getFreeSpots() {
+        ArrayList<Cell> freeCells = new ArrayList<>();
+
+        for (int row = 0; row < this.height; row++) {
+            for (int col = 0; col < this.width; col++) {
+                if (!this.cells[col][row].isDisabled()) {
+                    freeCells.add(this.cells[col][row]);
+                }
+            }
+        }
+
+        return freeCells;
+    }
 }

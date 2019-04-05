@@ -13,7 +13,6 @@ import javafx.scene.layout.BorderPane;
 import java.util.ArrayList;
 
 public abstract class Game extends Scene {
-
     private Board board;
     private boolean started;
     private ArrayList<Player> players;
@@ -26,7 +25,6 @@ public abstract class Game extends Scene {
 
         //JUST FOR TESTING
         addPlayer(new HumanPlayer(this, "Player 1"));
-        addPlayer(new ai_test_player_jonathan(this, "Player 2"));
     }
 
     public final void init() {
