@@ -1,11 +1,9 @@
 package group3.griddie.game.ortello;
 
 import group3.griddie.game.Game;
-import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.player.Player;
 import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;
-import group3.griddie.model.board.actor.Actor;
 import group3.griddie.model.board.actor.OrtelloActor;
 import group3.griddie.view.View;
 import group3.griddie.view.board.ortello.OrtelloBoardView;
@@ -14,8 +12,6 @@ public class Ortello extends Game {
 
     public Ortello() {
         super();
-
-        addPlayer(new HumanPlayer(this, Actor.Type.TYPE_2, "Ai player"));
     }
 
     @Override
@@ -28,9 +24,7 @@ public class Ortello extends Game {
 
         int index = getPlayers().indexOf(player);
 
-        OrtelloActor actor = new OrtelloActor(
-                index % 2 == 0 ? Actor.Type.TYPE_1 : Actor.Type.TYPE_2
-        );
+        OrtelloActor actor = new OrtelloActor(player.getActorType());
 
         player.registerActor(actor);
 
