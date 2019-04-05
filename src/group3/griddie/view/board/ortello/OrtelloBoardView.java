@@ -1,14 +1,10 @@
 package group3.griddie.view.board.ortello;
 
-import group3.griddie.controller.board.BoardController;
 import group3.griddie.controller.board.CellController;
 import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;
 import group3.griddie.view.RootView;
 import group3.griddie.view.board.CellView;
-import group3.griddie.view.board.tictactoe.TicTacToeActorView;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 
@@ -25,10 +21,6 @@ public class OrtelloBoardView extends RootView<Board> implements Observer {
     public void initializeView() {
         StackPane root = (StackPane) getParent();
 
-        Image border = new Image("assets/images/borderrevisiongame.png");
-        ImageView borderView = new ImageView(border);
-        root.getChildren().add(borderView);
-
         Board board = (Board) getModel();
         GridPane grid = new GridPane();
 
@@ -41,7 +33,7 @@ public class OrtelloBoardView extends RootView<Board> implements Observer {
 
                 cellView.setController(new CellController(cell));
 
-                //grid.add(cellView.getNode(), c, r);
+                grid.add(cellView.getNode(), c, r);
             }
         }
 
