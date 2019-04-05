@@ -1,6 +1,7 @@
 package group3.griddie.game;
 
 import group3.griddie.controller.board.BoardController;
+import group3.griddie.game.player.ai_test_player_jonathan;
 import group3.griddie.model.board.Board;
 import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.player.Player;
