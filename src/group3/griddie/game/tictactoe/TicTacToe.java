@@ -67,10 +67,6 @@ public class TicTacToe extends Game {
 
     }
 
-    /**
-     * Win situations:
-     * 789
-     */
     @Override
     protected void onTick() {
         Board board = this.getBoard();
@@ -151,6 +147,43 @@ public class TicTacToe extends Game {
     }
 
     private void checkIfDiagonalWon(Game game, Board board) {
-        // todo
+        Cell cell       = board.getCell(1, 1);
+        Cell topLeft    = board.getCell(0, 0);
+        Cell topRight   = board.getCell(2, 0);
+        Cell botLeft    = board.getCell(0, 2);
+        Cell botRight   = board.getCell(2, 2);
+
+        TicTacToeActor actor            = (TicTacToeActor) cell.getOccupant();
+        TicTacToeActor topLeftActor     = (TicTacToeActor) topLeft.getOccupant();
+        TicTacToeActor botRightActor    = (TicTacToeActor) botRight.getOccupant();
+
+        if (actor == null) {
+            return;
+        }
+
+        if (topLeftActor != null) {
+            if (actor.getType() == topLeftActor.getType()) {
+                if (botRightActor != null) {
+                    if (actor.getType() == botRightActor.getType()) {
+                        System.out.println("Diagonal won!");
+                        game.stop();
+                    }
+                }
+            }
+        }
+
+        TicTacToeActor topRightActor    = (TicTacToeActor) topRight.getOccupant();
+        TicTacToeActor botLeftActor     = (TicTacToeActor) botLeft.getOccupant();
+
+        if (topRightActor != null) {
+            if (actor.getType() == topRightActor.getType()) {
+                if (botLeftActor != null) {
+                    if (actor.getType() == botLeftActor.getType()) {
+                        System.out.println("Diagonal won!");
+                        game.stop();
+                    }
+                }
+            }
+        }
     }
 }
