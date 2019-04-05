@@ -14,7 +14,7 @@ public class TicTacToeActorView extends ActorView {
     @Override
     protected Image getImage() {
         return new Image(
-                ((TicTacToeActor) getModel()).getType() == TicTacToeActor.Type.O
+                ((TicTacToeActor) getModel()).getType() == Actor.Type.TYPE_1
                         ? "assets/images/o.png"
                         : "assets/images/x.png"
         );

@@ -11,11 +11,13 @@ public abstract class Player {
     private Game game;
     private ArrayList<Actor> actors;
     private String name;
+    private Actor.Type actorType;
 
-    public Player(Game game, String name) {
+    public Player(Game game, Actor.Type type, String name) {
         this.game = game;
         actors = new ArrayList<>();
         this.name = name;
+        this.actorType = type;
     }
 
     public void init() {

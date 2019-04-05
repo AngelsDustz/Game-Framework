@@ -4,6 +4,8 @@ import group3.griddie.controller.board.BoardController;
 import group3.griddie.model.board.Board;
 import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.player.Player;
+import group3.griddie.model.board.Cell;
+import group3.griddie.model.board.actor.Actor;
 import group3.griddie.view.View;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -23,7 +25,7 @@ public abstract class Game extends Scene {
         players = new ArrayList<>();
 
         //JUST FOR TESTING
-        addPlayer(new HumanPlayer(this, "Player 1"));
+        addPlayer(new HumanPlayer(this, Actor.Type.TYPE_1, "Player 1"));
     }
 
     public final void init() {
@@ -109,6 +111,11 @@ public abstract class Game extends Scene {
     private Player getNextPlayer() {
         int index = playerOnTurn == null ? 0 : players.indexOf(playerOnTurn);
         return index >= players.size() - 1 ? players.get(0) : players.get(index + 1);
+    }
+
+    public void placeActor(Actor actor, int x, int y) {
+        Cell cell = board.getCell(x, y);
+        cell.setOccupant(actor);
     }
 
     protected abstract boolean onPlayerMove(Player player, int column, int row);

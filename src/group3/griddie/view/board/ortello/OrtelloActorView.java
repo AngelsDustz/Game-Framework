@@ -1,5 +1,6 @@
 package group3.griddie.view.board.ortello;
 
+import group3.griddie.model.board.actor.Actor;
 import group3.griddie.model.board.actor.OrtelloActor;
 import group3.griddie.view.board.ActorView;
 import javafx.scene.image.Image;
@@ -12,6 +13,12 @@ public class OrtelloActorView extends ActorView {
 
     @Override
     protected Image getImage() {
-        return new Image("assets/images/o.png");
+        OrtelloActor actor = (OrtelloActor) getModel();
+
+        return new Image(
+                actor.getType() == Actor.Type.TYPE_1
+                        ? "assets/images/blackrevision.png"
+                        : "assets/images/whiterevision.png"
+        );
     }
 }
