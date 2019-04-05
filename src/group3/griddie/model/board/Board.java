@@ -1,6 +1,7 @@
 package group3.griddie.model.board;
 
 import group3.griddie.model.Model;
+import group3.griddie.model.board.actor.Actor;
 
 import java.util.ArrayList;
 
@@ -54,5 +55,19 @@ public class Board extends Model {
         }
 
         return freeCells;
+    }
+
+    public Cell findFirstActor(Actor actor) {
+        for (int row = 0; row < this.height; row++) {
+            for (int col = 0; col < this.width; col++) {
+                if (!this.cells[col][row].isDisabled()) {
+                    if (cells[col][row].getOccupant() == actor) {
+                        return cells[col][row];
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 }

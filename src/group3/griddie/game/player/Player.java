@@ -46,6 +46,10 @@ public abstract class Player {
         onEndTurn();
     }
 
+    public ArrayList<Actor> getActors() {
+        return this.actors;
+    }
+
 
     public void registerActor(Actor actor) {
         actors.add(actor);
