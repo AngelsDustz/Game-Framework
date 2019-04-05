@@ -2,9 +2,11 @@ package group3.griddie.game.tictactoe;
 
 import group3.griddie.game.Game;
 import group3.griddie.game.player.AIPlayer;
+import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.player.Player;
 import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;
+import group3.griddie.model.board.actor.Actor;
 import group3.griddie.model.board.actor.TicTacToeActor;
 import group3.griddie.view.View;
 import group3.griddie.view.board.tictactoe.TicTacToeBoardView;
@@ -13,7 +15,10 @@ public class TicTacToe extends Game {
     public TicTacToe() {
         super();
 
-        AIPlayer aiPlayer = new AIPlayer(this, "AI Player");
+        addPlayer(new HumanPlayer(this, Actor.Type.TYPE_1, "Player 1"));
+
+        AIPlayer aiPlayer = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player");
+        aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_MEDIUM);
         this.addPlayer(aiPlayer);
     }
 
@@ -28,9 +33,7 @@ public class TicTacToe extends Game {
         int index = getPlayers().indexOf(player);
 
         TicTacToeActor actor = new TicTacToeActor(
-                index % 2 == 0 ? TicTacToeActor.Type.O : TicTacToeActor.Type.X,
-                column,
-                row
+                index % 2 == 0 ? Actor.Type.TYPE_1 : Actor.Type.TYPE_1
         );
 
         player.registerActor(actor);

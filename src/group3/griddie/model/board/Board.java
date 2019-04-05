@@ -57,11 +57,16 @@ public class Board extends Model {
         return freeCells;
     }
 
-    public Cell findFirstActor(Actor actor) {
+    public Cell findFirstActorTypeNotEqual(Actor.Type actorType) {
         for (int row = 0; row < this.height; row++) {
             for (int col = 0; col < this.width; col++) {
                 if (!this.cells[col][row].isDisabled()) {
-                    if (cells[col][row].getOccupant() == actor) {
+                    Actor actor = cells[col][row].getOccupant();
+                    if (actor == null) {
+                        continue;
+                    }
+
+                    if (actor.getType() != actorType) {
                         return cells[col][row];
                     }
                 }

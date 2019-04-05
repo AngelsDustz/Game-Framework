@@ -51,4 +51,8 @@ public class Cell extends Model {
     public int getY() {
         return y;
     }
+
+    public String toString() {
+        return String.format("Cell @ W:%d H:%d Actor: %s", this.x, this.y, this.occupant);
+    }
 }

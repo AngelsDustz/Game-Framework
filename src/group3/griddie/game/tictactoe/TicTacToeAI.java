@@ -4,6 +4,7 @@ import group3.griddie.game.Game;
 import group3.griddie.game.player.AIPlayer;
 import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;
+import group3.griddie.model.board.actor.Actor;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -27,6 +28,9 @@ public class TicTacToeAI {
 
             case DIFFICULTY_HARD:
                 return this.pickSmartCell();
+
+            default:
+                return null;
         }
     }
 
@@ -42,10 +46,16 @@ public class TicTacToeAI {
      *
      */
     private Cell pickSemiRandomCell() {
-        Board board = this.game.getBoard();
+        Board board             = this.game.getBoard();
+        Actor.Type actorType    = this.player.getActorType();
+
+        Cell firstFree = board.findFirstActorTypeNotEqual(actorType);
+        System.out.println(firstFree);
+
+        return pickRandomCell();
     }
 
     private Cell pickSmartCell() {
-        //
+        return pickRandomCell();
     }
 }
