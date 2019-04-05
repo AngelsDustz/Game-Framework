@@ -67,6 +67,10 @@ public class TicTacToe extends Game {
 
     }
 
+    /**
+     * Win situations:
+     * 789
+     */
     @Override
     protected void onTick() {
         Board board = this.getBoard();

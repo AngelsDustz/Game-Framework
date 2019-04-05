@@ -1,6 +1,11 @@
 package group3.griddie.game;
 
 import group3.griddie.controller.board.BoardController;
+<<<<<<< HEAD
+=======
+import group3.griddie.game.player.AI_TEST_player;
+>>>>>>> parent of 19837f4... Merge branch 'berwout' into network
+import group3.griddie.game.player.ai_test_player_jonathan;
 import group3.griddie.model.board.Board;
 import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.player.Player;
@@ -11,6 +16,7 @@ import javafx.scene.layout.BorderPane;
 import java.util.ArrayList;
 
 public abstract class Game extends Scene {
+
     private Board board;
     private boolean started;
     private ArrayList<Player> players;
@@ -23,6 +29,7 @@ public abstract class Game extends Scene {
 
         //JUST FOR TESTING
         addPlayer(new HumanPlayer(this, "Player 1"));
+        addPlayer(new ai_test_player_jonathan(this, "Player 2"));
     }
 
     public final void init() {
