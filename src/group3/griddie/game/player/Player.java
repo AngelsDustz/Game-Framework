@@ -1,11 +1,12 @@
 package group3.griddie.game.player;
 
+import group3.griddie.game.Entity;
 import group3.griddie.game.Game;
 import group3.griddie.model.board.actor.Actor;
 
 import java.util.ArrayList;
 
-public abstract class Player {
+public abstract class Player extends Entity {
 
     private boolean onTurn;
     private Game game;
@@ -49,8 +50,9 @@ public abstract class Player {
     }
 
 
-    public void registerActor(Actor actor) {
+    public Actor registerActor(Actor actor) {
         actors.add(actor);
+        return actor;
     }
 
     public void unregisterActor(Actor actor) {
@@ -63,6 +65,14 @@ public abstract class Player {
 
     public Game getGame() {
         return game;
+    }
+
+    public Actor.Type getActorType() {
+        return actorType;
+    }
+
+    public String getName() {
+        return name;
     }
 
     protected abstract void onStartTurn();

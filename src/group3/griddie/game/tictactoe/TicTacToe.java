@@ -5,7 +5,6 @@ import group3.griddie.game.player.AIPlayer;
 import group3.griddie.game.player.Player;
 import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;
-import group3.griddie.model.board.actor.Actor;
 import group3.griddie.model.board.actor.TicTacToeActor;
 import group3.griddie.view.View;
 import group3.griddie.view.board.tictactoe.TicTacToeBoardView;
@@ -13,9 +12,6 @@ import group3.griddie.view.board.tictactoe.TicTacToeBoardView;
 public class TicTacToe extends Game {
     public TicTacToe() {
         super();
-
-        AIPlayer aiPlayer = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player");
-        this.addPlayer(aiPlayer);
     }
 
     @Override
@@ -28,9 +24,7 @@ public class TicTacToe extends Game {
 
         int index = getPlayers().indexOf(player);
 
-        TicTacToeActor actor = new TicTacToeActor(
-                index % 2 == 0 ? Actor.Type.TYPE_1 : Actor.Type.TYPE_1
-        );
+        TicTacToeActor actor = new TicTacToeActor(player.getActorType());
 
         player.registerActor(actor);
 

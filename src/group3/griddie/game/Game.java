@@ -1,14 +1,16 @@
 package group3.griddie.game;
 
 import group3.griddie.controller.board.BoardController;
-import group3.griddie.model.board.Board;
 import group3.griddie.game.player.HumanPlayer;
+import group3.griddie.model.board.Board;
 import group3.griddie.game.player.Player;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
 import group3.griddie.view.View;
+import group3.griddie.view.game.PlayerView;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 
 import java.util.ArrayList;
 
@@ -24,8 +26,8 @@ public abstract class Game extends Scene {
 
         players = new ArrayList<>();
 
-        //JUST FOR TESTING
         addPlayer(new HumanPlayer(this, Actor.Type.TYPE_1, "Player 1"));
+        addPlayer(new HumanPlayer(this, Actor.Type.TYPE_2, "Player 2"));
     }
 
     public final void init() {
@@ -37,6 +39,14 @@ public abstract class Game extends Scene {
         boardView.setController(new BoardController(board));
 
         root.setCenter(boardView.getNode());
+//
+//        HBox hbox = new HBox();
+//        PlayerView playerView1
+//
+//        hbox.getChildren().add((new PlayerView(players.get(0)).getNode()));
+//        hbox.getChildren().add((new PlayerView(players.get(1)).getNode()));
+
+//        /root.setBottom(hbox);
 
         for (Player player : players) {
             player.init();
