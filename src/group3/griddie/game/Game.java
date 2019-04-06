@@ -1,6 +1,7 @@
 package group3.griddie.game;
 
 import group3.griddie.controller.board.BoardController;
+import group3.griddie.game.player.AIPlayer;
 import group3.griddie.model.board.Board;
 import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.model.board.Board;
@@ -28,8 +29,9 @@ public abstract class Game extends Scene {
 
         thread = new GameThread(this);
 
-        addPlayer(new HumanPlayer(this, Actor.Type.TYPE_1, "Player 1"));
-        addPlayer(new HumanPlayer(this, Actor.Type.TYPE_2, "Player 2"));
+        addPlayer(new HumanPlayer(this, Actor.Type.TYPE_2, "Player"));
+        addPlayer(new AIPlayer(this, Actor.Type.TYPE_1, "AI"));
+
     }
 
     public final void init() {
