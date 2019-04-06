@@ -65,13 +65,11 @@ public class TicTacToeAI {
                     if (this.type == Actor.Type.TYPE_1){
                         board.setCells(freeCells.get(i).getX(), freeCells.get(i).getY(), "X");
                         board.setXor0("X");
-                        board.setMinOrMax("MAX");
                     }
 
                     else if(this.type == Actor.Type.TYPE_2){
                         board.setCells(freeCells.get(i).getX(), freeCells.get(i).getY(), "0");
                         board.setXor0("0");
-                        board.setMinOrMax("MIN");
                     }
                     count++;
                     board.setMinOrMax("MAX");
