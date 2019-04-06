@@ -23,4 +23,10 @@ public class GameThread extends Thread{
         }
     }
 
+    public void touch() {
+        synchronized (this) {
+            notify();
+        }
+    }
+
 }

@@ -47,10 +47,6 @@ public class AIPlayer extends Player {
     }
 
     @Override
-    protected void onTick() {
-    }
-
-    @Override
     protected void onStartTurn() {
         Cell predicted = this.getTicTacToeAI().predictMove();
         this.getGame().playerMove(this, predicted.getX(), predicted.getY());

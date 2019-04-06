@@ -15,11 +15,6 @@ public class RemotePlayer extends Player {
     }
 
     @Override
-    protected void onTick() {
-
-    }
-
-    @Override
     protected void onStartTurn() {
 
     }

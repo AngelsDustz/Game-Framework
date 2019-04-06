@@ -10,7 +10,6 @@ import group3.griddie.view.View;
 import group3.griddie.view.game.PlayerView;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-
 import java.util.ArrayList;
 
 public abstract class Game extends Scene {
@@ -26,10 +25,10 @@ public abstract class Game extends Scene {
 
         players = new ArrayList<>();
 
+        thread = new GameThread(this);
+
         addPlayer(new HumanPlayer(this, Actor.Type.TYPE_1, "Player 1"));
         addPlayer(new HumanPlayer(this, Actor.Type.TYPE_2, "Player 2"));
-
-        thread = new GameThread(this);
     }
 
     public final void init() {
@@ -68,9 +67,6 @@ public abstract class Game extends Scene {
 
         started = true;
 
-        playerOnTurn = getNextPlayer();
-        playerOnTurn.startTurn();
-
         onStart();
 
         thread.start();
@@ -85,11 +81,6 @@ public abstract class Game extends Scene {
     public final void tick() {
         onTick();
 
-        for (Player player : players) {
-            player.tick();
-        }
-
-        playerOnTurn.endTurn();
         playerOnTurn = getNextPlayer();
         playerOnTurn.startTurn();
     }
@@ -100,9 +91,7 @@ public abstract class Game extends Scene {
         }
 
         if (onPlayerMove(player, column, row)) {
-            synchronized (thread) {
-                thread.notify();
-            }
+            player.endTurn();
         }
     }
 
@@ -112,6 +101,8 @@ public abstract class Game extends Scene {
 
     public void addPlayer(Player player) {
         players.add(player);
+
+        player.endTurnEvent.addListener(thread::touch);
     }
 
     public ArrayList<Player> getPlayers() {

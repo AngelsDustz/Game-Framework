@@ -28,11 +28,6 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    protected void onTick() {
-
-    }
-
-    @Override
     protected void onStartTurn() {
 
     }
