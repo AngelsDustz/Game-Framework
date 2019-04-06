@@ -2,11 +2,12 @@ package group3.griddie.game.player;
 
 import group3.griddie.game.Game;
 import group3.griddie.model.board.Cell;
+import group3.griddie.model.board.actor.Actor;
 
 public class HumanPlayer extends Player {
 
-    public HumanPlayer(Game game, String name) {
-        super(game, name);
+    public HumanPlayer(Game game, Actor.Type type, String name) {
+        super(game, type, name);
     }
 
     @Override
@@ -24,11 +25,6 @@ public class HumanPlayer extends Player {
                 });
             }
         }
-    }
-
-    @Override
-    protected void onTick() {
-
     }
 
     @Override

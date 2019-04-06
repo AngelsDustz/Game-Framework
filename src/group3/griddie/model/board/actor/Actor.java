@@ -3,24 +3,18 @@ package group3.griddie.model.board.actor;
 import group3.griddie.model.Model;
 
 public abstract class Actor extends Model {
-    private int x;
-    private int y;
-
-    public Actor(int x, int y) {
-        setPosition(x, y);
+    public enum Type {
+        TYPE_1,
+        TYPE_2,
     }
 
-    public void setPosition(int x, int y) {
-        this.x = x;
-        this.y = y;
+    private Type type;
+
+    public Actor(Type type) {
+        this.type = type;
     }
 
-    public int getX() {
-        return x;
+    public Type getType() {
+        return type;
     }
-
-    public int getY() {
-        return y;
-    }
-
 }

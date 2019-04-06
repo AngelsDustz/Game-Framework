@@ -3,11 +3,14 @@ package group3.griddie.game;
 import group3.griddie.controller.board.BoardController;
 import group3.griddie.model.board.Board;
 import group3.griddie.game.player.HumanPlayer;
+import group3.griddie.model.board.Board;
 import group3.griddie.game.player.Player;
+import group3.griddie.model.board.Cell;
+import group3.griddie.model.board.actor.Actor;
 import group3.griddie.view.View;
+import group3.griddie.view.game.PlayerView;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-
 import java.util.ArrayList;
 
 public abstract class Game extends Scene {
@@ -16,14 +19,17 @@ public abstract class Game extends Scene {
     private boolean started;
     private ArrayList<Player> players;
     private Player playerOnTurn;
+    private final GameThread thread;
 
     public Game() {
         super(new BorderPane());
 
         players = new ArrayList<>();
 
-        //JUST FOR TESTING
-        addPlayer(new HumanPlayer(this, "Player 1"));
+        thread = new GameThread(this);
+
+        addPlayer(new HumanPlayer(this, Actor.Type.TYPE_1, "Player 1"));
+        addPlayer(new HumanPlayer(this, Actor.Type.TYPE_2, "Player 2"));
     }
 
     public final void init() {
@@ -35,6 +41,18 @@ public abstract class Game extends Scene {
         boardView.setController(new BoardController(board));
 
         root.setCenter(boardView.getNode());
+
+        BorderPane bottom = new BorderPane();
+        PlayerView player1View = new PlayerView(players.get(0));
+        PlayerView player2View = new PlayerView(players.get(1));
+
+        player1View.init();
+        player2View.init();
+
+        bottom.setLeft(player1View.getNode());
+        bottom.setRight(player2View.getNode());
+
+        root.setBottom(bottom);
 
         for (Player player : players) {
             player.init();
@@ -52,7 +70,7 @@ public abstract class Game extends Scene {
 
         onStart();
 
-        nextTurn();
+        thread.start();
     }
 
     public final void stop() {
@@ -62,22 +80,10 @@ public abstract class Game extends Scene {
     }
 
     public final void tick() {
-        for (Player player : players) {
-            player.tick();
-        }
-
         onTick();
-    }
-
-    public void nextTurn() {
-        if (playerOnTurn != null) {
-            playerOnTurn.endTurn();
-        }
 
         playerOnTurn = getNextPlayer();
         playerOnTurn.startTurn();
-
-        tick();
     }
 
     public void playerMove(Player player, int column, int row) {
@@ -86,7 +92,7 @@ public abstract class Game extends Scene {
         }
 
         if (onPlayerMove(player, column, row)) {
-            nextTurn();
+            player.endTurn();
         }
     }
 
@@ -96,6 +102,8 @@ public abstract class Game extends Scene {
 
     public void addPlayer(Player player) {
         players.add(player);
+
+        player.endTurnEvent.addListener(thread::touch);
     }
 
     public ArrayList<Player> getPlayers() {
@@ -109,6 +117,15 @@ public abstract class Game extends Scene {
     private Player getNextPlayer() {
         int index = playerOnTurn == null ? 0 : players.indexOf(playerOnTurn);
         return index >= players.size() - 1 ? players.get(0) : players.get(index + 1);
+    }
+
+    public void placeActor(Actor actor, int x, int y) {
+        Cell cell = board.getCell(x, y);
+        cell.setOccupant(actor);
+    }
+
+    public boolean isRunning() {
+        return this.started;
     }
 
     protected abstract boolean onPlayerMove(Player player, int column, int row);

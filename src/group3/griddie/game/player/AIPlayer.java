@@ -3,12 +3,14 @@ package group3.griddie.game.player;
 import group3.griddie.game.Game;
 import group3.griddie.game.tictactoe.TicTacToeAI;
 import group3.griddie.model.board.Cell;
+import group3.griddie.model.board.actor.Actor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class AIPlayer extends Player {
+
     private Difficulty difficulty;
     private TicTacToeAI tttAI;
 
@@ -21,14 +23,14 @@ public class AIPlayer extends Player {
         DIFFICULTY_HARD
     }
 
-    public AIPlayer(Game game, String name) {
-        super(game, name);
+    public AIPlayer(Game game, Actor.Type type, String name) {
+        super(game, type, name);
         this.difficulty = Difficulty.DIFFICULTY_EASY;
     }
 
 
-    public AIPlayer(Game game, Difficulty difficulty) {
-        super(game, "AI");
+    public AIPlayer(Game game, Actor.Type type, Difficulty difficulty) {
+        super(game, type, "AI");
         this.difficulty = difficulty;
     }
 
