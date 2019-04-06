@@ -23,12 +23,22 @@ public class Board extends Model {
         }
     }
 
+    public Board(Board board) {
+        this.width = board.width;
+        this.height = board.height;
+        this.cells = board.cells;
+    }
+
     public Cell[][] getCells() {
         return cells;
     }
 
     public Cell getCell(int column, int row) {
         return cells[column][row];
+    }
+
+    public void setCell(int column, int row, Cell cell) {
+        this.cells[column][row] = cell;
     }
 
     public int getWidth() {
@@ -49,7 +59,9 @@ public class Board extends Model {
         for (int row = 0; row < this.height; row++) {
             for (int col = 0; col < this.width; col++) {
                 if (!this.cells[col][row].isDisabled()) {
-                    freeCells.add(this.cells[col][row]);
+                    if (this.cells[col][row].getOccupant() == null) {
+                        freeCells.add(this.cells[col][row]);
+                    }
                 }
             }
         }
@@ -60,15 +72,14 @@ public class Board extends Model {
     public Cell findFirstActorTypeNotEqual(Actor.Type actorType) {
         for (int row = 0; row < this.height; row++) {
             for (int col = 0; col < this.width; col++) {
-                if (!this.cells[col][row].isDisabled()) {
-                    Actor actor = cells[col][row].getOccupant();
-                    if (actor == null) {
-                        continue;
-                    }
+                Actor actor = cells[col][row].getOccupant();
+                if (actor == null) {
+                    System.out.println("NO OCCUPANT!");
+                    continue;
+                }
 
-                    if (actor.getType() != actorType) {
-                        return cells[col][row];
-                    }
+                if (actor.getType() != actorType) {
+                    return cells[col][row];
                 }
             }
         }

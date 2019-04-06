@@ -2,7 +2,6 @@ package group3.griddie.game;
 
 import group3.griddie.controller.board.BoardController;
 import group3.griddie.model.board.Board;
-import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.player.Player;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
@@ -13,7 +12,6 @@ import javafx.scene.layout.BorderPane;
 import java.util.ArrayList;
 
 public abstract class Game extends Scene {
-
     private Board board;
     private boolean started;
     private ArrayList<Player> players;
@@ -113,6 +111,10 @@ public abstract class Game extends Scene {
     public void placeActor(Actor actor, int x, int y) {
         Cell cell = board.getCell(x, y);
         cell.setOccupant(actor);
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
     protected abstract boolean onPlayerMove(Player player, int column, int row);

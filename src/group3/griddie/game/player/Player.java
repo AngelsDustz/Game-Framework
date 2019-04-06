@@ -83,12 +83,4 @@ public abstract class Player extends Entity {
     protected abstract void onEndTurn();
     protected abstract void onInit();
     protected abstract void onTick();
-
-    public Actor.Type getActorType() {
-        return actorType;
-    }
-
-    public void setActorType(Actor.Type actorType) {
-        this.actorType = actorType;
-    }
 }
