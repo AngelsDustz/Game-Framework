@@ -112,7 +112,6 @@ public class TicTacToe extends Game {
             }
 
             if (check) {
-                System.out.println("Column win!");
                 return toActor.getType();
             }
         }
@@ -143,7 +142,6 @@ public class TicTacToe extends Game {
             }
 
             if (check) {
-                System.out.println("Column win!");
                 return toActor.getType();
             }
         }
@@ -170,7 +168,6 @@ public class TicTacToe extends Game {
             if (actor.getType() == topLeftActor.getType()) {
                 if (botRightActor != null) {
                     if (actor.getType() == botRightActor.getType()) {
-                        System.out.println("Diagonal won!");
                         return actor.getType();
                     }
                 }
@@ -184,7 +181,6 @@ public class TicTacToe extends Game {
             if (actor.getType() == topRightActor.getType()) {
                 if (botLeftActor != null) {
                     if (actor.getType() == botLeftActor.getType()) {
-                        System.out.println("Diagonal won!");
                         return actor.getType();
                     }
                 }

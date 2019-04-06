@@ -3,6 +3,7 @@ package group3.griddie.model.board;
 import group3.griddie.model.Model;
 import group3.griddie.model.board.actor.Actor;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Board extends Model {
@@ -24,9 +25,15 @@ public class Board extends Model {
     }
 
     public Board(Board board) {
-        this.width = board.width;
+        this.width  = board.width;
         this.height = board.height;
-        this.cells = board.cells;
+        this.cells  = new Cell[width][height];
+
+        for (int i=0;i<this.width;i++) {
+            for (int c=0;c<this.height;c++) {
+                this.cells[i][c] = board.cells[i][c];
+            }
+        }
     }
 
     public Cell[][] getCells() {
@@ -35,6 +42,18 @@ public class Board extends Model {
 
     public Cell getCell(int column, int row) {
         return cells[column][row];
+    }
+
+    public ArrayList<Cell> getCellsArray() {
+        ArrayList<Cell> cells = new ArrayList<>();
+
+        for (int i=0;i<this.width;i++) {
+            for (int c=0;c<this.height;c++) {
+                cells.add(this.getCell(i, c));
+            }
+        }
+
+        return cells;
     }
 
     public void setCell(int column, int row, Cell cell) {
@@ -85,5 +104,38 @@ public class Board extends Model {
         }
 
         return null;
+    }
+
+    public String toString() {
+        String data = "";
+
+        for (int i=0;i<this.height;i++) {
+            for (int c=0;c<this.width;c++) {
+                Cell cell = this.getCell(c, i);
+
+                if (cell.getOccupant() == null) {
+                    data += "[ ]";
+                    continue;
+                }
+
+                Actor.Type type = cell.getOccupant().getType();
+
+                if (type == null) {
+                    data += "[ ]";
+                }
+
+                if (type == Actor.Type.TYPE_1) {
+                    data += "[X]";
+                }
+
+                if (type == Actor.Type.TYPE_2) {
+                    data += "[O]";
+                }
+            }
+
+            data += "\n";
+        }
+
+        return data;
     }
 }

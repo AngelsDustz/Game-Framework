@@ -6,8 +6,6 @@ import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
 import group3.griddie.model.board.actor.TicTacToeActor;
-import group3.griddie.util.MiniMaxNode;
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -64,62 +62,81 @@ public class TicTacToeAI {
     }
 
     private Cell pickSmartCell() {
-        int mini = minimax(this.game.getBoard(), 10, false);
-        System.out.println(String.format("Minimax returned %d after %d iterations", mini, this.counter));
-//        return pickRandomCell();
-        return null;
+        int bestVal = Integer.MIN_VALUE;
+        Cell move   = null;
+
+        Board testBoard = this.game.getBoard();
+        System.out.println("Board:");
+        System.out.println(testBoard);
+        for (int i=0;i<testBoard.getWidth();i++) {
+            for (int c=0;c<testBoard.getHeight();c++) {
+                Cell cell = testBoard.getCell(i, c);
+
+                if (cell.getOccupant() == null) {
+
+                    cell.testOccupant(new TicTacToeActor(this.player.getActorType()));
+
+                    int val = minimax(testBoard, 0, false);
+
+                    cell.testOccupant(null);
+
+                    if (val > bestVal) {
+                        System.out.println(String.format("Found good move at col: %d row: %d with score %d", i, c, val));
+                        bestVal = val;
+                        move = cell;
+                    }
+                }
+            }
+        }
+
+        return move;
     }
 
     // https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-3-tic-tac-toe-ai-finding-optimal-move/
-    private int minimax(Board board, int depth, boolean isMaximizing) {
-        board = new Board(board); // Force deep copy.
-        this.counter++;
-        System.out.println("Slots free: "+board.getFreeSpots().size());
-        Actor.Type winner = game.checkIfWon(board);
+    private int minimax(Board board, int depth, boolean isMax) {
+        Board newBoard  = new Board(board); // Force hard copy.
+        Actor.Type type = game.checkIfWon(board);
 
-        if (winner != null) {
-            if (this.player.getActorType() == winner) {
-                return 10;
+        if (type != null) {
+            if (type == this.player.getActorType()) {
+                return 10 - depth;
             } else {
-                return -10;
+                return -10 + depth;
             }
         }
 
-        // If we tried to do more calculations than our limit return 0.
-        if (depth == 0) {
+        if (newBoard.getFreeSpots().size() == 0) {
             return 0;
         }
 
-        // Make sure you can flip between min and max.
-        if (!isMaximizing) {
-            int bestVal = Integer.MAX_VALUE;
-            for (Cell cell : board.getFreeSpots()) {
-                // Loop through all cells and make a new board.
-                Board newBoard = new Board(board);
-                Cell newCell = new Cell(cell.getX(), cell.getY());
-                newCell.setOccupant(new TicTacToeActor(Actor.Type.TYPE_1));
-                newBoard.setCell(cell.getX(), cell.getY(), newCell);
+        if (isMax) {
+            int best = Integer.MIN_VALUE; //Set a base.
 
-                System.out.println(newBoard.getCell(cell.getX(), cell.getY()));
-                int value = minimax(newBoard, depth - 1, !isMaximizing);
-                bestVal = Math.min(bestVal, value);
+            for (Cell cell : newBoard.getFreeSpots()) {
+                // Make move at cell.
+                cell.testOccupant(new TicTacToeActor(Actor.Type.TYPE_2));
 
-                return bestVal;
+                best = Integer.max(best, minimax(newBoard, depth+1, false));
+
+                // Undo move.
+                cell.testOccupant(null);
             }
+
+            return best;
         } else {
-            int bestVal = Integer.MIN_VALUE;
-            for (Cell cell : game.getBoard().getFreeSpots()) {
-                Board newBoard = new Board(board);
-                Cell newCell = new Cell(cell.getX(), cell.getY());
-                newCell.setOccupant(new TicTacToeActor(Actor.Type.TYPE_2));
-                newBoard.setCell(cell.getX(), cell.getY(), newCell);
-                int value = minimax(newBoard, depth - 1, !isMaximizing);
-                bestVal = Math.max(bestVal, value);
+            int best = Integer.MAX_VALUE; //Set a base.
 
-                return bestVal;
+            for (Cell cell : newBoard.getFreeSpots()) {
+                // Make move at cell.
+                cell.testOccupant(new TicTacToeActor(Actor.Type.TYPE_1));
+
+                best = Integer.min(best, minimax(newBoard, depth+1, true));
+
+                // Undo move.
+                cell.testOccupant(null);
             }
-        }
 
-        throw new IllegalStateException();
+            return best;
+        }
     }
 }
