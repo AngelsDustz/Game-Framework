@@ -28,15 +28,12 @@ public class AIPlayer extends Player {
         this.difficulty = Difficulty.DIFFICULTY_EASY;
     }
 
-    /*
-    public AIPlayer(Game game, Actor.Type type, Difficulty difficulty) {
-        super(game, type, "AI");
-        this.difficulty = difficulty;
-    }
-    **/
-
     public Difficulty getDifficulty() {
         return difficulty;
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
     }
 
     public TicTacToeAI getTicTacToeAI() {

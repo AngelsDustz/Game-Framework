@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 public class TicTacToeAI {
-    private Game        game;
+    private TicTacToe   game;
     private AIPlayer    player;
     private Actor.Type  type;
 
@@ -22,7 +22,19 @@ public class TicTacToeAI {
     }
 
     public Cell predictMove() {
-        return this.pickRandomCell();
+        switch(player.getDifficulty()) {
+            case DIFFICULTY_EASY:
+                return this.pickRandomCell();
+
+            case DIFFICULTY_MEDIUM:
+                return this.pickSemiRandomCell();
+
+            case DIFFICULTY_HARD:
+                return this.pickSmartCell();
+
+            default:
+                return null;
+        }
     }
 
     private Cell pickRandomCell() {

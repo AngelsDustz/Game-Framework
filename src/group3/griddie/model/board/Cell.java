@@ -4,7 +4,6 @@ import group3.griddie.model.Model;
 import group3.griddie.model.board.actor.Actor;
 
 public class Cell extends Model {
-
     private Actor occupant;
     private boolean disabled;
     private int x;
@@ -50,5 +49,13 @@ public class Cell extends Model {
 
     public int getY() {
         return y;
+    }
+
+    public String toString() {
+        return String.format("Cell @ W:%d H:%d Actor: %s", this.x, this.y, this.occupant);
+    }
+
+    public void testOccupant(Actor occupant) {
+        this.occupant = occupant;
     }
 }

@@ -2,9 +2,11 @@ package group3.griddie.game.tictactoe;
 
 import group3.griddie.game.Game;
 import group3.griddie.game.player.AIPlayer;
+import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.player.Player;
 import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;
+import group3.griddie.model.board.actor.Actor;
 import group3.griddie.model.board.actor.TicTacToeActor;
 import group3.griddie.view.View;
 import group3.griddie.view.board.tictactoe.TicTacToeBoardView;
@@ -12,6 +14,12 @@ import group3.griddie.view.board.tictactoe.TicTacToeBoardView;
 public class TicTacToe extends Game {
     public TicTacToe() {
         super();
+
+        addPlayer(new HumanPlayer(this, Actor.Type.TYPE_1, "Player 1"));
+
+        AIPlayer aiPlayer = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player");
+        aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
+        this.addPlayer(aiPlayer);
     }
 
     @Override
@@ -63,14 +71,25 @@ public class TicTacToe extends Game {
     protected void onTick() {
         Board board = this.getBoard();
 
-        this.checkIfColumnWon(this, board);
-        this.checkIfRowWon(this, board);
-        this.checkIfDiagonalWon(this, board);
+        if (this.checkIfWon(board) != null) {
+            this.stop();
+        }
     }
 
-    private void checkIfColumnWon(Game game, Board board) {
-        boolean won = false;
+    public Actor.Type checkIfWon(Board board) {
+        Actor.Type check = checkIfColumnWon(board);
+        if (check != null) return check;
 
+        check = checkIfRowWon(board);
+        if (check != null) return check;
+
+        check = checkIfDiagonalWon(board);
+        if (check != null) return check;
+
+        return null;
+    }
+
+    public Actor.Type checkIfColumnWon(Board board) {
         for (int i=0;i<board.getWidth();i++) {
             Cell toCheck            = board.getCell(i, 0);
             TicTacToeActor toActor  = (TicTacToeActor) toCheck.getOccupant();
@@ -93,19 +112,14 @@ public class TicTacToe extends Game {
             }
 
             if (check) {
-                won = true;
+                return toActor.getType();
             }
         }
 
-        if (won) {
-            System.out.println("Column win!");
-            game.stop();
-        }
+        return null;
     }
 
-    private void checkIfRowWon(Game game, Board board) {
-        boolean won = false;
-
+    private Actor.Type checkIfRowWon(Board board) {
         for (int i=0;i<board.getWidth();i++) {
             Cell toCheck            = board.getCell(0, i);
             TicTacToeActor toActor  = (TicTacToeActor) toCheck.getOccupant();
@@ -128,17 +142,14 @@ public class TicTacToe extends Game {
             }
 
             if (check) {
-                won = true;
+                return toActor.getType();
             }
         }
 
-        if (won) {
-            System.out.println("Row win!");
-            game.stop();
-        }
+        return null;
     }
 
-    private void checkIfDiagonalWon(Game game, Board board) {
+    private Actor.Type checkIfDiagonalWon(Board board) {
         Cell cell       = board.getCell(1, 1);
         Cell topLeft    = board.getCell(0, 0);
         Cell topRight   = board.getCell(2, 0);
@@ -150,15 +161,14 @@ public class TicTacToe extends Game {
         TicTacToeActor botRightActor    = (TicTacToeActor) botRight.getOccupant();
 
         if (actor == null) {
-            return;
+            return null;
         }
 
         if (topLeftActor != null) {
             if (actor.getType() == topLeftActor.getType()) {
                 if (botRightActor != null) {
                     if (actor.getType() == botRightActor.getType()) {
-                        System.out.println("Diagonal won!");
-                        game.stop();
+                        return actor.getType();
                     }
                 }
             }
@@ -171,11 +181,12 @@ public class TicTacToe extends Game {
             if (actor.getType() == topRightActor.getType()) {
                 if (botLeftActor != null) {
                     if (actor.getType() == botLeftActor.getType()) {
-                        System.out.println("Diagonal won!");
-                        game.stop();
+                        return actor.getType();
                     }
                 }
             }
         }
+
+        return null;
     }
 }

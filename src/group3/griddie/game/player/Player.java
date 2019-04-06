@@ -49,6 +49,10 @@ public abstract class Player extends Entity {
         endTurnEvent.call();
     }
 
+    public ArrayList<Actor> getActors() {
+        return this.actors;
+    }
+
 
     public Actor registerActor(Actor actor) {
         actors.add(actor);
@@ -78,4 +82,5 @@ public abstract class Player extends Entity {
     protected abstract void onStartTurn();
     protected abstract void onEndTurn();
     protected abstract void onInit();
+    protected abstract void onTick();
 }
