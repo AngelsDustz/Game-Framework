@@ -10,7 +10,6 @@ import group3.griddie.view.View;
 import group3.griddie.view.game.PlayerView;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 
 import java.util.ArrayList;
 
@@ -20,6 +19,7 @@ public abstract class Game extends Scene {
     private boolean started;
     private ArrayList<Player> players;
     private Player playerOnTurn;
+    private final GameThread thread;
 
     public Game() {
         super(new BorderPane());
@@ -28,6 +28,8 @@ public abstract class Game extends Scene {
 
         addPlayer(new HumanPlayer(this, Actor.Type.TYPE_1, "Player 1"));
         addPlayer(new HumanPlayer(this, Actor.Type.TYPE_2, "Player 2"));
+
+        thread = new GameThread(this);
     }
 
     public final void init() {
@@ -39,14 +41,18 @@ public abstract class Game extends Scene {
         boardView.setController(new BoardController(board));
 
         root.setCenter(boardView.getNode());
-//
-//        HBox hbox = new HBox();
-//        PlayerView playerView1
-//
-//        hbox.getChildren().add((new PlayerView(players.get(0)).getNode()));
-//        hbox.getChildren().add((new PlayerView(players.get(1)).getNode()));
 
-//        /root.setBottom(hbox);
+        BorderPane bottom = new BorderPane();
+        PlayerView player1View = new PlayerView(players.get(0));
+        PlayerView player2View = new PlayerView(players.get(1));
+
+        player1View.init();
+        player2View.init();
+
+        bottom.setLeft(player1View.getNode());
+        bottom.setRight(player2View.getNode());
+
+        root.setBottom(bottom);
 
         for (Player player : players) {
             player.init();
@@ -62,9 +68,12 @@ public abstract class Game extends Scene {
 
         started = true;
 
+        playerOnTurn = getNextPlayer();
+        playerOnTurn.startTurn();
+
         onStart();
 
-        nextTurn();
+        thread.start();
     }
 
     public final void stop() {
@@ -74,22 +83,15 @@ public abstract class Game extends Scene {
     }
 
     public final void tick() {
+        onTick();
+
         for (Player player : players) {
             player.tick();
         }
 
-        onTick();
-    }
-
-    public void nextTurn() {
-        if (playerOnTurn != null) {
-            playerOnTurn.endTurn();
-        }
-
+        playerOnTurn.endTurn();
         playerOnTurn = getNextPlayer();
         playerOnTurn.startTurn();
-
-        tick();
     }
 
     public void playerMove(Player player, int column, int row) {
@@ -98,7 +100,9 @@ public abstract class Game extends Scene {
         }
 
         if (onPlayerMove(player, column, row)) {
-            nextTurn();
+            synchronized (thread) {
+                thread.notify();
+            }
         }
     }
 
@@ -126,6 +130,10 @@ public abstract class Game extends Scene {
     public void placeActor(Actor actor, int x, int y) {
         Cell cell = board.getCell(x, y);
         cell.setOccupant(actor);
+    }
+
+    public boolean isRunning() {
+        return this.started;
     }
 
     protected abstract boolean onPlayerMove(Player player, int column, int row);
