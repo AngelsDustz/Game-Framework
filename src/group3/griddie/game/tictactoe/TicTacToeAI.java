@@ -61,56 +61,47 @@ public class TicTacToeAI {
             if (start == 1){
                 ArrayList<BoardSimulated> array_start = new ArrayList<>();
                 for (int i = 0; i < freeCells.size(); i++) {
-                    BoardSimulated board = new BoardSimulated(3, 3);
-                    for (int b = 0; b < occupiedCells.size(); b++) {
-                        if (occupiedCells.get(b).getOccupant().getType() == Actor.Type.TYPE_1) {
-                            board.setCells(occupiedCells.get(b).getX(), occupiedCells.get(b).getY(), "X");
-                        } else if (occupiedCells.get(b).getOccupant().getType() == Actor.Type.TYPE_2) {
-                            board.setCells(occupiedCells.get(b).getX(), occupiedCells.get(b).getY(), "0");
-                        }
-                    }
-
+                    BoardSimulated board = minMaxBoardHeap.get(start - 1).get(0);
                     if (this.type == Actor.Type.TYPE_1){
                         board.setCells(freeCells.get(i).getX(), freeCells.get(i).getY(), "X");
+                        board.setXor0("X");
+                        board.setMinOrMax("MAX");
                     }
 
                     else if(this.type == Actor.Type.TYPE_2){
                         board.setCells(freeCells.get(i).getX(), freeCells.get(i).getY(), "0");
+                        board.setXor0("0");
+                        board.setMinOrMax("MIN");
                     }
                     count++;
+                    board.setMinOrMax("MAX");
                     array_start.add(board);
+                    minMaxBoardHeap.get(start - 1).get(0).setPointer(board);
                 }
                 minMaxBoardHeap.add(array_start);
             }
 
             if(start != 1 && start != 0 ){
                 ArrayList<BoardSimulated> simulatedBoards = new ArrayList<>();
-                int start_for = 0;
-                for (int i = 0; i < minMaxBoardHeap.get(start).size(); i++){
-                    ArrayList<CellSimulated> selected_freespots = minMaxBoardHeap.get(start).get(i).getFreeSpots();
+                for (int i = 0; i < minMaxBoardHeap.get(start - 1).size(); i++){
+                    ArrayList<CellSimulated> selected_freespots = minMaxBoardHeap.get(start - 1).get(i).getFreeSpots();
+                    BoardSimulated selected_board = minMaxBoardHeap.get(start - 1).get(i);
                     for (int b = 0; b < selected_freespots.size(); b++){
                         BoardSimulated board = minMaxBoardHeap.get(start).get(i);
                         if(start % 2 == 1){
                             board.setCells(selected_freespots.get(b).getX(), selected_freespots.get(b).getY(), "0");
+                            board.setXor0("0");
+                            board.setMinOrMax("MIN");
                         }
 
                         else if(start % 2 == 0){
                             board.setCells(selected_freespots.get(b).getX(), selected_freespots.get(b).getY(), "X");
+                            board.setXor0("X");
+                            board.setMinOrMax("MAX");
                         }
 
                         simulatedBoards.add(board);
-
-                        if (b > 0 && b < selected_freespots.size() - 1){
-                            board.setPointer(simulatedBoards.get(b + start_for));
-                        }
-
-                        else if(b > 0 && b < selected_freespots.size()){
-                            board.setPointer(simulatedBoards.get(start_for));
-                        }
-
-                        if (b == selected_freespots.size() - 1){
-                            start_for = b;
-                        }
+                        selected_board.setPointer(board);
                         count++;
                     }
                 }
@@ -147,7 +138,10 @@ public class TicTacToeAI {
         public int width;
         public int height;
         public CellSimulated[][] cells;
-        public BoardSimulated pointer;
+        public ArrayList<BoardSimulated> pointers = new ArrayList<>();
+        public int score;
+        public String minOrMax;
+        public String xor0;
 
         public BoardSimulated(int width, int height){
             this.width = width;
@@ -162,8 +156,24 @@ public class TicTacToeAI {
             }
         }
 
+        public void giveScore(){
+            //TODO
+        }
+
+        public void setMinOrMax(String minOrMax){
+            this.minOrMax = minOrMax;
+        }
+
         public void setPointer(BoardSimulated pointer) {
-            this.pointer = pointer;
+            this.pointers.add(pointer);
+        }
+
+        public void setXor0(String xor0){
+            this.xor0 = xor0;
+        }
+
+        public void setminOrMax(String minOrMax){
+            this.minOrMax = minOrMax;
         }
 
         public ArrayList<CellSimulated> getFreeSpots() {
