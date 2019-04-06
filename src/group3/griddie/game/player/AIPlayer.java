@@ -50,11 +50,10 @@ public class AIPlayer extends Player {
 
     @Override
     protected void onStartTurn() {
-        this.tttAI.calculateMinMaxTree();
+
     }
 
     @Override
     protected void onEndTurn() {
-        this.tttAI.calculateMinMaxTree();
     }
 }
