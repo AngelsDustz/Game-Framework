@@ -21,7 +21,9 @@ public class HumanPlayer extends Player {
 
                 Cell cell = cells[c][r];
                 cell.addInteractListener(() -> {
-                    getGame().playerMove(this, column, row);
+                    if (isOnTurn()) {
+                        getGame().playerMove(this, column, row);
+                    }
                 });
             }
         }

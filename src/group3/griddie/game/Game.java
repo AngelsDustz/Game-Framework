@@ -117,7 +117,7 @@ public abstract class Game extends Scene {
     }
 
     private Player getNextPlayer() {
-        int index = playerOnTurn == null ? 0 : players.indexOf(playerOnTurn);
+        int index = playerOnTurn == null ? -1 : players.indexOf(playerOnTurn);
         return index >= players.size() - 1 ? players.get(0) : players.get(index + 1);
     }
 
