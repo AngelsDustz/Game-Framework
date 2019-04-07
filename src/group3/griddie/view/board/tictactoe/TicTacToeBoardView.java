@@ -1,5 +1,6 @@
 package group3.griddie.view.board.tictactoe;
 
+import group3.griddie.controller.board.BoardController;
 import group3.griddie.controller.board.CellController;
 import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;

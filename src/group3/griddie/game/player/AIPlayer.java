@@ -5,10 +5,6 @@ import group3.griddie.game.tictactoe.TicTacToeAI;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 public class AIPlayer extends Player {
 
     private Difficulty difficulty;
@@ -50,13 +46,12 @@ public class AIPlayer extends Player {
 
     @Override
     protected void onTick() {
-        Cell predicted = this.getTicTacToeAI().predictMove();
-        this.getGame().playerMove(this, predicted.getX(), predicted.getY());
     }
 
     @Override
     protected void onStartTurn() {
-
+        Cell predicted = this.getTicTacToeAI().predictMove();
+        this.getGame().playerMove(this, predicted.getX(), predicted.getY());
     }
 
     @Override
