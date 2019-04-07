@@ -137,6 +137,7 @@ public class BoardSimulated {
     }
 
     public void setCells(int x, int y, String occupant) {
+        this.minOrMax = occupant;
         getCells(x,y).setOccupant(occupant);
         this.move[0] = x;
         this.move[1] = y;
