@@ -17,7 +17,7 @@ public class MainMenuView extends RootView {
     @Override
     public void initializeView() {
         VBox root = (VBox) getParent();
-        root.getChildren().add(ortelloButton = new GameButton("Ortello"));
+        root.getChildren().add(ortelloButton = new GameButton("Othello"));
         root.getChildren().add(ticTacToeButton = new GameButton("TicTacToe"));
     }
 

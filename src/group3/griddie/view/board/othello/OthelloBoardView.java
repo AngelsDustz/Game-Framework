@@ -1,4 +1,4 @@
-package group3.griddie.view.board.ortello;
+package group3.griddie.view.board.othello;
 
 import group3.griddie.controller.board.CellController;
 import group3.griddie.model.board.Board;
@@ -11,9 +11,9 @@ import javafx.scene.layout.StackPane;
 import java.util.Observable;
 import java.util.Observer;
 
-public class OrtelloBoardView extends RootView<Board> implements Observer {
+public class OthelloBoardView extends RootView<Board> implements Observer {
 
-    public OrtelloBoardView(Board board) {
+    public OthelloBoardView(Board board) {
         super(board, new StackPane());
     }
 
@@ -28,7 +28,7 @@ public class OrtelloBoardView extends RootView<Board> implements Observer {
             for (int r = 0; r < board.getWidth(); r++) {
                 Cell cell = board.getCell(c, r);
 
-                CellView cellView = new CellView(cell, new OrtelloActorView(null));
+                CellView cellView = new CellView(cell, new OthelloActorView(null));
                 cellView.init();
 
                 cellView.setController(new CellController(cell));

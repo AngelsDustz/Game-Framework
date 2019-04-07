@@ -2,8 +2,6 @@ package group3.griddie.model.board;
 
 import group3.griddie.model.Model;
 import group3.griddie.model.board.actor.Actor;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Board extends Model {
@@ -41,6 +39,14 @@ public class Board extends Model {
     }
 
     public Cell getCell(int column, int row) {
+        if (column < 0 || column >= this.width) {
+            return null;
+        }
+
+        if (row < 0 || row >= this.height) {
+            return null;
+        }
+
         return cells[column][row];
     }
 

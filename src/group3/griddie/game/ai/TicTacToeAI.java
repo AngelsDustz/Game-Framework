@@ -1,7 +1,8 @@
-package group3.griddie.game.tictactoe;
+package group3.griddie.game.ai;
 
 import group3.griddie.game.Game;
 import group3.griddie.game.player.AIPlayer;
+import group3.griddie.game.tictactoe.TicTacToe;
 import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
@@ -10,10 +11,9 @@ import group3.griddie.model.board.actor.TicTacToeActor;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class TicTacToeAI {
-    private TicTacToe   game;
+public class TicTacToeAI implements AI {
+    private TicTacToe game;
     private AIPlayer    player;
-    private int counter =0;
 
     public TicTacToeAI(Game game, AIPlayer player) {
         if (!(game instanceof TicTacToe)) {
@@ -68,6 +68,7 @@ public class TicTacToeAI {
         Board testBoard = this.game.getBoard();
         System.out.println("Board:");
         System.out.println(testBoard);
+        long start = System.currentTimeMillis();
         for (int i=0;i<testBoard.getWidth();i++) {
             for (int c=0;c<testBoard.getHeight();c++) {
                 Cell cell = testBoard.getCell(i, c);
@@ -88,6 +89,10 @@ public class TicTacToeAI {
                 }
             }
         }
+
+        long end = System.currentTimeMillis();
+
+        System.out.println("Minimax took: "+(end-start)+" ms.");
 
         return move;
     }

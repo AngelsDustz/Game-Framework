@@ -1,19 +1,19 @@
-package group3.griddie.view.board.ortello;
+package group3.griddie.view.board.othello;
 
 import group3.griddie.model.board.actor.Actor;
-import group3.griddie.model.board.actor.OrtelloActor;
+import group3.griddie.model.board.actor.OthelloActor;
 import group3.griddie.view.board.ActorView;
 import javafx.scene.image.Image;
 
-public class OrtelloActorView extends ActorView {
+public class OthelloActorView extends ActorView {
 
-    public OrtelloActorView(OrtelloActor actor) {
+    public OthelloActorView(OthelloActor actor) {
         super(actor);
     }
 
     @Override
     protected Image getImage() {
-        OrtelloActor actor = (OrtelloActor) getModel();
+        OthelloActor actor = (OthelloActor) getModel();
 
         return new Image(
                 actor.getType() == Actor.Type.TYPE_1

@@ -1,6 +1,7 @@
 package group3.griddie.game.tictactoe;
 
 import group3.griddie.game.Game;
+import group3.griddie.game.ai.TicTacToeAI;
 import group3.griddie.game.player.AIPlayer;
 import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.player.Player;
@@ -19,6 +20,8 @@ public class TicTacToe extends Game {
 
         AIPlayer aiPlayer = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player");
         aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
+        aiPlayer.setGameAI(new TicTacToeAI(this, aiPlayer));
+
         this.addPlayer(aiPlayer);
     }
 
