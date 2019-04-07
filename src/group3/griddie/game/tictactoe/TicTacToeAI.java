@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 public class TicTacToeAI {
-    private TicTacToe   game;
+    private Game        game;
     private AIPlayer    player;
     private Actor.Type  type;
 
@@ -22,19 +22,7 @@ public class TicTacToeAI {
     }
 
     public Cell predictMove() {
-        switch(player.getDifficulty()) {
-            case DIFFICULTY_EASY:
-                return this.pickRandomCell();
-
-            case DIFFICULTY_MEDIUM:
-                return this.pickSemiRandomCell();
-
-            case DIFFICULTY_HARD:
-                return this.pickSmartCell();
-
-            default:
-                return null;
-        }
+        return this.pickRandomCell();
     }
 
     private Cell pickRandomCell() {
@@ -42,6 +30,14 @@ public class TicTacToeAI {
         Random random               = new Random();
 
         return freeCells.get(random.nextInt(freeCells.size()));
+    }
+
+    public void calculateMinMaxTree(){
+        ArrayList<ArrayList<BoardSimulated>> boardinput = new ArrayList<>();
+        ArrayList<ArrayList<BoardSimulated>> minMaxBoardHeap = returnMinMaxList(10, 0, boardinput, 0);
+        for (ArrayList<BoardSimulated> board: minMaxBoardHeap) {
+            System.out.println(board);
+        }
     }
 
     public ArrayList<ArrayList<BoardSimulated>>  returnMinMaxList(int depth, int start, ArrayList<ArrayList<BoardSimulated>> boardinput, int count){
@@ -70,6 +66,7 @@ public class TicTacToeAI {
                 array_start.add(start_board);
                 minMaxBoardHeap.add(array_start);
             }
+            //starting max row
             if (start == 1){
                 ArrayList<BoardSimulated> array_start = new ArrayList<>();
                 for (int i = 0; i < freeCells.size(); i++) {
@@ -90,29 +87,29 @@ public class TicTacToeAI {
                 }
                 minMaxBoardHeap.add(array_start);
             }
-
+            //starting with min and going in depth
             if(start != 1 && start != 0 ){
                 ArrayList<BoardSimulated> simulatedBoards = new ArrayList<>();
                 for (int i = 0; i < minMaxBoardHeap.get(start - 1).size(); i++){
                     ArrayList<CellSimulated> selected_freespots = minMaxBoardHeap.get(start - 1).get(i).getFreeSpots();
                     BoardSimulated selected_board = minMaxBoardHeap.get(start - 1).get(i);
-                    for (int b = 0; b < selected_freespots.size(); b++){
+                    for (int b = 0; b < selected_freespots.size(); b++) {
                         BoardSimulated board = minMaxBoardHeap.get(start).get(i);
-                        if(start % 2 == 1){
-                            board.setCells(selected_freespots.get(b).getX(), selected_freespots.get(b).getY(), "0");
-                            board.setXor0("0");
-                            board.setMinOrMax("MIN");
-                        }
+                        if (board.endPoint != -1 || board.endPoint != 0) {
+                            if (start % 2 == 1) {
+                                board.setCells(selected_freespots.get(b).getX(), selected_freespots.get(b).getY(), "0");
+                                board.setXor0("0");
+                                board.setMinOrMax("MIN");
+                            } else if (start % 2 == 0) {
+                                board.setCells(selected_freespots.get(b).getX(), selected_freespots.get(b).getY(), "X");
+                                board.setXor0("X");
+                                board.setMinOrMax("MAX");
+                            }
 
-                        else if(start % 2 == 0){
-                            board.setCells(selected_freespots.get(b).getX(), selected_freespots.get(b).getY(), "X");
-                            board.setXor0("X");
-                            board.setMinOrMax("MAX");
+                            simulatedBoards.add(board);
+                            selected_board.setPointer(board);
+                            count++;
                         }
-
-                        simulatedBoards.add(board);
-                        selected_board.setPointer(board);
-                        count++;
                     }
                 }
                 minMaxBoardHeap.add(simulatedBoards);
@@ -122,7 +119,7 @@ public class TicTacToeAI {
         if(depth == 0){
             return minMaxBoardHeap;
         }
-        return returnMinMaxList(depth--, start++, minMaxBoardHeap, count);
+        return returnMinMaxList(depth --, start++, minMaxBoardHeap, count);
     }
 
     private ArrayList<Cell> getOccupied(int height, int width) {
@@ -152,16 +149,63 @@ public class TicTacToeAI {
         public int score;
         public String minOrMax;
         public String xor0;
+        public int endPoint;
 
         public BoardSimulated(int width, int height){
             this.width = width;
             this.height = height;
 
-            cells = new CellSimulated[width][height];
+            this.cells = new CellSimulated[width][height];
 
             for (int c = 0; c < width; c++) {
                 for (int r = 0; r < height; r++) {
                     cells[c][r] = new CellSimulated(c, r);
+                }
+            }
+        }
+
+        public int getEndPoint() {
+            return this.endPoint;
+        }
+
+        public void ifWon(){
+            //check collumns
+            for(int i = 0; i < this.width; i++){
+                if(this.cells[i][this.height - 1].getMinOrMax() == this.cells[i][this.height - 2].getMinOrMax()
+                        && this.cells[i][this.width - 2].getMinOrMax() == this.cells[i][this.width - 3].getMinOrMax()){
+                    if(this.minOrMax == "MAX"){
+                        this.endPoint = 1;
+                    }
+
+                    else if(this.minOrMax == "MIN"){
+                        this.endPoint = -1;
+                    }
+                }
+            }
+            //check rows
+            for(int i = 0; i < this.height; i++){
+                if(this.cells[this.width - 1][i].getMinOrMax() == this.cells[this.width - 2][i].getMinOrMax()
+                        && this.cells[this.width - 2][i].getMinOrMax() == this.cells[this.width - 3][i].getMinOrMax()){
+                    if(this.minOrMax == "MAX"){
+                        this.endPoint = 1;
+                    }
+
+                    else if(this.minOrMax == "MIN"){
+                        this.endPoint = -1;
+                    }
+                }
+            }
+            //check diagonal
+            for(int i = 0; i < this.width - 1; i++){
+                if(this.cells[this.width - this.width][this.width - this.width].getMinOrMax() == this.cells[this.width + i - this.width][i].getMinOrMax()
+                        && this.cells[this.width][this.width].getMinOrMax() == this.cells[this.width + i - this.width][i].getMinOrMax()){
+                    if(this.minOrMax == "MAX"){
+                        this.endPoint = 1;
+                    }
+
+                    else if(this.minOrMax == "MIN"){
+                        this.endPoint = -1;
+                    }
                 }
             }
         }
@@ -200,11 +244,12 @@ public class TicTacToeAI {
         }
 
         public CellSimulated getCells(int collumn, int row) {
-            return cells[collumn][row];
+            return this.cells[collumn][row];
         }
 
         public void setCells(int x, int y, String occupant) {
             getCells(x,y).setOccupant(occupant);
+            ifWon();
         }
     }
 
@@ -218,8 +263,12 @@ public class TicTacToeAI {
         public CellSimulated(int c, int r) {
             this.x = c;
             this.y = r;
-
+            this.MinOrMax = "default";
             disabled = false;
+        }
+
+        public String getMinOrMax() {
+            return MinOrMax;
         }
 
         public void setDisabled(boolean disabled) {
