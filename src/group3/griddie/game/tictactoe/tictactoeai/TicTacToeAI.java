@@ -16,13 +16,16 @@ public class TicTacToeAI {
     private Game        game;
     private AIPlayer    player;
     private Actor.Type  type;
+    private CellSimulated[][][] bestPosition = new CellSimulated[10][3][3];
+
 
     public TicTacToeAI(Game game, AIPlayer player, Actor.Type type) {
         this.game   = game;
         this.player = player;
         this.type = type;
     }
-
+    public void setupBestPositions(){
+    }
     public Cell predictMove() {
         return this.pickRandomCell();
     }
@@ -34,18 +37,30 @@ public class TicTacToeAI {
         return freeCells.get(random.nextInt(freeCells.size()));
     }
 
-    public void calculateMinMaxTree(){
+    public Cell calculateMinMaxTree(){
         ArrayList<ArrayList<BoardSimulated>> boardinput = new ArrayList<>();
-        ArrayList<ArrayList<BoardSimulated>> minMaxBoardHeap = returnMinMaxList(10, 0, boardinput, 0);
+        long start_timer = System.nanoTime();
+        Cell bestCell = null;
+        ArrayList<ArrayList<BoardSimulated>> minMaxBoardHeap = returnMinMaxList(11, 0, boardinput, 0, start_timer);
+        ArrayList<BoardSimulated> simulation = new ArrayList<>();
+        for (ArrayList<BoardSimulated> listBoards: minMaxBoardHeap){
+            for (BoardSimulated boards : listBoards){
+                if(boards.getScore() > 0){
+                    simulation.add(boards);
+                }
+            }
+        }
+        return new Cell(simulation.get(0).getMove()[0], simulation.get(0).getMove()[1]);
     }
 
-    public ArrayList<ArrayList<BoardSimulated>>  returnMinMaxList(int depth, int start, ArrayList<ArrayList<BoardSimulated>> boardinput, int count){
+    public ArrayList<ArrayList<BoardSimulated>>  returnMinMaxList(int depth, int start, ArrayList<ArrayList<BoardSimulated>> boardinput, int count, long inputtime){
         ArrayList<ArrayList<BoardSimulated>> minMaxBoardHeap = boardinput;
         int depthMethod = depth;
         int startMethod = start;
         int countMethod = count;
         ArrayList<Cell> freeCells = null;
         ArrayList<Cell> occupiedCells = null;
+        long last_time = inputtime;
         if (startMethod == 0) {
             count = 0;
             minMaxBoardHeap = new ArrayList<>();
@@ -56,7 +71,6 @@ public class TicTacToeAI {
         if(depthMethod > 0){
             if(startMethod == 0) {
                 //init of heap
-                System.out.println("INIT HEAP");
                 ArrayList<BoardSimulated> array_start = new ArrayList<>();
                 BoardSimulated start_board = new BoardSimulated(3, 3);
                 /**
@@ -70,8 +84,6 @@ public class TicTacToeAI {
                     }
                 }
                  */
-                System.out.println(start_board);
-                System.out.println(occupiedCells);
                 array_start.add(start_board);
                 minMaxBoardHeap.add(array_start);
             }
@@ -81,27 +93,21 @@ public class TicTacToeAI {
                 for (int i = 0; i < minMaxBoardHeap.get(start - 1).size(); i++){
                     ArrayList<CellSimulated> selected_freespots = minMaxBoardHeap.get(start - 1).get(i).getFreeSpots();
                     BoardSimulated selected_board = minMaxBoardHeap.get(start - 1).get(i);
-                    System.out.println("ARRAY SIZE: " + minMaxBoardHeap.get(start - 1).size());
                     for (int b = 0; b < selected_freespots.size(); b++) {
                         if (selected_board.getEndPoint() == 0) {
                             BoardSimulated board = new BoardSimulated(3,3);
-                            CellSimulated[][] array = selected_board.getNewCellsArray();
-                            board.setCells(array);
+                            board.setCells(selected_board.getNewCellsArray());
                             if ((startMethod % 2) == 0) {
                                 board.setCells(selected_freespots.get(b).getX(), selected_freespots.get(b).getY(), "0");
                                 board.setXor0("0");
                                 board.setMinOrMax("MIN");
-                                System.out.println("MIN:" + startMethod % 2);
 
                             }
                             else if ((startMethod % 2) == 1) {
                                 board.setCells(selected_freespots.get(b).getX(), selected_freespots.get(b).getY(), "X");
                                 board.setXor0("X");
                                 board.setMinOrMax("MAX");
-                                System.out.println("MAX:" + startMethod % 2);
                             }
-                            System.out.println(board);
-                            System.out.println(selected_board);
                             simulatedBoards.add(board);
                             selected_board.setPointer(board);
                             countMethod++;
@@ -113,13 +119,16 @@ public class TicTacToeAI {
         }
 
         if(depthMethod == 0){
+            long time = System.nanoTime();
+            int delta_time = (int) ((time - last_time) / 1000000);
+            System.out.println("Time: " + delta_time + "ms");
             System.out.println("Start: " + startMethod);
             System.out.println("Depth: " + depthMethod);
             System.out.println("Count: " + countMethod);
             return minMaxBoardHeap;
         }
 
-        return returnMinMaxList(depthMethod -= 1, startMethod += 1, minMaxBoardHeap, countMethod);
+        return returnMinMaxList(depthMethod -= 1, startMethod += 1, minMaxBoardHeap, countMethod, last_time);
     }
 
     private ArrayList<Cell> getOccupied(int height, int width) {

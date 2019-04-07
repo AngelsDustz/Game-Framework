@@ -2,6 +2,7 @@ package group3.griddie.game.player;
 
 import group3.griddie.game.Game;
 import group3.griddie.game.tictactoe.tictactoeai.TicTacToeAI;
+import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
 
 public class AIPlayer extends Player {
@@ -49,7 +50,8 @@ public class AIPlayer extends Player {
 
     @Override
     protected void onStartTurn() {
-        this.getTicTacToeAI().calculateMinMaxTree();
+        Cell cell = this.getTicTacToeAI().calculateMinMaxTree();
+        this.getGame().playerMove(this, cell.getX(), cell.getY());
     }
 
     @Override
