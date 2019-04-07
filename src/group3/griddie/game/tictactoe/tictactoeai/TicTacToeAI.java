@@ -73,17 +73,18 @@ public class TicTacToeAI {
                 //init of heap
                 ArrayList<BoardSimulated> array_start = new ArrayList<>();
                 BoardSimulated start_board = new BoardSimulated(3, 3);
-                /**
                 for (int c = 0; c < occupiedCells.size(); c++) {
-                    if (occupiedCells.get(c).getOccupant().getType() == this.type) {
-                        System.out.println("filled: X");
-                        start_board.setCells(occupiedCells.get(c).getX(), occupiedCells.get(c).getY(), "X");
-                    } else if (occupiedCells.get(c).getOccupant().getType() != this.type) {
-                        start_board.setCells(occupiedCells.get(c).getX(), occupiedCells.get(c).getY(), "0");
-                        System.out.println("filled: 0");
+                    if (occupiedCells.get(c).isDisabled() == true) {
+                        if (occupiedCells.get(c).getOccupant().getType() == this.type) {
+                            System.out.println("filled: X");
+                            start_board.setCells(occupiedCells.get(c).getX(), occupiedCells.get(c).getY(), "X");
+                        } else if (occupiedCells.get(c).getOccupant().getType() != this.type) {
+                            start_board.setCells(occupiedCells.get(c).getX(), occupiedCells.get(c).getY(), "0");
+                            System.out.println("filled: 0");
+                        }
                     }
                 }
-                 */
+
                 array_start.add(start_board);
                 minMaxBoardHeap.add(array_start);
             }

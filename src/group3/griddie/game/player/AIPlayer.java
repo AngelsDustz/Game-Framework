@@ -33,6 +33,7 @@ public class AIPlayer extends Player {
     }
 
     public TicTacToeAI getTicTacToeAI() {
+        System.out.println("ACTOR: " + this.getActorType());
         if (this.tttAI == null) {
             this.tttAI = new TicTacToeAI(this.getGame(), this, this.getActorType());
         }
@@ -46,6 +47,7 @@ public class AIPlayer extends Player {
 
     @Override
     protected void onTick() {
+
     }
 
     @Override
