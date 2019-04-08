@@ -1,4 +1,4 @@
-package group3.griddie.helper.networktranslator;
+package group3.griddie.network.networktranslator;
 
 public class NetworkTranslator {
 

@@ -1,6 +1,6 @@
-package group3.griddie.helper.invoker;
+package group3.griddie.network.invoker;
 
-import group3.griddie.helper.commands.Command;
+import group3.griddie.network.commands.Command;
 
 import java.util.ArrayList;
 import java.util.List;

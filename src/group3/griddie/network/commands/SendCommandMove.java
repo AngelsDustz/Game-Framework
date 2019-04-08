@@ -1,6 +1,6 @@
-package group3.griddie.helper.commands;
+package group3.griddie.network.commands;
 
-import group3.griddie.helper.NetworkMain;
+import group3.griddie.network.NetworkMain;
 
 public class SendCommandMove implements Command {
     //access for the whole class

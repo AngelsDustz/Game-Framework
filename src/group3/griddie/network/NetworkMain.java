@@ -1,6 +1,6 @@
-package group3.griddie.helper;
+package group3.griddie.network;
 
-import group3.griddie.helper.producer.HostCreator;
+import group3.griddie.network.producer.HostCreator;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -125,9 +125,6 @@ public class NetworkMain {
         while (connectedrun) {
             checkCommand(); //send the commands that are in the buffer
             checkPutInBufferIn(); // puts the commands from the socketbuffer in the linkedlistqueue
-            for (String value : printAll()) {
-                System.out.println(value);
-            }
         }
 
         //prints out the socket closed if closed

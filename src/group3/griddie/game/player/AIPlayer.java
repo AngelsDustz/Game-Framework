@@ -4,6 +4,7 @@ import group3.griddie.game.Game;
 import group3.griddie.game.tictactoe.tictactoeai.TicTacToeAI;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
+import group3.griddie.network.NetworkMain;
 
 public class AIPlayer extends Player {
 
@@ -19,8 +20,8 @@ public class AIPlayer extends Player {
         DIFFICULTY_HARD
     }
 
-    public AIPlayer(Game game, Actor.Type type, String name) {
-        super(game, type, name);
+    public AIPlayer(Game game, Actor.Type type, String name, NetworkMain access) {
+        super(game, type, name, access);
         this.difficulty = Difficulty.DIFFICULTY_EASY;
     }
 

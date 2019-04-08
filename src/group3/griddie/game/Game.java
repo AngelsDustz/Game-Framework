@@ -16,11 +16,17 @@ public abstract class Game extends Scene {
     private boolean started;
     private ArrayList<Player> players;
     private Player playerOnTurn;
+    private String game;
 
-    public Game() {
+    public Game(String game) {
         super(new BorderPane());
-
         players = new ArrayList<>();
+        this.game = game;
+    }
+
+    @Override
+    public String toString() {
+        return game;
     }
 
     public final void init() {

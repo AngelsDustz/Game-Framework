@@ -83,8 +83,22 @@ public class TicTacToeAI {
             for (BoardSimulated boards : listBoards){
                 if(boards.getStart() != 1) {
                     if (boards.getScore() > 0) {
-                        simulation.add(boards);
-                    } else if (boards.getScore() == 0) {
+                        int check = 0;
+                        for (BoardSimulated pointerBack: boards.getPointerBack().getPointers()) {
+                            if (pointerBack.getScore() < 0){
+                                check = 1;
+                            }
+
+                            else if (pointerBack.getScore() == 0) {
+                                zeros.add(boards);
+                            }
+                        }
+                        if (check == 0){
+                            simulation.add(boards);
+                        }
+                    }
+
+                    else if (boards.getScore() == 0) {
                         zeros.add(boards);
                     }
                 }
@@ -104,13 +118,11 @@ public class TicTacToeAI {
         int depthMethod = depth;
         int startMethod = start;
         int countMethod = count;
-        ArrayList<Cell> freeCells = null;
         ArrayList<Cell> occupiedCells = null;
         long last_time = inputtime;
         if (startMethod == 0) {
             count = 0;
             minMaxBoardHeap = new ArrayList<>();
-            freeCells = this.game.getBoard().getFreeSpots();
             occupiedCells = getOccupied(3, 3);
         }
 

@@ -1,4 +1,4 @@
-package group3.griddie.helper;
+package group3.griddie.network;
 
 public class NetworkHelperThread implements Runnable {
     //access for the class

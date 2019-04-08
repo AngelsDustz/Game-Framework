@@ -1,4 +1,4 @@
-package group3.griddie.helper;
+package group3.griddie.network;
 
 import java.util.concurrent.LinkedBlockingQueue;
 

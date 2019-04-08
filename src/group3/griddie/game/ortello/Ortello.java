@@ -10,8 +10,8 @@ import group3.griddie.view.board.ortello.OrtelloBoardView;
 
 public class Ortello extends Game {
 
-    public Ortello() {
-        super();
+    public Ortello(String game) {
+        super(game);
     }
 
     @Override

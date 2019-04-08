@@ -3,6 +3,8 @@ package group3.griddie.game.player;
 import group3.griddie.game.Entity;
 import group3.griddie.game.Game;
 import group3.griddie.model.board.actor.Actor;
+import group3.griddie.network.NetworkMain;
+import group3.griddie.network.commands.SendCommandLogin;
 
 import java.util.ArrayList;
 
@@ -13,12 +15,14 @@ public abstract class Player extends Entity {
     private ArrayList<Actor> actors;
     private String name;
     private Actor.Type actorType;
+    private NetworkMain access;
 
-    public Player(Game game, Actor.Type type, String name) {
+    public Player(Game game, Actor.Type type, String name, NetworkMain access) {
         this.game = game;
         actors = new ArrayList<>();
         this.name = name;
         this.actorType = type;
+        this.access = access;
     }
 
     public void init() {
@@ -77,6 +81,14 @@ public abstract class Player extends Entity {
 
     public String getName() {
         return name;
+    }
+
+    public NetworkMain getAccess() {
+        return access;
+    }
+
+    public void setAccess(NetworkMain access) {
+        this.access = access;
     }
 
     protected abstract void onStartTurn();
