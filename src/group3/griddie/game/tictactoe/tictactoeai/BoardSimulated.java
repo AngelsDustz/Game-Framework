@@ -9,17 +9,21 @@ public class BoardSimulated {
     public int height;
     public CellSimulated[][] cells;
     public ArrayList<BoardSimulated> pointers = new ArrayList<>();
+    public BoardSimulated pointerBack;
     public int score;
     public int[] move;
     public String minOrMax;
     public String xor0;
     public int endPoint = 0;
+    public boolean inherit;
+    public int start = 0;
 
     public BoardSimulated(int width, int height){
         this.width = width;
         this.height = height;
         this.endPoint = 0;
         this.move = new int[2];
+        this.inherit = false;
         this.cells = new CellSimulated[width][height];
 
         for (int c = 0; c < width; c++) {
@@ -27,6 +31,30 @@ public class BoardSimulated {
                 cells[c][r] = new CellSimulated(c, r);
             }
         }
+    }
+
+    public void inHeritance(boolean inheritance){
+        this.inherit = inheritance;
+    }
+
+    public boolean getInheritance(){
+        return this.inherit;
+    }
+
+    public void setStart(int start) {
+        this.start = start;
+    }
+
+    public int getStart() {
+        return this.start;
+    }
+
+    public void setPointerBack(BoardSimulated pointerBack) {
+        this.pointerBack = pointerBack;
+    }
+
+    public BoardSimulated getPointerBack() {
+        return this.pointerBack;
     }
 
     public int getEndPoint() {
@@ -46,6 +74,19 @@ public class BoardSimulated {
     }
 
     public void ifWon(){
+        int full = 0;
+        for(int i = 0; i < this.width; i++){
+            for(int b = 0; b < this.height; b++){
+                if (!this.cells[i][b].getMinOrMax().equals(" ")){
+                    full += 1;
+
+                }
+
+                if (full == this.width * this.height){
+                    this.endPoint = 1;
+                }
+            }
+        }
         //check rows
         for(int i = 0; i < this.width; i++){
             if(!this.cells[i][this.height - 1].getMinOrMax().equals(" ") && this.cells[i][this.height - 1].getMinOrMax().equals(this.cells[i][this.height - 2].getMinOrMax())
@@ -156,9 +197,9 @@ public class BoardSimulated {
     public String toString() {
         ArrayList<CellSimulated> cellSimulateds = new ArrayList<>();
         String returnString = "===============\n\r";
-        for(int i = 0; i < this.width; i++){
+        for(int i = 0; i < this.height; i++){
             for (int b = 0; b < this.width; b++){
-                cellSimulateds.add(this.cells[i][b]);
+                cellSimulateds.add(this.cells[b][i]);
             }
         }
 
