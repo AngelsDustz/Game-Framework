@@ -81,26 +81,19 @@ public class TicTacToeAI {
         ArrayList<BoardSimulated> zeros = new ArrayList<>();
         for (ArrayList<BoardSimulated> listBoards: minMaxBoardHeap){
             for (BoardSimulated boards : listBoards){
-                if(boards.getScore() > 0){
-                    simulation.add(boards);
-                }
-
-                else if (boards.getScore() == 0){
-                    zeros.add(boards);
+                if(boards.getStart() != 1) {
+                    if (boards.getScore() > 0) {
+                        simulation.add(boards);
+                    } else if (boards.getScore() == 0) {
+                        zeros.add(boards);
+                    }
                 }
             }
         }
-        if(this.count == 1){
-            simulation.addAll(zeros);
-            System.out.println(simulation.get(1));
-            bestCell = new Cell(simulation.get(1).getMove()[0], simulation.get(1).getMove()[1]);
-        }
 
-        else if(this.count != 1){
-            simulation.addAll(zeros);
-            System.out.println(simulation.get(0));
-            bestCell = new Cell(simulation.get(0).getMove()[0], simulation.get(0).getMove()[1]);
-        }
+        simulation.addAll(zeros);
+        System.out.println(simulation.get(0));
+        bestCell = new Cell(simulation.get(0).getMove()[0], simulation.get(0).getMove()[1]);
         return bestCell;
     }
 
