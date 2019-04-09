@@ -9,20 +9,17 @@ import group3.griddie.network.commands.SendCommandLogin;
 import java.util.ArrayList;
 
 public abstract class Player extends Entity {
-
     private boolean onTurn;
     private Game game;
     private ArrayList<Actor> actors;
     private String name;
     private Actor.Type actorType;
-    private NetworkMain access;
 
-    public Player(Game game, Actor.Type type, String name, NetworkMain access) {
+    public Player(Game game, Actor.Type type, String name) {
         this.game = game;
         actors = new ArrayList<>();
         this.name = name;
         this.actorType = type;
-        this.access = access;
     }
 
     public void init() {
@@ -81,14 +78,6 @@ public abstract class Player extends Entity {
 
     public String getName() {
         return name;
-    }
-
-    public NetworkMain getAccess() {
-        return access;
-    }
-
-    public void setAccess(NetworkMain access) {
-        this.access = access;
     }
 
     protected abstract void onStartTurn();
