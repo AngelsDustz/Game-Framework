@@ -16,10 +16,8 @@ public class HumanPlayer extends Player {
     private SendCommandMove move;
     private CommandInvoker invoker;
 
-    public HumanPlayer(Game game, Actor.Type type, String name, NetworkMain access) {
-        super(game, type, name, access);
-        this.login = new SendCommandLogin(access, name);
-        this.subscribe = new SendCommandSubscribe(access, "Tic-tac-toe");
+    public HumanPlayer(Game game, Actor.Type type, String name) {
+        super(game, type, name);
     }
 
     @Override

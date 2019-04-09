@@ -10,7 +10,7 @@ import group3.griddie.network.commands.SendCommandSubscribe;
 public class RemotePlayer extends Player {
 
     public RemotePlayer(Game game, Actor.Type type, String name, NetworkMain access) {
-        super(game, type, name, access);
+        super(game, type, name);
     }
 
     @Override

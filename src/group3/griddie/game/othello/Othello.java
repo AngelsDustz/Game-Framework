@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class Othello extends Game {
 
     public Othello() {
-        super();
+        super("Othello");
 
         this.addPlayer(new HumanPlayer(this, Actor.Type.TYPE_1, "Player 1"));
 
