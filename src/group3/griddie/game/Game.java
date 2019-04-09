@@ -29,6 +29,10 @@ public abstract class Game extends Scene implements Observer {
         lobby.addObserver(this);
     }
 
+    public String getGame() {
+        return game;
+    }
+
     @Override
     public String toString() {
         return game;

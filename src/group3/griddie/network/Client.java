@@ -4,8 +4,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class Client {
     //access for the class and other class
-    public LinkedBlockingQueue<String> bufferIn;
-    public LinkedBlockingQueue<String> bufferOut;
+    public volatile LinkedBlockingQueue<String> bufferIn;
+    public volatile LinkedBlockingQueue<String> bufferOut;
 
     //initialize the client
     public Client() {
@@ -56,6 +56,7 @@ public class Client {
 
     //put the value in the bufferIn
     public void putInBufferIn(String incoming) {
+        System.out.println(incoming);
         try {
             bufferIn.put(incoming);
         } catch (InterruptedException e) {

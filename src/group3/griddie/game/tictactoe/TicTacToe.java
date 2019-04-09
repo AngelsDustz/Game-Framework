@@ -12,26 +12,43 @@ import group3.griddie.model.board.actor.Actor;
 import group3.griddie.model.board.actor.TicTacToeActor;
 import group3.griddie.network.NetworkHelperThread;
 import group3.griddie.network.NetworkMain;
+import group3.griddie.network.commands.*;
+import group3.griddie.network.invoker.CommandInvoker;
+import group3.griddie.network.networktranslator.NetworkTranslator;
 import group3.griddie.view.View;
 import group3.griddie.view.board.tictactoe.TicTacToeBoardView;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 public class TicTacToe extends Game {
-    private static String IP = "134.209.93.232";
+    private static String IP = "127.0.0.1";
     private static int PORT = 7789;
+
     private NetworkHelperThread runner = new NetworkHelperThread(IP,PORT);
     private Thread NetworkThread = new Thread(runner);
     private NetworkMain access = runner.getNetworkRunner();
-    private boolean networkOn;
+    private boolean networkOn = true;
+
+    private GetInformation information = new GetInformation(access);
+    private GetAllInformation allInformation = new GetAllInformation(access);
+    private SendCommandMove move = new SendCommandMove(access, 0);
+    private GetBufferSize bufferSize = new GetBufferSize(access);
+    private CommandInvoker invoker = new CommandInvoker();
+
+    private ArrayList<Cell> alreadySendMoves = new ArrayList<>();
+
     public TicTacToe(String game) {
         super(game);
-
+        NetworkThread.start();
+        setupNetwork();
     }
 
     public void setNetworkOn(boolean networkOn) {
         this.networkOn = networkOn;
     }
 
-    public boolean getNetwork(){
+    public boolean getNetworkOn(){
         return networkOn;
     }
 
@@ -65,13 +82,58 @@ public class TicTacToe extends Game {
 
     @Override
     protected void onInit() {
-        AIPlayer aiPlayer = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player");
-        aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
-        aiPlayer.setGameAI(new TicTacToeAI(this, aiPlayer));
+        allInformation.empty();
+        ArrayList<String> returnString = waiterAll(invoker);
 
-        lobby.join(aiPlayer);
-        lobby.join(new HumanPlayer(this,Actor.Type.TYPE_1, "Human Player"));
+        if(returnString.size() == 2){
+            lobby.join(new HumanPlayer(this, Actor.Type.TYPE_1, "Humanplayer"));
+            lobby.join(new RemotePlayer(this, Actor.Type.TYPE_2, "Remote Player", access));
+            System.out.println(returnString);
+        }
+
+        else if(returnString.size() == 1) {
+            AIPlayer aiPlayer = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player");
+            aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
+            aiPlayer.setGameAI(new TicTacToeAI(this, aiPlayer));
+
+            lobby.join(aiPlayer);
+            lobby.join(new RemotePlayer(this, Actor.Type.TYPE_1, "Remote Player", access));
+            System.out.println(returnString);
+        }
     }
+
+    private synchronized void setupNetwork(){
+        if(getNetworkOn()) {
+            waiter(invoker);
+            System.out.println("information");
+            System.out.println(information);
+            SendCommandLogin login = new SendCommandLogin(access, "TRUMP");
+            SendCommandSubscribe subscribe = new SendCommandSubscribe(access, this.getGame());
+            invoker.executeCommand(login);
+        }
+    }
+
+    private String waiter(CommandInvoker invoker){
+        bufferSize.getBufferSize();
+        while(bufferSize.getBufferSize() <= 0){
+            invoker.executeCommand(bufferSize);
+        }
+        System.out.println("Buffer size waiter: " + bufferSize.getBufferSize());
+        System.out.println(information.getReturnString());
+        return information.getReturnString();
+    }
+
+    private ArrayList<String> waiterAll(CommandInvoker invoker){
+        bufferSize.getBufferSize();
+        while(bufferSize.getBufferSize() <= 0){
+            invoker.executeCommand(bufferSize);
+        }
+        System.out.println("Buffer size: " + bufferSize.getBufferSize());
+        System.out.println(allInformation.getCommandInformation());
+        return allInformation.getCommandInformation();
+    }
+
+
 
     @Override
     protected void onStart() {
@@ -86,10 +148,35 @@ public class TicTacToe extends Game {
     @Override
     protected void onTick() {
         Board board = this.getBoard();
+        ArrayList<Cell> cellsArray = board.getCellsArray();
 
         if (this.checkIfWon(board) != null) {
             this.stop();
         }
+
+        if (networkOn){
+            for(int i = 0; i < cellsArray.size(); i++){
+                if(alreadySendMoves.size() != 0) {
+                    for(int b = 0; b < alreadySendMoves.size(); b++) {
+                        if (cellsArray.get(i).getX() != alreadySendMoves.get(b).getX() && cellsArray.get(i).getX() != alreadySendMoves.get(b).getY()
+                                && cellsArray.get(i).getOccupant().getType() != Actor.Type.TYPE_1){
+                            sendMove(cellsArray, i);
+                        }
+                    }
+                }
+
+                else if(alreadySendMoves.size() == 0){
+                    sendMove(cellsArray, i);
+                }
+            }
+        }
+    }
+
+    private void sendMove(ArrayList<Cell> cellsArray, int i){
+        Cell send = cellsArray.get(i);
+        int moveNumber = NetworkTranslator.translateMove(0, "tic-tac-toe", send.getX(), send.getY());
+        move.setMove(moveNumber);
+        invoker.executeCommand(move);
     }
 
     public Actor.Type checkIfWon(Board board) {

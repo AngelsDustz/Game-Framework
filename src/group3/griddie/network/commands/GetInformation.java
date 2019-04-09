@@ -2,6 +2,8 @@ package group3.griddie.network.commands;
 
 import group3.griddie.network.NetworkMain;
 
+import java.util.LinkedList;
+
 public class GetInformation implements Command {
     //access to the class
     private String returnString;
@@ -15,11 +17,15 @@ public class GetInformation implements Command {
     //execute method
     @Override
     public void execute() {
-        this.returnString = this.runner.readBufferIn();
+        this.returnString = this.runner.getClient().readBufferIn();
     }
 
     //return the String 
     public String getReturnString(){
         return this.returnString;
+    }
+
+    public void empty(){
+        this.returnString = null;
     }
 }

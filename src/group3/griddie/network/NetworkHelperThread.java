@@ -15,6 +15,7 @@ public class NetworkHelperThread implements Runnable {
     //run method
     @Override
     public void run() {
+        System.out.println("starting network thread");
         this.looper.main();
     }
 

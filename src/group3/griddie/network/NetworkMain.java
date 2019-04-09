@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -25,6 +26,7 @@ public class NetworkMain {
     private BufferedReader in;
     private Boolean connectedrun;
     private Timer timer;
+    public volatile boolean ready = false;
 
 
     //init of the NetworkMain
@@ -37,6 +39,10 @@ public class NetworkMain {
         setupStartTimer();
     }
 
+    public Client getClient() {
+        return client;
+    }
+
     //setups the timer
     private void setupStartTimer() {
         //schedules a method
@@ -47,6 +53,11 @@ public class NetworkMain {
                 isConnected(); // checks if the server is online
             }
         }, 1000, 10000);
+    }
+
+    public int getBufferInSize(){
+        int size = client.bufferIn.size();
+        return size;
     }
 
     //sets up the stream
@@ -109,22 +120,36 @@ public class NetworkMain {
         connectedrun = connected;
     }
 
-    //returns linked list if you want all the returns for sevrers
-    public LinkedList<String> printAll() {
-        LinkedList<String> buffer = new LinkedList<>();
+    //returns linked list if you want all the returns for servers
+    public ArrayList<String> printAll() {
+        ArrayList<String> buffer = new ArrayList<>();
         while (client.bufferIn.size() > 0) {
             buffer.add(readBufferIn());
         }
         return buffer;
     }
 
+    public void printEverything(){
+        ArrayList<String> buffer = new ArrayList<>();
+        while (client.bufferIn.size() > 0) {
+            System.out.println(readBufferIn());
+        }
+    }
+
+    public void setConnectedrun(Boolean connectedrun) {
+        this.connectedrun = connectedrun;
+    }
 
     public void main() {
         //print the current connection
         System.out.println("opened: " + socket);
+        System.out.println("Buffer size: " + client.bufferIn.size());
+        checkPutInBufferIn(); // puts the commands from the socketbuffer in the linkedlistqueue
         while (connectedrun) {
             checkCommand(); //send the commands that are in the buffer
             checkPutInBufferIn(); // puts the commands from the socketbuffer in the linkedlistqueue
+            //printEverything();
+            ready = true;
         }
 
         //prints out the socket closed if closed
