@@ -14,7 +14,7 @@ public class MainMenuController extends Controller {
     public void startOrtello() {
         System.out.println("Starting othello");
 
-        Griddie.launchGame(new Othello("Reversie"));
+        Griddie.launchGame(new Othello());
     }
 
     public void startTicTacToe() {
