@@ -23,7 +23,6 @@ public class TicTacToe extends Game {
         NetworkHelperThread thread = new NetworkHelperThread(IP,PORT);
         Thread thread_network = new Thread(thread);
         thread_network.start();
-        //addPlayer(new RemotePlayer(this,Actor.Type.TYPE_1, "Remote Player", thread.getNetworkRunner()));
         AIPlayer aiPlayer = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player");
         aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
         aiPlayer.setGameAI(new TicTacToeAI(this, aiPlayer));

@@ -18,6 +18,7 @@ public class Griddie extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
+        stage.setTitle("Griddie Game Framework");
         stage.show();
 
         MainMenuView menu = new MainMenuView();
