@@ -77,6 +77,7 @@ public class NetworkMain {
             if (in.ready()) {
                 input = in.readLine();
                 client.putInBufferIn(input);
+                System.out.println("Current buffer size: " + client.bufferIn.size());
             }
         } catch (IOException e) {
 
@@ -144,7 +145,6 @@ public class NetworkMain {
         //print the current connection
         System.out.println("opened: " + socket);
         System.out.println("Buffer size: " + client.bufferIn.size());
-        checkPutInBufferIn(); // puts the commands from the socketbuffer in the linkedlistqueue
         while (connectedrun) {
             checkCommand(); //send the commands that are in the buffer
             checkPutInBufferIn(); // puts the commands from the socketbuffer in the linkedlistqueue

@@ -1,16 +1,17 @@
 package group3.griddie.network;
 
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Client {
     //access for the class and other class
-    public volatile LinkedBlockingQueue<String> bufferIn;
-    public volatile LinkedBlockingQueue<String> bufferOut;
+    public volatile ArrayBlockingQueue<String> bufferIn;
+    public volatile ArrayBlockingQueue<String> bufferOut;
 
     //initialize the client
     public Client() {
-        bufferIn = new LinkedBlockingQueue<>();
-        bufferOut = new LinkedBlockingQueue<>();
+        bufferIn = new ArrayBlockingQueue<>(10);
+        bufferOut = new ArrayBlockingQueue<>(10);
     }
 
     //puts the command in the bufferOut
@@ -32,8 +33,7 @@ public class Client {
     public String readBufferOut() {
         String peek = null;
         if (bufferOut.size() > 0) {
-            peek = bufferOut.peek();
-            bufferOut.poll();
+            peek = bufferOut.poll();
         }
         return peek;
     }
@@ -47,9 +47,8 @@ public class Client {
     //read the bufferIn en removes the value from the queue
     public String readBufferIn() {
         String peek = null;
-        while (bufferIn.size() > 0) {
-            peek = bufferIn.peek();
-            bufferIn.poll();
+        if (bufferIn.size() > 0) {
+            peek = bufferIn.poll();
         }
         return peek;
     }

@@ -82,55 +82,87 @@ public class TicTacToe extends Game {
 
     @Override
     protected void onInit() {
-        allInformation.empty();
-        ArrayList<String> returnString = waiterAll(invoker);
+            AIPlayer aiPlayer = null;
+            RemotePlayer remotePlayer = null;
+            HumanPlayer player = null;
+            ArrayList<String> returnList = waiterAll(invoker);
+            if(returnList.size() == 2){
+                System.out.println("you're the first player");
+                System.out.println(returnList + " WHHHAAAA");
+                player = new HumanPlayer(this, Actor.Type.TYPE_1, "TRUMP");
+                /*aiPlayer = new AIPlayer(this, Actor.Type.TYPE_1, "AI Player");
+                aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
+                aiPlayer.setGameAI(new TicTacToeAI(this, aiPlayer));*/
+                remotePlayer = new RemotePlayer(this, Actor.Type.TYPE_2, "Putty", access);
+                lobby.join(remotePlayer);
+                lobby.join(player);
+            }
 
-        if(returnString.size() == 2){
-            lobby.join(new HumanPlayer(this, Actor.Type.TYPE_1, "Humanplayer"));
-            lobby.join(new RemotePlayer(this, Actor.Type.TYPE_2, "Remote Player", access));
-            System.out.println(returnString);
-        }
+            else if(returnList.size() == 1){
+                System.out.println("you're the second player");
+                System.out.println(returnList + " WHHHAAAA");
+                /*aiPlayer = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player");
+                aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
+                aiPlayer.setGameAI(new TicTacToeAI(this, aiPlayer));*/
+                player = new HumanPlayer(this, Actor.Type.TYPE_2, "TRUMP");
+                remotePlayer = new RemotePlayer(this, Actor.Type.TYPE_1, "Putty", access);
+                lobby.join(player);
+                lobby.join(remotePlayer);
+            }
 
-        else if(returnString.size() == 1) {
-            AIPlayer aiPlayer = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player");
-            aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
-            aiPlayer.setGameAI(new TicTacToeAI(this, aiPlayer));
-
-            lobby.join(aiPlayer);
-            lobby.join(new RemotePlayer(this, Actor.Type.TYPE_1, "Remote Player", access));
-            System.out.println(returnString);
-        }
     }
 
     private synchronized void setupNetwork(){
         if(getNetworkOn()) {
-            waiter(invoker);
-            System.out.println("information");
-            System.out.println(information);
+            ArrayList<String> returnList = waiterAll(invoker);
+            for(String string: returnList){
+                System.out.println("return command: " + string);
+            }
             SendCommandLogin login = new SendCommandLogin(access, "TRUMP");
             SendCommandSubscribe subscribe = new SendCommandSubscribe(access, this.getGame());
             invoker.executeCommand(login);
+            System.out.println("SERVER: " + waiter(invoker));
+            invoker.executeCommand(subscribe);
+            System.out.println("SERVER: " + waiter(invoker));
         }
     }
 
     private String waiter(CommandInvoker invoker){
-        bufferSize.getBufferSize();
-        while(bufferSize.getBufferSize() <= 0){
+        invoker.executeCommand(bufferSize);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if(bufferSize.getBufferSize() == 0){
             invoker.executeCommand(bufferSize);
         }
-        System.out.println("Buffer size waiter: " + bufferSize.getBufferSize());
-        System.out.println(information.getReturnString());
-        return information.getReturnString();
+
+        else if(bufferSize.getBufferSize() > 0) {
+            System.out.println("Buffer size: " + bufferSize.getBufferSize());
+            return access.readBufferIn();
+        }
+
+        return waiter(invoker);
     }
 
     private ArrayList<String> waiterAll(CommandInvoker invoker){
-        bufferSize.getBufferSize();
-        while(bufferSize.getBufferSize() <= 0){
+        invoker.executeCommand(bufferSize);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if(bufferSize.getBufferSize() == 0){
             invoker.executeCommand(bufferSize);
         }
-        System.out.println("Buffer size: " + bufferSize.getBufferSize());
-        System.out.println(allInformation.getCommandInformation());
-        return allInformation.getCommandInformation();
+
+        else if(bufferSize.getBufferSize() > 0) {
+            System.out.println("Buffer size: " + bufferSize.getBufferSize());
+            return access.printAll();
+        }
+
+        return waiterAll(invoker);
     }
 
 
@@ -154,19 +186,19 @@ public class TicTacToe extends Game {
             this.stop();
         }
 
-        if (networkOn){
-            for(int i = 0; i < cellsArray.size(); i++){
-                if(alreadySendMoves.size() != 0) {
-                    for(int b = 0; b < alreadySendMoves.size(); b++) {
-                        if (cellsArray.get(i).getX() != alreadySendMoves.get(b).getX() && cellsArray.get(i).getX() != alreadySendMoves.get(b).getY()
-                                && cellsArray.get(i).getOccupant().getType() != Actor.Type.TYPE_1){
-                            sendMove(cellsArray, i);
+        if (networkOn) {
+            for (int i = 0; i < cellsArray.size(); i++) {
+                if (cellsArray.get(i).isDisabled()) {
+                    if (alreadySendMoves.size() != 0) {
+                        for (int b = 0; b < alreadySendMoves.size(); b++) {
+                            if (cellsArray.get(i).getX() != alreadySendMoves.get(b).getX() && cellsArray.get(i).getX() != alreadySendMoves.get(b).getY()
+                                    && cellsArray.get(i).getOccupant().getType() != Actor.Type.TYPE_1) {
+                                sendMove(cellsArray, i);
+                            }
                         }
+                    } else if (alreadySendMoves.size() == 0) {
+                        sendMove(cellsArray, i);
                     }
-                }
-
-                else if(alreadySendMoves.size() == 0){
-                    sendMove(cellsArray, i);
                 }
             }
         }
