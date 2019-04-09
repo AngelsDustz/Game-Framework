@@ -16,11 +16,11 @@ public class NetworkTranslator {
                 break;
             case "revisie":
                 if(start == 0){
-                    move = x * 8 + y ;
+                    move = x + y + 8;
                 }
 
                 else if (start == 1){
-                    move = x * 8 + y - 1;
+                    move = x + y * 8 - 1;
                 }
                 break;
         }
