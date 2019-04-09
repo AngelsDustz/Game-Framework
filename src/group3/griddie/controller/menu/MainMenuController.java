@@ -14,12 +14,12 @@ public class MainMenuController extends Controller {
     public void startOrtello() {
         System.out.println("Starting othello");
 
-        Griddie.launchGame(new Othello());
+        Griddie.launchGame(new Othello("Reversie"));
     }
 
     public void startTicTacToe() {
         System.out.println("Starting tic tac toe");
 
-        Griddie.launchGame(new TicTacToe());
+        Griddie.launchGame(new TicTacToe("Tic-tac-toe"));
     }
 }

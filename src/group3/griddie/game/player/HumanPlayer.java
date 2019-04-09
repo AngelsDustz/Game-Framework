@@ -3,11 +3,23 @@ package group3.griddie.game.player;
 import group3.griddie.game.Game;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
+import group3.griddie.network.NetworkMain;
+import group3.griddie.network.commands.SendCommandLogin;
+import group3.griddie.network.commands.SendCommandMove;
+import group3.griddie.network.commands.SendCommandSubscribe;
+import group3.griddie.network.invoker.CommandInvoker;
 
 public class HumanPlayer extends Player {
 
-    public HumanPlayer(Game game, Actor.Type type, String name) {
-        super(game, type, name);
+    private SendCommandLogin login;
+    private SendCommandSubscribe subscribe;
+    private SendCommandMove move;
+    private CommandInvoker invoker;
+
+    public HumanPlayer(Game game, Actor.Type type, String name, NetworkMain access) {
+        super(game, type, name, access);
+        this.login = new SendCommandLogin(access, name);
+        this.subscribe = new SendCommandSubscribe(access, "Tic-tac-toe");
     }
 
     @Override

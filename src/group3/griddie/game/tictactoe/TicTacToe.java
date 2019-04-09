@@ -5,24 +5,32 @@ import group3.griddie.game.ai.TicTacToeAI;
 import group3.griddie.game.player.AIPlayer;
 import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.player.Player;
+import group3.griddie.game.player.RemotePlayer;
 import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
 import group3.griddie.model.board.actor.TicTacToeActor;
+import group3.griddie.network.NetworkHelperThread;
 import group3.griddie.view.View;
 import group3.griddie.view.board.tictactoe.TicTacToeBoardView;
 
 public class TicTacToe extends Game {
-    public TicTacToe() {
-        super();
+    private static String IP = "134.209.93.232";
+    private static int PORT = 7789;
+    public TicTacToe(String game) {
+        super(game);
 
-        addPlayer(new HumanPlayer(this, Actor.Type.TYPE_1, "Player 1"));
-
-        AIPlayer aiPlayer = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player");
+        NetworkHelperThread thread = new NetworkHelperThread(IP,PORT);
+        Thread thread_network = new Thread(thread);
+        thread_network.start();
+        //addPlayer(new RemotePlayer(this,Actor.Type.TYPE_1, "Remote Player", thread.getNetworkRunner()));
+        AIPlayer aiPlayer = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player", thread.getNetworkRunner());
         aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
         aiPlayer.setGameAI(new TicTacToeAI(this, aiPlayer));
 
         this.addPlayer(aiPlayer);
+        addPlayer(new HumanPlayer(this,Actor.Type.TYPE_1, "Human Player", thread.getNetworkRunner()));
+
     }
 
     @Override
