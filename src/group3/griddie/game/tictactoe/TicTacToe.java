@@ -11,16 +11,28 @@ import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
 import group3.griddie.model.board.actor.TicTacToeActor;
 import group3.griddie.network.NetworkHelperThread;
+import group3.griddie.network.NetworkMain;
 import group3.griddie.view.View;
 import group3.griddie.view.board.tictactoe.TicTacToeBoardView;
 
 public class TicTacToe extends Game {
     private static String IP = "134.209.93.232";
     private static int PORT = 7789;
+    private NetworkHelperThread runner = new NetworkHelperThread(IP,PORT);
+    private Thread NetworkThread = new Thread(runner);
+    private NetworkMain access = runner.getNetworkRunner();
+    private boolean networkOn;
     public TicTacToe(String game) {
         super(game);
 
-        //addPlayer(new RemotePlayer(this,Actor.Type.TYPE_1, "Remote Player", thread.getNetworkRunner()));
+    }
+
+    public void setNetworkOn(boolean networkOn) {
+        this.networkOn = networkOn;
+    }
+
+    public boolean getNetwork(){
+        return networkOn;
     }
 
     @Override

@@ -32,7 +32,8 @@ public class AIPlayer extends Player {
         this.difficulty = difficulty;
     }
 
-    public AI getAI() {
+    public AI getAI()
+    {
         return this.gameAI;
     }
 
