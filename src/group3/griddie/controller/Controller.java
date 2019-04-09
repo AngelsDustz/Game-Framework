@@ -7,6 +7,10 @@ public abstract class Controller<M extends Model> {
     private M model;
     private View view;
 
+    public Controller() {
+
+    }
+
     public Controller(M model) {
         this.model = model;
     }
@@ -21,5 +25,9 @@ public abstract class Controller<M extends Model> {
 
     public void setView(View view) {
         this.view = view;
+    }
+
+    public void setModel(M model) {
+        this.model = model;
     }
 }

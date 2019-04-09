@@ -12,6 +12,7 @@ public class Lobby extends Entity {
     public Lobby(int size, Game game) {
         this.size = size;
         players = new Player[size];
+        this.game = game;
     }
 
     public void join(Player player) {

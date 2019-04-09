@@ -21,6 +21,9 @@ public abstract class Game extends Scene implements Observer {
     private String game;
     private int round;
 
+    private LobbyView lobbyView;
+    private View<Board> boardView;
+
     protected Lobby lobby;
 
     public Game(String game) {
@@ -29,6 +32,14 @@ public abstract class Game extends Scene implements Observer {
 
         lobby = new Lobby(2, this);
         lobby.addObserver(this);
+
+        board = createBoard();
+        boardView = createBoardView(board);
+        boardView.init();
+        boardView.setController(new BoardController(board));
+
+        lobbyView = new LobbyView(lobby);
+        lobbyView.init();
     }
 
     @Override
@@ -39,23 +50,14 @@ public abstract class Game extends Scene implements Observer {
     public final void init() {
         BorderPane root = (BorderPane) getRoot();
 
-        board = createBoard();
-        View<Board> boardView = createBoardView(board);
-        boardView.init();
-        boardView.setController(new BoardController(board));
-
-        LobbyView lobbyView = new LobbyView(lobby);
-        lobbyView.init();
-        lobbyView.setController(new LobbyController(lobby));
-
         root.setCenter(lobbyView.getNode());
-        //root.setCenter(boardView.getNode());
 
         onInit();
     }
 
     public final void start() {
-        System.out.println("Starting");
+        BorderPane root = (BorderPane) getRoot();
+        root.setCenter(boardView.getNode());
 
         round = 0;
         started = true;

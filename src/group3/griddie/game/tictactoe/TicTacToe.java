@@ -56,12 +56,12 @@ public class TicTacToe extends Game {
 
     @Override
     protected void onInit() {
-        AIPlayer aiPlayer = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player");
-        aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
-        aiPlayer.setGameAI(new TicTacToeAI(this, aiPlayer));
-
-        lobby.join(aiPlayer);
-        lobby.join(new HumanPlayer(this,Actor.Type.TYPE_1, "Human Player"));
+//        AIPlayer aiPlayer = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player");
+//        aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
+//        aiPlayer.setGameAI(new TicTacToeAI(this, aiPlayer));
+//
+//        lobby.join(aiPlayer);
+//        lobby.join(new HumanPlayer(this,Actor.Type.TYPE_1, "Human Player"));
     }
 
     @Override
