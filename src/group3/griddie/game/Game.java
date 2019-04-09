@@ -1,11 +1,13 @@
 package group3.griddie.game;
 
 import group3.griddie.controller.board.BoardController;
+import group3.griddie.controller.game.LobbyController;
 import group3.griddie.model.board.Board;
 import group3.griddie.game.player.Player;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
 import group3.griddie.view.View;
+import group3.griddie.view.game.LobbyView;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import java.util.Observable;
@@ -25,7 +27,7 @@ public abstract class Game extends Scene implements Observer {
         super(new BorderPane());
         this.game = game;
 
-        lobby = new Lobby(2);
+        lobby = new Lobby(2, this);
         lobby.addObserver(this);
     }
 
@@ -42,7 +44,12 @@ public abstract class Game extends Scene implements Observer {
         boardView.init();
         boardView.setController(new BoardController(board));
 
-        root.setCenter(boardView.getNode());
+        LobbyView lobbyView = new LobbyView(lobby);
+        lobbyView.init();
+        lobbyView.setController(new LobbyController(lobby));
+
+        root.setCenter(lobbyView.getNode());
+        //root.setCenter(boardView.getNode());
 
         onInit();
     }
