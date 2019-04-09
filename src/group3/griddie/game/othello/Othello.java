@@ -36,9 +36,6 @@ public class Othello extends Game {
             return false;
         }
 
-        int index = getPlayers().indexOf(player);
-
-
         OthelloActor actor = new OthelloActor(player.getActorType());
 
         player.registerActor(actor);
@@ -47,6 +44,132 @@ public class Othello extends Game {
         cell.setDisabled(true);
 
         return true;
+    }
+
+    private ArrayList<Cell> getMoveCells(Player player, Cell toCell) {
+        // get all empty spots.
+        ArrayList<Cell> empty   = getBoard().getSpotsByActorType(player.getActorType());
+        ArrayList<Cell> moves   = null;
+
+        for (Cell cell : empty) {
+            // check if we have an actor in any of the directons.
+            Cell[] colliding = getBoard().getAdjacentCells(cell);
+
+            for (int i=0;i<colliding.length;i++) {
+                ArrayList<Cell> potentialMoves = new ArrayList<>();
+
+                if (colliding[i] == null || !colliding[i].isOccupied()) {
+                    // Out of bounds.
+                    continue;
+                }
+
+                if (colliding[i].getOccupant().getType() == player.getActorType()) {
+                    // We cant beat our own cells.
+                    continue;
+                }
+
+                int dirX = -1 + (i%3);
+                int dirY = -1 + (i/3);
+
+                // follow actor if we do. follow untill we reach empty or null.
+                Cell checkCell      = getBoard().getCell(cell.getX()-dirX, cell.getY()-dirY);
+                boolean finished    = false;
+
+                while (!finished) {
+//                    System.out.println("Checking cell: "+checkCell);
+                    if (checkCell == null) {
+                        // If we reached out of bounds continue.
+                        finished = true;
+                        continue;
+                    }
+
+                    if (!checkCell.isDisabled() || !checkCell.isOccupied() || checkCell.getOccupant() == null) {
+                        // Empty spot.
+                        System.out.println("Found unoccupied cell: "+checkCell);
+                        potentialMoves.add(checkCell);
+
+                        System.out.println("Checking if :");
+                        System.out.println(checkCell);
+                        System.out.println("Is equal to :");
+                        System.out.println(toCell);
+
+                        if (checkCell.equals(toCell)) {
+                            moves = potentialMoves;
+                        }
+
+                        finished = true;
+                        continue;
+                    }
+
+                    if (checkCell.getOccupant().getType() != player.getActorType()) {
+                        potentialMoves.add(checkCell);
+                        // We found a valid move, follow it till the end of hell.
+                        checkCell = getBoard().getCell(checkCell.getX()-dirX, checkCell.getY()-dirY);
+                        continue;
+                    }
+                }
+            }
+        }
+
+        return moves;
+    }
+
+    public ArrayList<Cell> getLegalMoves(Board board, Actor.Type type) {
+        // get all empty spots.
+        ArrayList<Cell> empty       = board.getFreeSpots();
+        ArrayList<Cell> legalMoves  = new ArrayList<>();
+
+        for (Cell cell : empty) {
+            // check if we have an actor in any of the directons.
+            Cell[] colliding = board.getAdjacentCells(cell);
+
+            for (int i=0;i<colliding.length;i++) {
+                if (colliding[i] == null || !colliding[i].isOccupied()) {
+                    // Out of bounds.
+                    continue;
+                }
+
+                if (colliding[i].getOccupant().getType() == type) {
+                    // We cant beat our own cells.
+                    continue;
+                }
+
+                int dirX = -1 + (i%3);
+                int dirY = -1 + (i/3);
+
+                System.out.println("["+i+"] Found actor: "+colliding[i].getOccupant().getType()+" at "+colliding[i]);
+                System.out.println("["+i+"] Direction: X:"+dirX+" Y:"+dirY);
+
+                // follow actor if we do. follow untill we reach empty or null.
+                Cell checkCell      = board.getCell(cell.getX()-dirX, cell.getY()-dirY);
+                boolean finished    = false;
+
+                while (!finished) {
+                    System.out.println("Checking cell: "+checkCell);
+                    if (checkCell == null) {
+                        // If we reached out of bounds continue.
+                        finished = true;
+                        continue;
+                    }
+
+                    if (!checkCell.isDisabled() || !checkCell.isOccupied() || checkCell.getOccupant() == null) {
+                        // Empty spot.
+//                        System.out.println("Found unoccupied cell: "+cell);
+                        legalMoves.add(checkCell);
+                        finished = true;
+                        continue;
+                    }
+
+                    if (checkCell.getOccupant().getType() != type) {
+//                        System.out.println("Found enemy piece!");
+                        // We found a valid move, follow it till the end of hell.
+                        checkCell = board.getCell(checkCell.getX()-dirX, checkCell.getY()-dirY);
+                    }
+                }
+            }
+        }
+
+        return legalMoves;
     }
 
     @Override
@@ -79,66 +202,5 @@ public class Othello extends Game {
 
     @Override
     protected void onTick() {
-    }
-
-    public ArrayList<Cell> getLegalMoves(Board board, Actor.Type type) {
-        ArrayList<Cell> cells = new ArrayList<>();
-
-        for (int row=0;row<board.getHeight();row++) {
-            for (int col=0;col<board.getWidth();col++) {
-                Cell cell = board.getCell(col, row);
-
-                if (!cell.isOccupied()) {
-                    continue;
-                }
-
-                if (cell.getOccupant().getType() == type) {
-                    // We can never beat our own piece.
-                    continue;
-                }
-
-//                System.out.println("Occupied cell: "+cell);
-
-                for (int i=0;i<3;i++) {
-                    for (int c=0;c<3;c++) {
-                        if (c == 1 && i == 1) {
-                            // Skip the piece we are checking for.
-                            continue;
-                        }
-
-                        Cell cellToCheck = board.getCell(col-(c-1), row-(i-1));
-
-                        if (cellToCheck == null) {
-                            continue;
-                        }
-
-                        if (cellToCheck.isOccupied()) {
-                            continue;
-                        }
-
-//                        System.out.println("Cell to check: "+cellToCheck);
-
-                        Cell move = board.getCell(col-((c-1)*-1), row-((i-1)*-1));
-
-                        if (move == null) {
-                            continue;
-                        }
-
-                        if (!move.isOccupied()) {
-                            continue;
-                        }
-
-                        if (move.getOccupant().getType() == type) {
-//                            System.out.println("Valid move: "+cellToCheck);
-                            cells.add(cellToCheck);
-                        }
-                    }
-                }
-
-                // Currently cells are all valid directions we can go to.
-            }
-        }
-
-        return cells;
     }
 }

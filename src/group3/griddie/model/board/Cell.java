@@ -58,4 +58,18 @@ public class Cell extends Model {
     public void testOccupant(Actor occupant) {
         this.occupant = occupant;
     }
+
+    public boolean equals(Cell cell) {
+        if (this.occupant != null && cell.occupant != null) {
+            if (this.occupant.getType() != cell.occupant.getType()) {
+                return false;
+            }
+        }
+
+        if (this.x != cell.x || this.y != cell.y) {
+            return false;
+        }
+
+        return true;
+    }
 }

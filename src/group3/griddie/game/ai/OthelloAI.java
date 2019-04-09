@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class OthelloAI implements AI {
-    private Othello game;
+    private Othello     game;
     private AIPlayer    player;
 
     public OthelloAI(Game game, AIPlayer player) {
@@ -23,8 +23,13 @@ public class OthelloAI implements AI {
 
     @Override
     public Cell predictMove() {
-        ArrayList<Cell> legitMoves = game.getLegalMoves(game.getBoard(), player.getActorType());
+        ArrayList<Cell> moves = game.getLegalMoves(game.getBoard(), player.getActorType());
 
-        return legitMoves.get(new Random().nextInt(legitMoves.size()));
+        for (Cell cell : moves) {
+            System.out.println("Found legal move: " + cell);
+        }
+
+        return moves.get(new Random().nextInt(moves.size()));
     }
+
 }
