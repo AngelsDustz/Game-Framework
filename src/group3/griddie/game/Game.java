@@ -8,20 +8,25 @@ import group3.griddie.model.board.actor.Actor;
 import group3.griddie.view.View;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import java.util.Observable;
+import java.util.Observer;
 
-import java.util.ArrayList;
+public abstract class Game extends Scene implements Observer {
 
-public abstract class Game extends Scene {
     private Board board;
     private boolean started;
-    private ArrayList<Player> players;
     private Player playerOnTurn;
     private String game;
+    private int round;
+
+    protected Lobby lobby;
 
     public Game(String game) {
         super(new BorderPane());
-        players = new ArrayList<>();
         this.game = game;
+
+        lobby = new Lobby(2);
+        lobby.addObserver(this);
     }
 
     @Override
@@ -39,21 +44,20 @@ public abstract class Game extends Scene {
 
         root.setCenter(boardView.getNode());
 
-        for (Player player : players) {
-            player.init();
-        }
-
         onInit();
     }
 
-    public final void start() throws Exception {
-        if (players.size() <= 1) {
-            throw new Exception("Need two players to start a game!");
-        }
+    public final void start() {
+        System.out.println("Starting");
 
+        round = 0;
         started = true;
 
         onStart();
+
+        for (Player player : lobby.getPlayers()) {
+            player.init();
+        }
 
         nextTurn();
     }
@@ -65,7 +69,7 @@ public abstract class Game extends Scene {
     }
 
     public final void tick() {
-        for (Player player : players) {
+        for (Player player : lobby.getPlayers()) {
             player.tick();
         }
 
@@ -73,6 +77,10 @@ public abstract class Game extends Scene {
     }
 
     public void nextTurn() {
+        System.out.println("Next turn");
+
+        round++;
+
         if (playerOnTurn != null) {
             playerOnTurn.endTurn();
         }
@@ -81,6 +89,8 @@ public abstract class Game extends Scene {
         playerOnTurn.startTurn();
 
         tick();
+
+        System.out.println("END TURN");
     }
 
     public void playerMove(Player player, int column, int row) {
@@ -97,26 +107,31 @@ public abstract class Game extends Scene {
         return board;
     }
 
-    public void addPlayer(Player player) {
-        players.add(player);
-    }
-
-    public ArrayList<Player> getPlayers() {
-        return players;
-    }
-
     public Player getPlayerOnTurn() {
         return playerOnTurn;
     }
 
     private Player getNextPlayer() {
-        int index = playerOnTurn == null ? 0 : players.indexOf(playerOnTurn);
-        return index >= players.size() - 1 ? players.get(0) : players.get(index + 1);
+        System.out.println(round % 2);
+        return lobby.getPlayer(round % 2);
     }
 
     public void placeActor(Actor actor, int x, int y) {
         Cell cell = board.getCell(x, y);
         cell.setOccupant(actor);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o instanceof Lobby) {
+            System.out.println("Lobby observer");
+
+            Lobby lobby = (Lobby) o;
+
+            if (!started && lobby.isFull()) {
+                start();
+            }
+        }
     }
 
     public void setBoard(Board board) {

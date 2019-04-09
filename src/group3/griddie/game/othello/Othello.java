@@ -19,13 +19,13 @@ public class Othello extends Game {
     public Othello() {
         super("Othello");
 
-        this.addPlayer(new HumanPlayer(this, Actor.Type.TYPE_1, "Player 1"));
+        lobby.join(new HumanPlayer(this, Actor.Type.TYPE_1, "Player 1"));
 
         AIPlayer aiPlayer = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player");
         aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
         aiPlayer.setGameAI(new OthelloAI(this, aiPlayer));
 
-        this.addPlayer(aiPlayer);
+        lobby.join(aiPlayer);
     }
 
     @Override
@@ -35,9 +35,6 @@ public class Othello extends Game {
         if (cell.isDisabled()) {
             return false;
         }
-
-        int index = getPlayers().indexOf(player);
-
 
         OthelloActor actor = new OthelloActor(player.getActorType());
 

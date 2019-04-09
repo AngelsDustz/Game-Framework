@@ -21,13 +21,6 @@ public class TicTacToe extends Game {
         super(game);
 
         //addPlayer(new RemotePlayer(this,Actor.Type.TYPE_1, "Remote Player", thread.getNetworkRunner()));
-        AIPlayer aiPlayer = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player");
-        aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
-        aiPlayer.setGameAI(new TicTacToeAI(this, aiPlayer));
-
-        this.addPlayer(aiPlayer);
-        addPlayer(new HumanPlayer(this,Actor.Type.TYPE_1, "Human Player"));
-
     }
 
     @Override
@@ -37,8 +30,6 @@ public class TicTacToe extends Game {
         if (cell.isDisabled()) {
             return false;
         }
-
-        int index = getPlayers().indexOf(player);
 
         TicTacToeActor actor = new TicTacToeActor(player.getActorType());
 
@@ -62,7 +53,12 @@ public class TicTacToe extends Game {
 
     @Override
     protected void onInit() {
+        AIPlayer aiPlayer = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player");
+        aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
+        aiPlayer.setGameAI(new TicTacToeAI(this, aiPlayer));
 
+        lobby.join(aiPlayer);
+        lobby.join(new HumanPlayer(this,Actor.Type.TYPE_1, "Human Player"));
     }
 
     @Override
