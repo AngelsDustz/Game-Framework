@@ -1,6 +1,7 @@
 package group3.griddie.game.player;
 
 import group3.griddie.game.Game;
+import group3.griddie.game.tictactoe.TicTacToe;
 import group3.griddie.model.board.actor.Actor;
 import group3.griddie.network.NetworkMain;
 import group3.griddie.network.commands.SendCommandLogin;
@@ -9,12 +10,20 @@ import group3.griddie.network.commands.SendCommandSubscribe;
 import group3.griddie.network.networktranslator.NetworkTranslator;
 
 import javax.annotation.processing.SupportedSourceVersion;
+import java.util.ArrayList;
 
 public class RemotePlayer extends Player {
-    NetworkMain access;
-    public RemotePlayer(Game game, Actor.Type type, String name, NetworkMain access) {
+    ArrayList<String> buffer;
+    ArrayList<String> bufferOwn;
+    TicTacToe tictactoe;
+    int tick;
+
+    public RemotePlayer(Game game, Actor.Type type, String name, ArrayList<String> buffer, TicTacToe tictactoe) {
         super(game, type, name);
-        this.access = access;
+        this.buffer = buffer;
+        this.bufferOwn = new ArrayList<>();
+        this.tictactoe = tictactoe;
+        this.tick = 0;
     }
 
     @Override
@@ -29,25 +38,31 @@ public class RemotePlayer extends Player {
 
     @Override
     protected void onStartTurn() {
-        String current = access.readBufferIn();
-        int value = 0;
-        if (current != null) {
-            System.out.println("remote player" + current);
-            if (NetworkTranslator.translateIncomingMessage(current, "player").equals(this.getName())) {
-                current = NetworkTranslator.translateIncomingMessage(current, "move");
-                value = Integer.valueOf(current);
-            } else if (!NetworkTranslator.translateIncomingMessage(current, "player").equals(this.getName())) {
-                current = NetworkTranslator.translateIncomingMessage(access.readBufferIn(), "move");
-                value = Integer.valueOf(current);
+        while (bufferOwn.size() == 0) {
+            if (tictactoe.getRemotePlayerBuffer().size() >= 1) {
+                bufferOwn.add(tictactoe.getRemotePlayerBuffer().get(0));
+                tictactoe.getRemotePlayerBuffer().remove(0);
+                System.out.println("not stuck");
             }
-
-            int[] xy = NetworkTranslator.reverseTranslateMove("tic-tac-toe", value);
-            this.getGame().playerMove(this, xy[0], xy[1]);
+            System.out.println(tictactoe.getRemotePlayerBuffer());
         }
+        System.out.println("did move");
+        int[] xy = NetworkTranslator.reverseTranslateMove("tic-tac-toe", Integer.valueOf(bufferOwn.get(0)));
+        this.getGame().playerMove(this, xy[0], xy[1]);
+        bufferOwn.clear();
     }
 
     @Override
     protected void onEndTurn() {
 
+    }
+
+    public class bufferOwn implements Runnable{
+
+
+        @Override
+        public void run() {
+
+        }
     }
 }

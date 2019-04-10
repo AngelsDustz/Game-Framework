@@ -12,23 +12,32 @@ import group3.griddie.model.board.actor.Actor;
 import group3.griddie.model.board.actor.TicTacToeActor;
 import group3.griddie.network.NetworkHelperThread;
 import group3.griddie.network.NetworkMain;
+import group3.griddie.network.bufferThread;
 import group3.griddie.network.commands.*;
 import group3.griddie.network.invoker.CommandInvoker;
 import group3.griddie.network.networktranslator.NetworkTranslator;
 import group3.griddie.view.View;
 import group3.griddie.view.board.tictactoe.TicTacToeBoardView;
 
+import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class TicTacToe extends Game {
     private static String IP = "127.0.0.1";
     private static int PORT = 7789;
-
-    private NetworkHelperThread runner = new NetworkHelperThread(IP,PORT);
+    private String ourplayerName = "TRUMP";
+    private NetworkHelperThread runner = new NetworkHelperThread(IP, PORT);
     private Thread NetworkThread = new Thread(runner);
     private NetworkMain access = runner.getNetworkRunner();
     private boolean networkOn = true;
+
+    private ArrayList<String> homePlayerBuffer = new ArrayList<>();
+    private ArrayList<String> remotePlayerBuffer = new ArrayList<>();
+    private ArrayList<String> otherBuffer = new ArrayList<>();
+    private volatile Boolean serverNetworkWinOrLoss = null;
+    private bufferThread networkSetupAccess = new bufferThread(this, access,ourplayerName, serverNetworkWinOrLoss);
+    private Thread networkSetupThread = new Thread(networkSetupAccess);
 
     private GetInformation information = new GetInformation(access);
     private GetAllInformation allInformation = new GetAllInformation(access);
@@ -36,7 +45,9 @@ public class TicTacToe extends Game {
     private GetBufferSize bufferSize = new GetBufferSize(access);
     private CommandInvoker invoker = new CommandInvoker();
 
+
     private ArrayList<Cell> alreadySendMoves = new ArrayList<>();
+
 
     public TicTacToe(String game) {
         super(game);
@@ -48,8 +59,24 @@ public class TicTacToe extends Game {
         this.networkOn = networkOn;
     }
 
-    public boolean getNetworkOn(){
+    public boolean getNetworkOn() {
         return networkOn;
+    }
+
+    public ArrayList<String> getRemotePlayerBuffer() {
+        return remotePlayerBuffer;
+    }
+
+    public ArrayList<String> getHomePlayerBuffer() {
+        return homePlayerBuffer;
+    }
+
+    public ArrayList<String> getOtherBuffer() {
+        return otherBuffer;
+    }
+
+    public void setServerNetworkWinOrLoss(Boolean serverNetworkWinOrLoss) {
+        this.serverNetworkWinOrLoss = serverNetworkWinOrLoss;
     }
 
     @Override
@@ -82,63 +109,64 @@ public class TicTacToe extends Game {
 
     @Override
     protected void onInit() {
-            AIPlayer aiPlayer = null;
-            RemotePlayer remotePlayer = null;
-            HumanPlayer player = null;
-            ArrayList<String> returnList = waiterAll(invoker);
-            if(returnList.size() == 2){
-                System.out.println("you're the first player");
-                System.out.println(returnList + " WHHHAAAA");
-                player = new HumanPlayer(this, Actor.Type.TYPE_1, "TRUMP");
-                /*aiPlayer = new AIPlayer(this, Actor.Type.TYPE_1, "AI Player");
-                aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
-                aiPlayer.setGameAI(new TicTacToeAI(this, aiPlayer));*/
-                remotePlayer = new RemotePlayer(this, Actor.Type.TYPE_2, "Putty", access);
-                lobby.join(remotePlayer);
-                lobby.join(player);
+        AIPlayer aiPlayer = null;
+        RemotePlayer remotePlayer = null;
+        HumanPlayer player = null;
+
+        while(networkSetupAccess.getOutPlayer() == null && networkSetupAccess.getCheck() < 2){
+            try {
+                Thread.sleep(50);
             }
 
-            else if(returnList.size() == 1){
-                System.out.println("you're the second player");
-                System.out.println(returnList + " WHHHAAAA");
-                /*aiPlayer = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player");
-                aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
-                aiPlayer.setGameAI(new TicTacToeAI(this, aiPlayer));*/
-                player = new HumanPlayer(this, Actor.Type.TYPE_2, "TRUMP");
-                remotePlayer = new RemotePlayer(this, Actor.Type.TYPE_1, "Putty", access);
-                lobby.join(player);
-                lobby.join(remotePlayer);
+            catch (InterruptedException e){
+                e.printStackTrace();
             }
+        }
 
+        player = new HumanPlayer(this, Actor.Type.TYPE_1, ourplayerName);
+        remotePlayer = new RemotePlayer(this, Actor.Type.TYPE_2, networkSetupAccess.getOutPlayer(), remotePlayerBuffer, this);
+
+        if (networkSetupAccess.getCheck() == 2){
+            System.out.println("You are the first player");
+            lobby.join(remotePlayer);
+            lobby.join(player);
+        }
+
+        else if(networkSetupAccess.getCheck() == 3){
+            System.out.println("You are the second player");
+            lobby.join(player);
+            lobby.join(remotePlayer);
+        }
+        //lobby.join(new HumanPlayer(this, Actor.Type.TYPE_1, "h"));
+        //lobby.join(new HumanPlayer(this, Actor.Type.TYPE_2, "a"));
     }
 
-    private synchronized void setupNetwork(){
-        if(getNetworkOn()) {
+    private synchronized void setupNetwork() {
+        if (getNetworkOn()) {
             ArrayList<String> returnList = waiterAll(invoker);
-            for(String string: returnList){
+            for (String string : returnList) {
                 System.out.println("return command: " + string);
             }
-            SendCommandLogin login = new SendCommandLogin(access, "TRUMP");
+            SendCommandLogin login = new SendCommandLogin(access, ourplayerName);
             SendCommandSubscribe subscribe = new SendCommandSubscribe(access, this.getGame());
             invoker.executeCommand(login);
             System.out.println("SERVER: " + waiter(invoker));
             invoker.executeCommand(subscribe);
             System.out.println("SERVER: " + waiter(invoker));
+            networkSetupThread.start();
         }
     }
 
-    private String waiter(CommandInvoker invoker){
+    private String waiter(CommandInvoker invoker) {
         invoker.executeCommand(bufferSize);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if(bufferSize.getBufferSize() == 0){
+        if (bufferSize.getBufferSize() == 0) {
             invoker.executeCommand(bufferSize);
-        }
-
-        else if(bufferSize.getBufferSize() > 0) {
+        } else if (bufferSize.getBufferSize() > 0) {
             System.out.println("Buffer size: " + bufferSize.getBufferSize());
             return access.readBufferIn();
         }
@@ -146,25 +174,22 @@ public class TicTacToe extends Game {
         return waiter(invoker);
     }
 
-    private ArrayList<String> waiterAll(CommandInvoker invoker){
+    private ArrayList<String> waiterAll(CommandInvoker invoker) {
         invoker.executeCommand(bufferSize);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if(bufferSize.getBufferSize() == 0){
+        if (bufferSize.getBufferSize() == 0) {
             invoker.executeCommand(bufferSize);
-        }
-
-        else if(bufferSize.getBufferSize() > 0) {
+        } else if (bufferSize.getBufferSize() > 0) {
             System.out.println("Buffer size: " + bufferSize.getBufferSize());
             return access.printAll();
         }
 
         return waiterAll(invoker);
     }
-
 
 
     @Override
@@ -192,11 +217,11 @@ public class TicTacToe extends Game {
                     if (alreadySendMoves.size() != 0) {
                         for (int b = 0; b < alreadySendMoves.size(); b++) {
                             if (cellsArray.get(i).getX() != alreadySendMoves.get(b).getX() && cellsArray.get(i).getX() != alreadySendMoves.get(b).getY()
-                                    && cellsArray.get(i).getOccupant().getType() != Actor.Type.TYPE_1) {
+                                    && cellsArray.get(i).getOccupant().getType() == Actor.Type.TYPE_1) {
                                 sendMove(cellsArray, i);
                             }
                         }
-                    } else if (alreadySendMoves.size() == 0) {
+                    } else if (alreadySendMoves.size() == 0 && cellsArray.get(i).getOccupant().getType() == Actor.Type.TYPE_1) {
                         sendMove(cellsArray, i);
                     }
                 }
@@ -204,7 +229,7 @@ public class TicTacToe extends Game {
         }
     }
 
-    private void sendMove(ArrayList<Cell> cellsArray, int i){
+    private void sendMove(ArrayList<Cell> cellsArray, int i) {
         Cell send = cellsArray.get(i);
         int moveNumber = NetworkTranslator.translateMove(0, "tic-tac-toe", send.getX(), send.getY());
         move.setMove(moveNumber);
@@ -225,17 +250,17 @@ public class TicTacToe extends Game {
     }
 
     public Actor.Type checkIfColumnWon(Board board) {
-        for (int i=0;i<board.getWidth();i++) {
-            Cell toCheck            = board.getCell(i, 0);
-            TicTacToeActor toActor  = (TicTacToeActor) toCheck.getOccupant();
-            boolean check           = true;
+        for (int i = 0; i < board.getWidth(); i++) {
+            Cell toCheck = board.getCell(i, 0);
+            TicTacToeActor toActor = (TicTacToeActor) toCheck.getOccupant();
+            boolean check = true;
             if (toActor == null) {
                 continue;
             }
 
-            for (int c=1;c<board.getHeight();c++) {
-                Cell nextCheck              = board.getCell(i, c);
-                TicTacToeActor nextActor    = (TicTacToeActor) nextCheck.getOccupant();
+            for (int c = 1; c < board.getHeight(); c++) {
+                Cell nextCheck = board.getCell(i, c);
+                TicTacToeActor nextActor = (TicTacToeActor) nextCheck.getOccupant();
                 if (nextActor == null) {
                     check = false;
                     continue;
@@ -255,17 +280,17 @@ public class TicTacToe extends Game {
     }
 
     private Actor.Type checkIfRowWon(Board board) {
-        for (int i=0;i<board.getWidth();i++) {
-            Cell toCheck            = board.getCell(0, i);
-            TicTacToeActor toActor  = (TicTacToeActor) toCheck.getOccupant();
-            boolean check           = true;
+        for (int i = 0; i < board.getWidth(); i++) {
+            Cell toCheck = board.getCell(0, i);
+            TicTacToeActor toActor = (TicTacToeActor) toCheck.getOccupant();
+            boolean check = true;
             if (toActor == null) {
                 continue;
             }
 
-            for (int c=1;c<board.getHeight();c++) {
-                Cell nextCheck              = board.getCell(c, i);
-                TicTacToeActor nextActor    = (TicTacToeActor) nextCheck.getOccupant();
+            for (int c = 1; c < board.getHeight(); c++) {
+                Cell nextCheck = board.getCell(c, i);
+                TicTacToeActor nextActor = (TicTacToeActor) nextCheck.getOccupant();
                 if (nextActor == null) {
                     check = false;
                     continue;
@@ -285,15 +310,15 @@ public class TicTacToe extends Game {
     }
 
     private Actor.Type checkIfDiagonalWon(Board board) {
-        Cell cell       = board.getCell(1, 1);
-        Cell topLeft    = board.getCell(0, 0);
-        Cell topRight   = board.getCell(2, 0);
-        Cell botLeft    = board.getCell(0, 2);
-        Cell botRight   = board.getCell(2, 2);
+        Cell cell = board.getCell(1, 1);
+        Cell topLeft = board.getCell(0, 0);
+        Cell topRight = board.getCell(2, 0);
+        Cell botLeft = board.getCell(0, 2);
+        Cell botRight = board.getCell(2, 2);
 
-        TicTacToeActor actor            = (TicTacToeActor) cell.getOccupant();
-        TicTacToeActor topLeftActor     = (TicTacToeActor) topLeft.getOccupant();
-        TicTacToeActor botRightActor    = (TicTacToeActor) botRight.getOccupant();
+        TicTacToeActor actor = (TicTacToeActor) cell.getOccupant();
+        TicTacToeActor topLeftActor = (TicTacToeActor) topLeft.getOccupant();
+        TicTacToeActor botRightActor = (TicTacToeActor) botRight.getOccupant();
 
         if (actor == null) {
             return null;
@@ -309,8 +334,8 @@ public class TicTacToe extends Game {
             }
         }
 
-        TicTacToeActor topRightActor    = (TicTacToeActor) topRight.getOccupant();
-        TicTacToeActor botLeftActor     = (TicTacToeActor) botLeft.getOccupant();
+        TicTacToeActor topRightActor = (TicTacToeActor) topRight.getOccupant();
+        TicTacToeActor botLeftActor = (TicTacToeActor) botLeft.getOccupant();
 
         if (topRightActor != null) {
             if (actor.getType() == topRightActor.getType()) {

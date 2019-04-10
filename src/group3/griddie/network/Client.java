@@ -55,7 +55,7 @@ public class Client {
 
     //put the value in the bufferIn
     public void putInBufferIn(String incoming) {
-        System.out.println(incoming);
+        //System.out.println(incoming);
         try {
             bufferIn.put(incoming);
         } catch (InterruptedException e) {

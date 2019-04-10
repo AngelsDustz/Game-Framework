@@ -31,32 +31,11 @@ public class NetworkTranslator {
     public static int[] reverseTranslateMove(String game, int move){
         int[] xycoordinates = new int[2];
         int y = move/3;
-        int x = move%3 + 1;
+        int x = move%3;
         xycoordinates[0] = x;
         xycoordinates[1] = y;
         return xycoordinates;
     }
 
-    public static String translateIncomingMessage(String message, String need){
-        String[] messageSplit = message.split("\\{");
-        String[] messageTplit = messageSplit[1].split(",");
-        for(int i = 0; i < messageTplit.length; i++) {
-            messageTplit[i].replaceAll("\\s+","");
-        }
-        String[] returnValue = null;
-        switch (need){
-            case "player":
-                returnValue = messageTplit[0].split(":");
-                returnValue[1].replaceAll("\\s+","");
-                break;
 
-            case "move":
-                returnValue = messageTplit[1].split(":");
-                returnValue[1].replaceAll("\\s+","");
-                break;
-        }
-        String returnSU = returnValue[1];
-
-        return returnSU;
-    }
 }
