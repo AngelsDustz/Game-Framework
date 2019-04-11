@@ -4,6 +4,7 @@ import group3.griddie.game.Game;
 import group3.griddie.game.othello.Othello;
 import group3.griddie.game.player.AIPlayer;
 import group3.griddie.model.board.Cell;
+import group3.griddie.model.board.actor.Actor;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -23,7 +24,8 @@ public class OthelloAI implements AI {
 
     @Override
     public Cell predictMove() {
-        ArrayList<Cell> moves = game.getLegalMoves(game.getBoard(), player.getActorType());
+        Actor.Type type = (player.getActorType() == Actor.Type.TYPE_1)? Actor.Type.TYPE_2 : Actor.Type.TYPE_1;
+        ArrayList<Cell> moves = game.getLegalMoves(game.getBoard(), type);
 
         for (Cell cell : moves) {
             System.out.println("Found legal move: " + cell);
@@ -31,5 +33,4 @@ public class OthelloAI implements AI {
 
         return moves.get(new Random().nextInt(moves.size()));
     }
-
 }
