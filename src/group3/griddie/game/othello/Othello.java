@@ -20,75 +20,135 @@ public class Othello extends Game {
         super("Othello");
 
         this.addPlayer(new HumanPlayer(this, Actor.Type.TYPE_2, "Player 1"));
+        this.addPlayer(new HumanPlayer(this, Actor.Type.TYPE_1, "Player 1"));
 
-        AIPlayer aiPlayer = new AIPlayer(this, Actor.Type.TYPE_1, "AI Player");
-        aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
-        aiPlayer.setGameAI(new OthelloAI(this, aiPlayer));
+//        AIPlayer aiPlayer = new AIPlayer(this, Actor.Type.TYPE_1, "AI Player");
+//        aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
+//        aiPlayer.setGameAI(new OthelloAI(this, aiPlayer));
 
-        this.addPlayer(aiPlayer);
+//        this.addPlayer(aiPlayer);
+    }
+
+    private void updateCellValidity(Board board, Actor.Type type) {
+        for (Cell cell: board.getCellsArray()) {
+            cell.setValidSpot(false);
+        }
+
+        for (Cell cell: this.getLegalMoves(board, type)) {
+            cell.setValidSpot(true);
+        }
     }
 
     @Override
     public boolean onPlayerMove(Player player, int column, int row) {
         Cell cell = getBoard().getCell(column, row);
+        System.out.println(this.getLegalMoves(this.getBoard(), player.getActorType()));
+
 
         if (cell.isDisabled()) {
             return false;
         }
 
-        OthelloActor actor = new OthelloActor(player.getActorType());
 
-        Cell[] adjacent = this.getBoard().getAdjacentCells(cell);
+        OthelloActor actor  = new OthelloActor(player.getActorType());
+        Cell[] adjacent     = this.getBoard().getAdjacentCells(cell);
+
         for (int i=0;i<adjacent.length;i++) {
             Cell adjacentCell       = adjacent[i];
-            boolean finished        = false;
             ArrayList<Cell> updates = new ArrayList<>();
+
 
             int dirX = -1 + (i%3);
             int dirY = -1 + (i/3);
 
-            while (!finished) {
-                if (dirX == 0 && dirY == 0) {
-                    finished = true;
-                }
+            if (adjacentCell == null) {
+                continue;
+            }
 
-                if (adjacentCell == null) {
+            if (!adjacentCell.isOccupied()) {
+                continue;
+            }
+
+            if (adjacentCell.getOccupant().getType() == player.getActorType() || adjacentCell.getOccupant().getType() == null) {
+                continue;
+            }
+
+            System.out.println(adjacentCell);
+            updates.add(adjacentCell);
+
+            Cell following = this.getBoard().getCell(adjacentCell.getX()+dirX, adjacentCell.getY()+dirY);
+
+            if (following == null) {
+                continue;
+            }
+
+            if (!following.isOccupied()) {
+                continue;
+            }
+
+            boolean finished = false;
+
+            while (!finished) {
+                System.out.println(following);
+                if (following == null) {
                     finished = true;
                     continue;
                 }
 
-                if (adjacentCell.isOccupied()) {
-                    if (adjacentCell.getOccupant().getType() != player.getActorType()) {
-                        updates.add(adjacentCell);
-
-                        adjacentCell = this.getBoard().getCell(adjacentCell.getX()+dirX, adjacentCell.getY()+dirY);
+                if (following.isOccupied()) {
+                    if (following.getOccupant().getType() == null) {
+                        finished = true;
                         continue;
                     }
+
+                    if (following.getOccupant().getType() != player.getActorType()) {
+                        updates.add(following);
+                        following = this.getBoard().getCell(following.getX()+dirX, following.getY()+dirY);
+                        continue;
+                    }
+
+                    if (following.getOccupant().getType() == player.getActorType()) {
+                        finished = true;
+                        continue;
+                    }
+                } else {
+                    finished = true;
+                    continue;
                 }
 
-                adjacentCell = this.getBoard().getCell(adjacentCell.getX()+dirX, adjacentCell.getY()+dirY);
+                following = this.getBoard().getCell(following.getX()-dirX, following.getY()-dirY);
             }
 
             for (Cell c : updates) {
+                System.out.println("Updating: "+c);
+
                 player.registerActor(actor);
                 c.setOccupant(actor);
                 c.setDisabled(true);
             }
+
         }
+
 
         player.registerActor(actor);
 
         cell.setOccupant(actor);
         cell.setDisabled(true);
 
+        this.updateCellValidity(this.getBoard(), (player.getActorType() == Actor.Type.TYPE_1)? Actor.Type.TYPE_2 : Actor.Type.TYPE_1);
+
         return true;
     }
 
     public ArrayList<Cell> getLegalMoves(Board board, Actor.Type type) {
-        ArrayList<Cell> legalMoves = new ArrayList<>();
+        ArrayList<Cell> legalMoves  = new ArrayList<>();
 
         for (Cell cell : board.getSpotsByActorType(type)) {
             Cell[] colliding = board.getAdjacentCells(cell);
+
+            if (!cell.isOccupied()) {
+                continue;
+            }
 
             for (int i=0;i<colliding.length;i++) {
                 Cell spot = colliding[i];
@@ -98,37 +158,56 @@ public class Othello extends Game {
                     continue;
                 }
 
-                if (spot.isOccupied() && spot.getOccupant().getType() != type) {
-                    // Found an enemy piece, follow it till the end.
-                    int dirX = -1 + (i%3);
-                    int dirY = -1 + (i/3);
-
-                    Cell following = board.getCell(cell.getX()+dirX, cell.getY()+dirY);
-                    boolean finished = false;
-
-                    while (!finished) {
-                        if (following == null) {
-                            finished = true;
-                            continue;
-                        }
-
-                        if (following.isOccupied()) {
-                            if (following.getOccupant().getType() == type) {
-                                following = board.getCell(following.getX()-dirX, following.getY()-dirY);
-                                continue;
-                            }
-                        }
-
-                        if (following.getOccupant() == null) {
-                            legalMoves.add(following);
-                            finished = true;
-                            continue;
-                        }
-
-                        following = board.getCell(following.getX()-dirX, following.getY()-dirY);
-                    }
+                if (!spot.isOccupied()) {
+                    continue;
                 }
 
+                if (spot.getOccupant().getType() == type || spot.getOccupant().getType() == null) {
+                    continue;
+                }
+
+                int dirX = -1 + (i%3);
+                int dirY = -1 + (i/3);
+
+                Cell following = board.getCell(spot.getX()+dirX, spot.getY()+dirY);
+
+                if (following == null) {
+                    continue;
+                }
+
+                if (following.isOccupied() && following.getOccupant().getType() != type) {
+                    continue;
+                }
+
+                boolean finished = false;
+
+                while (!finished) {
+                    if (following == null) {
+                        finished = true;
+                        continue;
+                    }
+
+                    if (following.isOccupied()) {
+                        if (following.getOccupant().getType() != type) {
+                            following = board.getCell(following.getX()+dirX, following.getY()+dirY);
+                            continue;
+                        }
+
+                        if (following.getOccupant().getType() == type) {
+                            finished = true;
+                            continue;
+                        }
+                    }
+
+                    if (following.getOccupant() == null) {
+                        legalMoves.add(following);
+                        finished = true;
+                        continue;
+                    }
+
+
+                    following = board.getCell(following.getX()-dirX, following.getY()-dirY);
+                }
             }
         }
 

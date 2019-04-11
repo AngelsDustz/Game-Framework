@@ -53,7 +53,7 @@ public class AIPlayer extends Player {
         Cell predicted = this.gameAI.predictMove();
 
         if (predicted != null) {
-            System.out.println("Doing move: " + predicted);
+            System.out.println("AI move: " + predicted);
             this.getGame().playerMove(this, predicted.getX(), predicted.getY());
         }
     }

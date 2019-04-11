@@ -127,7 +127,7 @@ public abstract class Game extends Scene {
 
     protected abstract Board createBoard();
 
-    protected abstract View<Board> createBoardView(Board board);
+    protected abstract View createBoardView(Board board);
 
     protected abstract void onInit();
 

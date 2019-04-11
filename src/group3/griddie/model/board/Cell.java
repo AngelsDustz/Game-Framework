@@ -6,6 +6,7 @@ import group3.griddie.model.board.actor.Actor;
 public class Cell extends Model {
     private Actor occupant;
     private boolean disabled;
+    private boolean validSpot;
     private int x;
     private int y;
 
@@ -13,7 +14,8 @@ public class Cell extends Model {
         this.x = x;
         this.y = y;
 
-        disabled = false;
+        disabled        = false;
+        this.validSpot  = false;
     }
 
     public boolean isOccupied() {
@@ -59,17 +61,14 @@ public class Cell extends Model {
         this.occupant = occupant;
     }
 
-    public boolean equals(Cell cell) {
-        if (this.occupant != null && cell.occupant != null) {
-            if (this.occupant.getType() != cell.occupant.getType()) {
-                return false;
-            }
-        }
+    public boolean isValidSpot() {
+        return validSpot;
+    }
 
-        if (this.x != cell.x || this.y != cell.y) {
-            return false;
-        }
+    public void setValidSpot(boolean validSpot) {
+        this.validSpot = validSpot;
 
-        return true;
+        setChanged();
+        notifyObservers();
     }
 }

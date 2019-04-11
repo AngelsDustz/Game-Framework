@@ -4,22 +4,19 @@ import group3.griddie.controller.board.CellController;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
 import group3.griddie.view.View;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 
 import java.util.Observable;
 import java.util.Observer;
 
 public class CellView extends View<Cell> implements Observer {
-
-    private static final int WIDTH = 64;
+    private static final int WIDTH  = 64;
     private static final int HEIGHT = 64;
 
     private ActorView actorView;
+    private ImageView imageView;
 
     public CellView(Cell cell, ActorView actorView) {
         super(cell, new StackPane());
@@ -36,15 +33,24 @@ public class CellView extends View<Cell> implements Observer {
         if (o instanceof Cell) {
             Actor occupant = ((Cell) o).getOccupant();
 
-            actorView.setModel(occupant);
+            if (actorView.getModel() != occupant) {
+                actorView.setModel(occupant);
+            }
+
+            if (((Cell) o).isValidSpot()) {
+                this.imageView.setImage(new Image("assets/images/node_valid.png"));
+            } else {
+                this.imageView.setImage(new Image("assets/images/node.png"));
+            }
         }
     }
 
     @Override
     public void initializeView() {
         StackPane stackPane = (StackPane) getNode();
+        this.imageView = new ImageView(new Image("assets/images/node.png"));
 
-        stackPane.getChildren().add(new ImageView(new Image("assets/images/node.png")));
+        stackPane.getChildren().add(this.imageView);
         stackPane.getChildren().add(actorView.getNode());
     }
 

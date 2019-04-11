@@ -24,8 +24,7 @@ public class OthelloAI implements AI {
 
     @Override
     public Cell predictMove() {
-        Actor.Type type = (player.getActorType() == Actor.Type.TYPE_1)? Actor.Type.TYPE_2 : Actor.Type.TYPE_1;
-        ArrayList<Cell> moves = game.getLegalMoves(game.getBoard(), type);
+        ArrayList<Cell> moves = game.getLegalMoves(game.getBoard(), player.getActorType());
 
         for (Cell cell : moves) {
             System.out.println("Found legal move: " + cell);
