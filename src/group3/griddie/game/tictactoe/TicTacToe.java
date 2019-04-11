@@ -1,11 +1,7 @@
 package group3.griddie.game.tictactoe;
 
 import group3.griddie.game.Game;
-import group3.griddie.game.ai.TicTacToeAI;
-import group3.griddie.game.player.AIPlayer;
-import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.player.Player;
-import group3.griddie.game.player.RemotePlayer;
 import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
@@ -18,6 +14,8 @@ import group3.griddie.network.invoker.CommandInvoker;
 import group3.griddie.network.networktranslator.NetworkTranslator;
 import group3.griddie.view.View;
 import group3.griddie.view.board.tictactoe.TicTacToeBoardView;
+import group3.griddie.viewOLD.ViewOLD;
+import group3.griddie.viewOLD.board.tictactoe.TicTacToeBoardViewOLD;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;
@@ -87,6 +85,8 @@ public class TicTacToe extends Game {
             return false;
         }
 
+        System.out.println(player.getActorType());
+
         TicTacToeActor actor = new TicTacToeActor(player.getActorType());
 
         player.registerActor(actor);
@@ -103,8 +103,8 @@ public class TicTacToe extends Game {
     }
 
     @Override
-    protected View<Board> createBoardView(Board board) {
-        return new TicTacToeBoardView(board);
+    protected ViewOLD<Board> createBoardView(Board board) {
+        return new TicTacToeBoardViewOLD(board);
     }
 
     @Override

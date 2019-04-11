@@ -9,8 +9,8 @@ import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
 import group3.griddie.model.board.actor.OthelloActor;
-import group3.griddie.view.View;
-import group3.griddie.view.board.othello.OthelloBoardView;
+import group3.griddie.viewOLD.ViewOLD;
+import group3.griddie.viewOLD.board.othello.OthelloBoardViewOLD;
 
 import java.util.ArrayList;
 
@@ -52,8 +52,8 @@ public class Othello extends Game {
     }
 
     @Override
-    protected View<Board> createBoardView(Board board) {
-        return new OthelloBoardView(board);
+    protected ViewOLD<Board> createBoardView(Board board) {
+        return new OthelloBoardViewOLD(board);
     }
 
     @Override

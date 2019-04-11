@@ -1,48 +1,26 @@
 package group3.griddie.view;
 
 import group3.griddie.controller.Controller;
-import group3.griddie.model.Model;
-import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.layout.AnchorPane;
 
-public abstract class View<M extends Model> {
+public class View extends AnchorPane {
 
-    private Controller<M> controller;
-    private Model model;
-    private Node node;
+    private Controller controller;
+    private Parent root;
 
-    public View(Model model, Node node) {
-        this.model = model;
-        this.node = node;
+    public View(Parent root, Controller controller) {
+        this.root = root;
+        this.controller = controller;
+
+        getChildren().add(root);
     }
 
-    public void init() {
-        initializeView();
-    }
-
-    public Controller<M> getController() {
+    public Controller getController() {
         return controller;
     }
 
-    public Model getModel() {
-        return model;
+    public Parent getRoot() {
+        return root;
     }
-
-    public void setModel(Model model) {
-        this.model = model;
-
-        initializeView();
-    }
-
-    public void setController(Controller<M> controller) {
-        this.controller = controller;
-
-        initializeControls();
-    }
-
-    public Node getNode() {
-        return node;
-    }
-
-    protected abstract void initializeView();
-    protected abstract void initializeControls();
 }
