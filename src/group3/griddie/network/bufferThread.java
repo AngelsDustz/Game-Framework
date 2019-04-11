@@ -104,6 +104,7 @@ public class bufferThread implements Runnable {
                 System.out.println("check value: " + check);
                 this.outPlayer = opponent[1];
                 remove = info;
+
             } else if (splitInfo[0].equals("SVR GAME YOURTURN") && check == 1) {
                 check = check + 1;
                 System.out.println("setup completed");
@@ -152,8 +153,9 @@ public class bufferThread implements Runnable {
                     }
 
                     if (playerName[1].equals(this.outPlayer)) {
-                        System.out.println("printed out");
+                        System.out.println("printed out " + playerMove[1]);
                         accessToBuffers.getRemotePlayerBuffer().add(playerMove[1]);
+                        System.out.println("buffer thread size: " + accessToBuffers.getRemotePlayerBuffer().size());
                         get.remove();
                     }
 

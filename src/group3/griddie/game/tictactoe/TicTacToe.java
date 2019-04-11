@@ -227,6 +227,7 @@ public class TicTacToe extends Game {
                 }
             }
         }
+        System.out.println("tick tictactoe");
     }
 
     private void sendMove(ArrayList<Cell> cellsArray, int i) {
