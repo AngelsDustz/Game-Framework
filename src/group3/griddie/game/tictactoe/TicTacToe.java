@@ -39,10 +39,10 @@ public class TicTacToe extends Game {
     private boolean networkOn = true;
 
     private ArrayList<String> homePlayerBuffer = new ArrayList<>();
-    private ArrayList<String> remotePlayerBuffer = new ArrayList<>();
+    public volatile static ArrayList<String> remotePlayerBuffer = new ArrayList<>();
     private ArrayList<String> otherBuffer = new ArrayList<>();
     private volatile Boolean serverNetworkWinOrLoss = null;
-    private bufferThread networkSetupAccess = new bufferThread(this, access,ourplayerName, serverNetworkWinOrLoss);
+    private bufferThread networkSetupAccess = new bufferThread(this, access, ourplayerName, serverNetworkWinOrLoss);
     private Thread networkSetupThread = new Thread(networkSetupAccess);
 
     private GetInformation information = new GetInformation(access);
@@ -52,11 +52,14 @@ public class TicTacToe extends Game {
     private CommandInvoker invoker = new CommandInvoker();
 
 
-    private ArrayList<Cell> alreadySendMoves = new ArrayList<>();
+    private static ArrayList<Cell> alreadySendMoves = new ArrayList<>();
 
 
     public TicTacToe(String game) {
         super(game);
+        sendToServer serverSend = new sendToServer(this);
+        Thread server = new Thread(serverSend);
+        server.start();
         NetworkThread.start();
         setupNetwork();
     }
@@ -132,12 +135,10 @@ public class TicTacToe extends Game {
         Task<Void> sleeper = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                while(networkSetupAccess.getOutPlayer() == null && networkSetupAccess.getCheck() < 2){
+                while (networkSetupAccess.getOutPlayer() == null && networkSetupAccess.getCheck() < 2) {
                     try {
                         Thread.sleep(50);
-                    }
-
-                    catch (InterruptedException e){
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
@@ -152,11 +153,9 @@ public class TicTacToe extends Game {
             }
         });
         new Thread(sleeper).start();
-        //lobby.join(new HumanPlayer(this, Actor.Type.TYPE_1, "h"));
-        //lobby.join(new HumanPlayer(this, Actor.Type.TYPE_2, "a"));
     }
 
-    public void setupGame(){
+    public void setupGame() {
         AIPlayer aiPlayer = null;
         RemotePlayer remotePlayer = null;
         HumanPlayer player = null;
@@ -164,13 +163,11 @@ public class TicTacToe extends Game {
         player = new HumanPlayer(this, Actor.Type.TYPE_1, ourplayerName);
         remotePlayer = new RemotePlayer(this, Actor.Type.TYPE_2, networkSetupAccess.getOutPlayer(), remotePlayerBuffer, this);
 
-        if (networkSetupAccess.getCheck() == 2){
+        if (networkSetupAccess.getCheck() == 2) {
             System.out.println("You are the first player");
             lobby.join(remotePlayer);
             lobby.join(player);
-        }
-
-        else if(networkSetupAccess.getCheck() == 3){
+        } else if (networkSetupAccess.getCheck() == 3) {
             System.out.println("You are the second player");
             lobby.join(player);
             lobby.join(remotePlayer);
@@ -245,28 +242,12 @@ public class TicTacToe extends Game {
             this.stop();
         }
 
-        if (networkOn) {
-            for (int i = 0; i < cellsArray.size(); i++) {
-                if (cellsArray.get(i).isDisabled()) {
-                    if (alreadySendMoves.size() != 0) {
-                        for (int b = 0; b < alreadySendMoves.size(); b++) {
-                            if (cellsArray.get(i).getX() != alreadySendMoves.get(b).getX() && cellsArray.get(i).getX() != alreadySendMoves.get(b).getY()
-                                    && cellsArray.get(i).getOccupant().getType() == Actor.Type.TYPE_1) {
-                                sendMove(cellsArray, i);
-                            }
-                        }
-                    } else if (alreadySendMoves.size() == 0 && cellsArray.get(i).getOccupant().getType() == Actor.Type.TYPE_1) {
-                        sendMove(cellsArray, i);
-                    }
-                }
-            }
-        }
-        System.out.println("tick tictactoe");
     }
 
     private void sendMove(ArrayList<Cell> cellsArray, int i) {
         Cell send = cellsArray.get(i);
         int moveNumber = NetworkTranslator.translateMove(0, "tic-tac-toe", send.getX(), send.getY());
+        System.out.println("send move to server: " + moveNumber);
         move.setMove(moveNumber);
         invoker.executeCommand(move);
     }
@@ -383,5 +364,55 @@ public class TicTacToe extends Game {
         }
 
         return null;
+    }
+
+    private class sendToServer implements Runnable{
+
+        private TicTacToe ticTacToe;
+        private boolean running;
+        public sendToServer(TicTacToe ticTacToe){
+           this.ticTacToe = ticTacToe;
+           this.running = true;
+        }
+
+        @Override
+        public void run() {
+            while (running) {
+                Board board = ticTacToe.getBoard();
+                ArrayList<Cell> cellsArray = board.getCellsArray();
+                if (networkOn) {
+                    for (int i = 0; i < cellsArray.size(); i++) {
+                        if (cellsArray.get(i).isDisabled()) {
+                            if (alreadySendMoves.size() > 0) {
+                                for (int b = 0; b < alreadySendMoves.size(); b++) {
+                                    if (cellsArray.get(i).getOccupant().getType() == Actor.Type.TYPE_1) {
+                                        if (cellsArray.get(i).getX() != alreadySendMoves.get(b).getX() ||
+                                                cellsArray.get(i).getY() != alreadySendMoves.get(b).getY() && !alreadySendMoves.contains(cellsArray.get(i))) {
+                                            System.out.println("ONE");
+                                            System.out.println(alreadySendMoves.get(b).getOccupant().getType());
+                                            System.out.println(alreadySendMoves.get(b));
+                                            System.out.println(cellsArray.get(i));
+                                            alreadySendMoves.add(cellsArray.get(i));
+                                            sendMove(cellsArray, i);
+                                        }
+                                    }
+                                }
+                            } else if (alreadySendMoves.size() == 0 && cellsArray.get(i).getOccupant().getType() == Actor.Type.TYPE_1) {
+                                System.out.println("ZERO");
+                                alreadySendMoves.add(cellsArray.get(i));
+                                System.out.println(cellsArray.get(i));
+                                sendMove(cellsArray, i);
+                            }
+                        }
+                    }
+                }
+
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

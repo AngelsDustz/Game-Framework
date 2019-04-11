@@ -12,7 +12,6 @@ public class LobbyController extends Controller<Lobby> {
 
     public void humanVersusHuman() {
         Lobby lobby = getModel();
-
         lobby.join(new HumanPlayer(lobby.getGame(), Actor.Type.TYPE_1, "Player 1"));
         lobby.join(new HumanPlayer(lobby.getGame(), Actor.Type.TYPE_2, "Player 2"));
     }

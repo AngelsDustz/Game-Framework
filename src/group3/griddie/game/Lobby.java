@@ -14,16 +14,12 @@ public class Lobby extends Entity {
         this.size = size;
         players = new Player[size];
         this.game = game;
+        this.count = 0;
     }
 
     public void join(Player player) {
         players[count] = player;
         count++;
-
-        player.setName("Player " + count);
-        player.setGame(game);
-        player.setActorType(count == 1 ? Actor.Type.TYPE_1 : Actor.Type.TYPE_2); //TEMPORARILY FIX
-
         setChanged();
         notifyObservers();
     }

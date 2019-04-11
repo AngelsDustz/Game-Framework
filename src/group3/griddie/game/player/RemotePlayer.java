@@ -8,6 +8,9 @@ import group3.griddie.network.commands.SendCommandLogin;
 import group3.griddie.network.commands.SendCommandMove;
 import group3.griddie.network.commands.SendCommandSubscribe;
 import group3.griddie.network.networktranslator.NetworkTranslator;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 
 import javax.annotation.processing.SupportedSourceVersion;
 import java.util.ArrayList;
@@ -17,6 +20,7 @@ public class RemotePlayer extends Player {
     private ArrayList<String> bufferOwn;
     private TicTacToe tictactoe;
     private int tick;
+    private Task<Void> sleeper;
 
     public RemotePlayer(Game game, Actor.Type type, String name, ArrayList<String> buffer, TicTacToe tictactoe) {
         super(game, type, name);
@@ -29,6 +33,7 @@ public class RemotePlayer extends Player {
         this.bufferOwn = new ArrayList<>();
         this.tictactoe = tictactoe;
         this.tick = 0;
+
     }
 
     public ArrayList<String> getBufferOwn() {
@@ -44,6 +49,15 @@ public class RemotePlayer extends Player {
 
     }
 
+    private void playerMove() {
+        if (bufferOwn.size() > 0) {
+            int[] xy = NetworkTranslator.reverseTranslateMove("tic-tac-toe", Integer.valueOf(bufferOwn.get(0)));
+            this.getGame().playerMove(this, xy[0], xy[1]);
+            bufferOwn.remove(0);
+            System.out.println("did move");
+        }
+    }
+
     @Override
     protected void onTick() {
 
@@ -51,19 +65,30 @@ public class RemotePlayer extends Player {
 
     @Override
     protected void onStartTurn() {
-        while(bufferOwn.size() == 0){
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        sleeper = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                System.out.println("started remote player");
+                while (bufferOwn.size() == 0) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return null;
             }
-        }
+        };
 
-        if(bufferOwn.size() != 0) {
-            int[] xy = NetworkTranslator.reverseTranslateMove("tic-tac-toe", Integer.valueOf(bufferOwn.get(0)));
-            this.getGame().playerMove(this, xy[0], xy[1]);
-            bufferOwn.clear();
-        }
+
+        sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                playerMove();
+            }
+        });
+
+        new Thread(sleeper).start();
     }
 
     @Override
@@ -71,11 +96,11 @@ public class RemotePlayer extends Player {
 
     }
 
-    public class bufferOwn implements Runnable{
+    public class bufferOwn implements Runnable {
         private boolean running;
         private RemotePlayer player;
 
-        public bufferOwn(RemotePlayer player){
+        public bufferOwn(RemotePlayer player) {
             this.player = player;
             this.running = true;
         }
@@ -83,14 +108,13 @@ public class RemotePlayer extends Player {
         @Override
         public void run() {
             while (this.running) {
-                if(this.player.getBufferOwn().size() == 0) {
-                    if (this.player.getBuffer().size() >= 1) {
-                        System.out.println("check: " + this.player.getBuffer().size());
-                        this.player.getBufferOwn().add(player.getBuffer().get(0));
-                        this.player.getBuffer().remove(0);
-                        System.out.println("not stuck");
-                    }
+                if (tictactoe.getRemotePlayerBuffer().size() == 1) {
+                    System.out.println("check: " + this.player.getBuffer().size());
+                    this.player.getBufferOwn().add(player.getBuffer().get(0));
+                    tictactoe.getRemotePlayerBuffer().remove(0);
+                    System.out.println("not stuck");
                 }
+
             }
         }
 
