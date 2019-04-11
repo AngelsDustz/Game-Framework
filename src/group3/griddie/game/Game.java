@@ -1,15 +1,14 @@
 package group3.griddie.game;
 
-import group3.griddie.controller.board.BoardController;
-import group3.griddie.controller.game.LobbyController;
 import group3.griddie.model.board.Board;
 import group3.griddie.game.player.Player;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
-import group3.griddie.view.View;
-import group3.griddie.view.game.LobbyView;
+import group3.griddie.view.game.GameView;
+import group3.griddie.viewOLD.ViewOLD;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.AnchorPane;
+
 import java.util.Observable;
 import java.util.Observer;
 
@@ -20,26 +19,22 @@ public abstract class Game extends Scene implements Observer {
     private Player playerOnTurn;
     private String game;
     private int round;
-
-    private LobbyView lobbyView;
-    private View<Board> boardView;
-
     protected Lobby lobby;
 
+    private GameView gameView;
+
     public Game(String game) {
-        super(new BorderPane());
-        this.game = game;
+        super(new AnchorPane());
+
+        board = createBoard();
 
         lobby = new Lobby(2, this);
         lobby.addObserver(this);
 
-        board = createBoard();
-        boardView = createBoardView(board);
-        boardView.init();
-        boardView.setController(new BoardController(board));
+        gameView = new GameView(this);
 
-        lobbyView = new LobbyView(lobby);
-        lobbyView.init();
+        AnchorPane root = (AnchorPane) getRoot();
+        root.getChildren().add(gameView);
     }
 
     @Override
@@ -48,17 +43,10 @@ public abstract class Game extends Scene implements Observer {
     }
 
     public final void init() {
-        BorderPane root = (BorderPane) getRoot();
-
-        root.setCenter(lobbyView.getNode());
-
         onInit();
     }
 
     public final void start() {
-        BorderPane root = (BorderPane) getRoot();
-        root.setCenter(boardView.getNode());
-
         round = 0;
         started = true;
 
@@ -86,8 +74,6 @@ public abstract class Game extends Scene implements Observer {
     }
 
     public void nextTurn() {
-        System.out.println("Next turn");
-
         round++;
 
         if (playerOnTurn != null) {
@@ -98,8 +84,6 @@ public abstract class Game extends Scene implements Observer {
         playerOnTurn.startTurn();
 
         tick();
-
-        System.out.println("END TURN");
     }
 
     public void playerMove(Player player, int column, int row) {
@@ -121,7 +105,6 @@ public abstract class Game extends Scene implements Observer {
     }
 
     private Player getNextPlayer() {
-        System.out.println(round % 2);
         return lobby.getPlayer(round % 2);
     }
 
@@ -143,6 +126,10 @@ public abstract class Game extends Scene implements Observer {
         }
     }
 
+    public Lobby getLobby() {
+        return lobby;
+    }
+
     public void setBoard(Board board) {
         this.board = board;
     }
@@ -151,7 +138,7 @@ public abstract class Game extends Scene implements Observer {
 
     protected abstract Board createBoard();
 
-    protected abstract View<Board> createBoardView(Board board);
+    protected abstract ViewOLD<Board> createBoardView(Board board);
 
     protected abstract void onInit();
 

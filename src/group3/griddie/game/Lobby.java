@@ -1,6 +1,7 @@
 package group3.griddie.game;
 
 import group3.griddie.game.player.Player;
+import group3.griddie.model.board.actor.Actor;
 
 public class Lobby extends Entity {
 
@@ -18,6 +19,10 @@ public class Lobby extends Entity {
     public void join(Player player) {
         players[count] = player;
         count++;
+
+        player.setName("Player " + count);
+        player.setGame(game);
+        player.setActorType(count == 1 ? Actor.Type.TYPE_1 : Actor.Type.TYPE_2); //TEMPORARILY FIX
 
         setChanged();
         notifyObservers();

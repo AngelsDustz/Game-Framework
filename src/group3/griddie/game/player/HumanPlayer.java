@@ -16,6 +16,10 @@ public class HumanPlayer extends Player {
     private SendCommandMove move;
     private CommandInvoker invoker;
 
+    public HumanPlayer() {
+
+    }
+
     public HumanPlayer(Game game, Actor.Type type, String name) {
         super(game, type, name);
     }
@@ -31,7 +35,9 @@ public class HumanPlayer extends Player {
 
                 Cell cell = cells[c][r];
                 cell.addInteractListener(() -> {
-                    getGame().playerMove(this, column, row);
+                    if (isOnTurn()) {
+                        getGame().playerMove(this, column, row);
+                    }
                 });
             }
         }

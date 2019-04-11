@@ -15,6 +15,10 @@ public abstract class Player extends Entity {
     private String name;
     private Actor.Type actorType;
 
+    public Player() {
+        actors = new ArrayList<>();
+    }
+
     public Player(Game game, Actor.Type type, String name) {
         this.game = game;
         actors = new ArrayList<>();
@@ -78,6 +82,18 @@ public abstract class Player extends Entity {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public void setActorType(Actor.Type actorType) {
+        this.actorType = actorType;
     }
 
     protected abstract void onStartTurn();
