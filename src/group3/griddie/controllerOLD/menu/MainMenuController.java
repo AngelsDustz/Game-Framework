@@ -4,6 +4,7 @@ import group3.griddie.Griddie;
 import group3.griddie.controllerOLD.Controller;
 import group3.griddie.game.othello.Othello;
 import group3.griddie.game.tictactoe.TicTacToe;
+import group3.griddie.network.bufferThread;
 
 public class MainMenuController extends Controller {
 
@@ -19,7 +20,7 @@ public class MainMenuController extends Controller {
 
     public void startTicTacToe() {
         System.out.println("Starting tic tac toe");
-
-        Griddie.launchGame(new TicTacToe("Tic-tac-toe"));
+        TicTacToe ticTacToe = new TicTacToe("Tic-tac-toe");
+        Griddie.launchGame(ticTacToe);
     }
 }

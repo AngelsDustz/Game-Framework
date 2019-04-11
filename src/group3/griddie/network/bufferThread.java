@@ -8,19 +8,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class bufferThread implements Runnable {
-    ArrayList<String> homePlayer;
-    ArrayList<String> remotePlayerBuffer;
-    ArrayList<String> other;
-    ArrayList<String> calculatedDataBuffer;
-    TicTacToe accessToBuffers;
+    private ArrayList<String> homePlayer;
+    private ArrayList<String> remotePlayerBuffer;
+    private ArrayList<String> other;
+    private ArrayList<String> calculatedDataBuffer;
+    private TicTacToe accessToBuffers;
 
-    Boolean runnning = true;
-    Boolean setup = true;
-    int check;
-    NetworkMain access;
-    String ourPlayer;
-    String outPlayer;
-    Boolean win;
+    private Boolean runnning = true;
+    private Boolean setup = true;
+    private int check;
+    private NetworkMain access;
+    private String ourPlayer;
+    private String outPlayer;
+    private Boolean win;
+    private int confirmation;
 
     public bufferThread(TicTacToe ticTacToe, NetworkMain access, String ourPlayer, Boolean win) {
 
@@ -33,6 +34,7 @@ public class bufferThread implements Runnable {
         this.outPlayer = null;
         this.win = win;
         this.check = 0;
+        this.confirmation = 0;
         this.accessToBuffers = ticTacToe;
 
     }
@@ -83,7 +85,14 @@ public class bufferThread implements Runnable {
             String info = get.next();
             String[] splitInfo = info.split("\\{");
             splitInfo[0] = splitInfo[0].trim();
-            if (splitInfo[0].equals("SVR GAME MATCH")) {
+            if (splitInfo[0].equals("OK")){
+                confirmation = confirmation + 1;
+                if (confirmation > 0){
+                    System.out.println("SERVER OK");
+                }
+                get.remove();
+            }
+            if (splitInfo[0].equals("SVR GAME MATCH") && confirmation == 2) {
                 System.out.println("'" + splitInfo[0] + "'");
                 check = check + 1;
                 splitInfo[1].replaceAll("\\}", "");
@@ -103,7 +112,7 @@ public class bufferThread implements Runnable {
                 System.out.println("opponent: " + opponent[1]);
                 System.out.println("check value: " + check);
                 this.outPlayer = opponent[1];
-                remove = info;
+                get.remove();
 
             } else if (splitInfo[0].equals("SVR GAME YOURTURN") && check == 1) {
                 check = check + 1;

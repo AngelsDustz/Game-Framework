@@ -1,7 +1,10 @@
 package group3.griddie.game.tictactoe;
 
 import group3.griddie.game.Game;
+import group3.griddie.game.player.AIPlayer;
+import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.player.Player;
+import group3.griddie.game.player.RemotePlayer;
 import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
@@ -12,14 +15,19 @@ import group3.griddie.network.bufferThread;
 import group3.griddie.network.commands.*;
 import group3.griddie.network.invoker.CommandInvoker;
 import group3.griddie.network.networktranslator.NetworkTranslator;
-import group3.griddie.view.View;
-import group3.griddie.view.board.tictactoe.TicTacToeBoardView;
 import group3.griddie.viewOLD.ViewOLD;
 import group3.griddie.viewOLD.board.tictactoe.TicTacToeBoardViewOLD;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
+import javafx.util.Duration;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
+
 
 public class TicTacToe extends Game {
     private static String IP = "127.0.0.1";
@@ -69,12 +77,24 @@ public class TicTacToe extends Game {
         return homePlayerBuffer;
     }
 
+    public String getOurplayerName() {
+        return ourplayerName;
+    }
+
+    public Boolean getServerNetworkWinOrLoss() {
+        return serverNetworkWinOrLoss;
+    }
+
     public ArrayList<String> getOtherBuffer() {
         return otherBuffer;
     }
 
     public void setServerNetworkWinOrLoss(Boolean serverNetworkWinOrLoss) {
         this.serverNetworkWinOrLoss = serverNetworkWinOrLoss;
+    }
+
+    public NetworkMain getAccess() {
+        return this.access;
     }
 
     @Override
@@ -109,19 +129,37 @@ public class TicTacToe extends Game {
 
     @Override
     protected void onInit() {
+        Task<Void> sleeper = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                while(networkSetupAccess.getOutPlayer() == null && networkSetupAccess.getCheck() < 2){
+                    try {
+                        Thread.sleep(50);
+                    }
+
+                    catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                }
+                return null;
+            }
+        };
+
+        sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                setupGame();
+            }
+        });
+        new Thread(sleeper).start();
+        //lobby.join(new HumanPlayer(this, Actor.Type.TYPE_1, "h"));
+        //lobby.join(new HumanPlayer(this, Actor.Type.TYPE_2, "a"));
+    }
+
+    public void setupGame(){
         AIPlayer aiPlayer = null;
         RemotePlayer remotePlayer = null;
         HumanPlayer player = null;
-
-        while(networkSetupAccess.getOutPlayer() == null && networkSetupAccess.getCheck() < 2){
-            try {
-                Thread.sleep(50);
-            }
-
-            catch (InterruptedException e){
-                e.printStackTrace();
-            }
-        }
 
         player = new HumanPlayer(this, Actor.Type.TYPE_1, ourplayerName);
         remotePlayer = new RemotePlayer(this, Actor.Type.TYPE_2, networkSetupAccess.getOutPlayer(), remotePlayerBuffer, this);
@@ -137,8 +175,6 @@ public class TicTacToe extends Game {
             lobby.join(player);
             lobby.join(remotePlayer);
         }
-        //lobby.join(new HumanPlayer(this, Actor.Type.TYPE_1, "h"));
-        //lobby.join(new HumanPlayer(this, Actor.Type.TYPE_2, "a"));
     }
 
     private synchronized void setupNetwork() {
@@ -150,9 +186,7 @@ public class TicTacToe extends Game {
             SendCommandLogin login = new SendCommandLogin(access, ourplayerName);
             SendCommandSubscribe subscribe = new SendCommandSubscribe(access, this.getGame());
             invoker.executeCommand(login);
-            System.out.println("SERVER: " + waiter(invoker));
             invoker.executeCommand(subscribe);
-            System.out.println("SERVER: " + waiter(invoker));
             networkSetupThread.start();
         }
     }

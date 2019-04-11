@@ -84,8 +84,8 @@ public class RemotePlayer extends Player {
         public void run() {
             while (this.running) {
                 if(this.player.getBufferOwn().size() == 0) {
-                    System.out.println("check: " + this.player.getBuffer().size());
                     if (this.player.getBuffer().size() >= 1) {
+                        System.out.println("check: " + this.player.getBuffer().size());
                         this.player.getBufferOwn().add(player.getBuffer().get(0));
                         this.player.getBuffer().remove(0);
                         System.out.println("not stuck");

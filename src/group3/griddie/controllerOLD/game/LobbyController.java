@@ -32,7 +32,7 @@ public class LobbyController extends Controller<Lobby> {
         Lobby lobby = getModel();
 
         lobby.join(new HumanPlayer(lobby.getGame(), Actor.Type.TYPE_1, "Player 1"));
-        lobby.join(new RemotePlayer(lobby.getGame(), Actor.Type.TYPE_1, "Player 2"));
+        //lobby.join(new RemotePlayer(lobby.getGame(), Actor.Type.TYPE_2, "Player 2"));
     }
 
 }
