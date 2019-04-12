@@ -1,30 +1,27 @@
 package group3.griddie;
 
-import group3.griddie.controller.menu.MainMenuController;
 import group3.griddie.game.Game;
-import group3.griddie.view.menu.main.MainMenuView;
+import group3.griddie.viewOLD.menu.main.MainMenuViewOLD;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class Griddie extends Application {
     private static Stage stage;
     private static Game game;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        Font.loadFont("assets/fonts/Fipps-Regular.otf", 12);
+
         stage = primaryStage;
         stage.setTitle("Griddie Game Framework");
         stage.show();
 
-        MainMenuView menu = new MainMenuView();
+        MainMenuViewOLD menu = new MainMenuViewOLD();
         menu.init();
-
-        menu.setController(new MainMenuController());
 
         stage.setScene(new Scene(menu.getParent()));
     }
@@ -33,11 +30,5 @@ public class Griddie extends Application {
         Griddie.game = game;
         game.init();
         stage.setScene(game);
-
-        try {
-            game.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

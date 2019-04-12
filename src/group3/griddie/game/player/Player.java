@@ -9,11 +9,17 @@ import group3.griddie.network.commands.SendCommandLogin;
 import java.util.ArrayList;
 
 public abstract class Player extends Entity {
-    private boolean onTurn;
+
+    private boolean onTurn = true;
     private Game game;
     private ArrayList<Actor> actors;
     private String name;
     private Actor.Type actorType;
+    private boolean ready;
+
+    public Player() {
+        actors = new ArrayList<>();
+    }
 
     public Player(Game game, Actor.Type type, String name) {
         this.game = game;
@@ -23,13 +29,13 @@ public abstract class Player extends Entity {
     }
 
     public void init() {
-        System.out.println(name + " initialized");
+        //System.out.println(name + " initialized");
 
         onInit();
     }
 
     public void tick() {
-        System.out.println(name + " ticked");
+        //System.out.println(name + " ticked");
 
         onTick();
     }
@@ -60,6 +66,19 @@ public abstract class Player extends Entity {
         return actor;
     }
 
+    public boolean isReady() {
+        return ready;
+    }
+
+    void setReady(boolean ready) {
+        this.ready = ready;
+
+        System.out.println(name + " is ready");
+
+        this.setChanged();
+        this.notifyObservers();
+    }
+
     public void unregisterActor(Actor actor) {
         actors.remove(actor);
     }
@@ -78,6 +97,18 @@ public abstract class Player extends Entity {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public void setActorType(Actor.Type actorType) {
+        this.actorType = actorType;
     }
 
     protected abstract void onStartTurn();

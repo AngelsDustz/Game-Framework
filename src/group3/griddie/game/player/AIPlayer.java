@@ -18,6 +18,10 @@ public class AIPlayer extends Player {
         DIFFICULTY_HARD
     }
 
+    public AIPlayer(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
+
     public AIPlayer(Game game, Actor.Type type, String name) {
         super(game, type, name);
         this.difficulty = Difficulty.DIFFICULTY_EASY;

@@ -1,27 +1,52 @@
 package group3.griddie.game;
 
-import group3.griddie.controller.board.BoardController;
 import group3.griddie.model.board.Board;
 import group3.griddie.game.player.Player;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
-import group3.griddie.view.View;
+import group3.griddie.view.game.GameView;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.AnchorPane;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
-public abstract class Game extends Scene {
+public abstract class Game extends Scene implements Observer {
+
+    public interface PlayerMove {
+        void onMove(Player player, int x, int y);
+    }
+
+    private ArrayList<PlayerMove> playerMoveListeners;
+
     private Board board;
     private boolean started;
-    private ArrayList<Player> players;
     private Player playerOnTurn;
     private String game;
+    private int round;
+    protected Lobby lobby;
+
+    private GameView gameView;
 
     public Game(String game) {
-        super(new BorderPane());
-        players = new ArrayList<>();
-        this.game = game;
+        super(new AnchorPane());
+
+        playerMoveListeners = new ArrayList<>();
+
+        board = createBoard();
+
+        lobby = new Lobby(2, this);
+        lobby.addObserver(this);
+
+        gameView = new GameView(this);
+
+        AnchorPane root = (AnchorPane) getRoot();
+        root.getChildren().add(gameView);
+    }
+
+    public void addOnPlayerMoveListener(PlayerMove listener) {
+        this.playerMoveListeners.add(listener);
     }
 
     @Override
@@ -30,27 +55,12 @@ public abstract class Game extends Scene {
     }
 
     public final void init() {
-        BorderPane root = (BorderPane) getRoot();
-
-        board = createBoard();
-        View<Board> boardView = createBoardView(board);
-        boardView.init();
-        boardView.setController(new BoardController(board));
-
-        root.setCenter(boardView.getNode());
-
-        for (Player player : players) {
-            player.init();
-        }
-
         onInit();
     }
 
-    public final void start() throws Exception {
-        if (players.size() <= 1) {
-            throw new Exception("Need two players to start a game!");
-        }
-
+    public final void start() {
+        System.out.println("Starting game");
+        round = 0;
         started = true;
 
         onStart();
@@ -65,7 +75,7 @@ public abstract class Game extends Scene {
     }
 
     public final void tick() {
-        for (Player player : players) {
+        for (Player player : lobby.getPlayers()) {
             player.tick();
         }
 
@@ -73,23 +83,23 @@ public abstract class Game extends Scene {
     }
 
     public void nextTurn() {
+        round++;
+
         if (playerOnTurn != null) {
-            playerOnTurn.endTurn();
+            //playerOnTurn.endTurn();
         }
 
-        playerOnTurn = getNextPlayer();
-        playerOnTurn.startTurn();
+//        playerOnTurn = getNextPlayer();
+//        playerOnTurn.startTurn();
 
         tick();
     }
 
     public void playerMove(Player player, int column, int row) {
-        if (playerOnTurn != player) {
-            return;
-        }
-
         if (onPlayerMove(player, column, row)) {
-            nextTurn();
+            for(PlayerMove listener : playerMoveListeners) {
+                listener.onMove(player, column, row);
+            }
         }
     }
 
@@ -97,26 +107,32 @@ public abstract class Game extends Scene {
         return board;
     }
 
-    public void addPlayer(Player player) {
-        players.add(player);
-    }
-
-    public ArrayList<Player> getPlayers() {
-        return players;
-    }
-
     public Player getPlayerOnTurn() {
         return playerOnTurn;
     }
 
     private Player getNextPlayer() {
-        int index = playerOnTurn == null ? 0 : players.indexOf(playerOnTurn);
-        return index >= players.size() - 1 ? players.get(0) : players.get(index + 1);
+        return lobby.getPlayer(round % 2);
     }
 
     public void placeActor(Actor actor, int x, int y) {
         Cell cell = board.getCell(x, y);
         cell.setOccupant(actor);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o instanceof Lobby) {
+            Lobby lobby = (Lobby) o;
+
+            if (!started && lobby.isFull() && lobby.allReady()) {
+                start();
+            }
+        }
+    }
+
+    public Lobby getLobby() {
+        return lobby;
     }
 
     public void setBoard(Board board) {
@@ -126,8 +142,6 @@ public abstract class Game extends Scene {
     protected abstract boolean onPlayerMove(Player player, int column, int row);
 
     protected abstract Board createBoard();
-
-    protected abstract View createBoardView(Board board);
 
     protected abstract void onInit();
 

@@ -1,8 +1,6 @@
 package group3.griddie.game.tictactoe;
 
 import group3.griddie.game.Game;
-import group3.griddie.game.ai.TicTacToeAI;
-import group3.griddie.game.player.AIPlayer;
 import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.player.Player;
 import group3.griddie.game.player.RemotePlayer;
@@ -10,25 +8,12 @@ import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
 import group3.griddie.model.board.actor.TicTacToeActor;
-import group3.griddie.network.NetworkHelperThread;
-import group3.griddie.view.View;
-import group3.griddie.view.board.tictactoe.TicTacToeBoardView;
 
 public class TicTacToe extends Game {
-    private static String IP = "134.209.93.232";
-    private static int PORT = 7789;
+
+
     public TicTacToe(String game) {
         super(game);
-
-        NetworkHelperThread thread = new NetworkHelperThread(IP,PORT);
-        Thread thread_network = new Thread(thread);
-        thread_network.start();
-        AIPlayer aiPlayer = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player");
-        aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
-        aiPlayer.setGameAI(new TicTacToeAI(this, aiPlayer));
-
-        this.addPlayer(aiPlayer);
-        addPlayer(new HumanPlayer(this,Actor.Type.TYPE_1, "Human Player"));
 
     }
 
@@ -39,8 +24,6 @@ public class TicTacToe extends Game {
         if (cell.isDisabled()) {
             return false;
         }
-
-        int index = getPlayers().indexOf(player);
 
         TicTacToeActor actor = new TicTacToeActor(player.getActorType());
 
@@ -58,13 +41,15 @@ public class TicTacToe extends Game {
     }
 
     @Override
-    protected View<Board> createBoardView(Board board) {
-        return new TicTacToeBoardView(board);
-    }
-
-    @Override
     protected void onInit() {
+        HumanPlayer human = new HumanPlayer();
+        human.setName("HUMAN");
 
+        RemotePlayer remotePlayer = new RemotePlayer();
+        remotePlayer.setName("REMOTE");
+
+        lobby.join(human);
+        lobby.join(remotePlayer);
     }
 
     @Override

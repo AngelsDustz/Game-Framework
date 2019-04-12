@@ -3,7 +3,8 @@ package group3.griddie.model.board;
 import group3.griddie.model.Model;
 import group3.griddie.model.board.actor.Actor;
 
-public class Cell extends Model {
+public class Cell extends Model
+{
     private Actor occupant;
     private boolean disabled;
     private boolean validSpot;
