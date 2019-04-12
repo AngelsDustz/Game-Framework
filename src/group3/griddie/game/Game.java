@@ -137,4 +137,6 @@ public abstract class Game extends Scene {
 
     protected abstract void onTick();
 
+    public abstract boolean canDoTurn(Player player);
+
 }

@@ -30,9 +30,9 @@ public class Othello extends Game {
         aiPlayer1.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
         aiPlayer1.setGameAI(new OthelloAI(this, aiPlayer1));
 
-        this.addPlayer(new HumanPlayer(this, Actor.Type.TYPE_2, "Human Player"));
+//        this.addPlayer(new HumanPlayer(this, Actor.Type.TYPE_2, "Human Player"));
         this.addPlayer(aiPlayer);
-//        this.addPlayer(aiPlayer1);
+        this.addPlayer(aiPlayer1);
     }
 
     private void updateCellValidity(Board board, Actor.Type type) {
@@ -304,5 +304,20 @@ public class Othello extends Game {
 
     @Override
     protected void onTick() {
+        if (this.getLegalMoves(this.getBoard(), Actor.Type.TYPE_1).size() == 0) {
+            if (this.getLegalMoves(this.getBoard(), Actor.Type.TYPE_2).size() == 0) {
+                System.out.println("Game ended.");
+                this.stop();
+            }
+        }
+    }
+
+    @Override
+    public boolean canDoTurn(Player player) {
+        if (this.getLegalMoves(this.getBoard(), player.getActorType()).size() == 0) {
+            return false;
+        }
+
+        return true;
     }
 }

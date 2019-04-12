@@ -44,6 +44,9 @@ public class HumanPlayer extends Player {
 
     @Override
     protected void onStartTurn() {
+        if (!this.getGame().canDoTurn(this)) {
+            this.endTurn();
+        }
 
     }
 
