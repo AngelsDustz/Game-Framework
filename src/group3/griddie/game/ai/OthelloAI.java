@@ -29,7 +29,11 @@ public class OthelloAI implements AI {
         ArrayList<Cell> moves = game.getLegalMoves(game.getBoard(), player.getActorType());
 
         if (this.player.getDifficulty() == AIPlayer.Difficulty.DIFFICULTY_HARD) {
+            long start = System.currentTimeMillis();
             Cell smartCell = this.pickSmartCell();
+            long end = System.currentTimeMillis();
+
+            System.out.println("Found move in "+(end-start)+ " ms.");
 
             return smartCell;
         }

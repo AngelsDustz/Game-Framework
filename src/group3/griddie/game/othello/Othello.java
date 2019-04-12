@@ -49,7 +49,19 @@ public class Othello extends Game {
     @Override
     public boolean onPlayerMove(Player player, int column, int row) {
         Cell cell = getBoard().getCell(column, row);
-//        System.out.println(this.getLegalMoves(this.getBoard(), player.getActorType()));
+
+        boolean valid = false;
+        for (Cell c : this.getLegalMoves(this.getBoard(), player.getActorType())) {
+            if (c.getX() == cell.getX()) {
+                if (c.getY() == cell.getY()) {
+                    valid = true;
+                }
+            }
+        }
+
+        if (!valid) {
+            return false;
+        }
 
 
         if (cell.isDisabled()) {
