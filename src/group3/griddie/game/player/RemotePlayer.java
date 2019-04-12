@@ -1,8 +1,6 @@
 package group3.griddie.game.player;
 
-import com.sun.security.ntlm.Server;
-import group3.griddie.game.Game;
-import group3.griddie.model.board.actor.Actor;
+import group3.griddie.network.networktranslator.NetworkTranslator;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -45,9 +43,15 @@ public class RemotePlayer extends Player implements Runnable {
             e.printStackTrace();
         }
 
+        getGame().addOnPlayerMoveListener(((Player player, int x, int y) -> {
+            if (player != this) {
+                sendOpponentMove(x, y);
+            }
+        }));
+
         thread.start();
 
-        out.println("login jesse");
+        out.println("login " + getName());
         out.println("subscribe Tic-tac-toe");
     }
 
@@ -100,22 +104,41 @@ public class RemotePlayer extends Player implements Runnable {
         }
     }
 
-    public void handleMatch(Map data) {
-        System.out.println("HANDLE MATCH");
+    public void handleMatch(Map<String, String> data) {
+        this.setReady(true);
     }
 
-    private void handleMove(Map data) {
-        System.out.println("HANDLE MOVE");
-
-        System.out.println(data.get("MOVE") + " <---");
+    private void handleMove(Map<String, String> data) {
+        if (!data.get("PLAYER").equals(getName())) {
+            startTurn();
+        }
 
         if (isOnTurn()) {
-            //getGame().playerMove(this, );
+            int move = Integer.parseInt(data.get("MOVE"));
+
+            System.out.println("Received move " + move);
+
+            int x = move % getGame().getBoard().getWidth();
+            int y = move / getGame().getBoard().getWidth();
+
+            getGame().playerMove(this, x, y);
+
+            endTurn();
+
+            this.getGame().getLobby().getPlayer(0).startTurn();
+        } else {
+            System.out.println("ERROR");
+            System.out.println(data);
         }
     }
 
-    private void handleYourTurn(Map data) {
-        System.out.print("HANDLE YOURTURN");
+    private void handleYourTurn(Map<String, String> data) {
+
+    }
+
+    private void sendOpponentMove(int x, int y) {
+        int move = NetworkTranslator.translateMove(0, "tic-tac-toe", x, y);
+        out.println("MOVE " + move);
     }
 
 }

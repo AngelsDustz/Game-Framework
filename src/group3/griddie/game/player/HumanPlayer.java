@@ -35,14 +35,14 @@ public class HumanPlayer extends Player {
 
                 Cell cell = cells[c][r];
                 cell.addInteractListener(() -> {
-                    if (isOnTurn()) {
-                        getGame().playerMove(this, column, row);
-                    }
+                    System.out.println("CLICkING");
+                    getGame().playerMove(this, column, row);
+                    endTurn();
                 });
             }
         }
 
-        ready = true;
+        this.setReady(true);
     }
 
     @Override

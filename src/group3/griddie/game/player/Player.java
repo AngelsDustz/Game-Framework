@@ -10,12 +10,12 @@ import java.util.ArrayList;
 
 public abstract class Player extends Entity {
 
-    private boolean onTurn;
+    private boolean onTurn = true;
     private Game game;
     private ArrayList<Actor> actors;
     private String name;
     private Actor.Type actorType;
-    protected boolean ready;
+    private boolean ready;
 
     public Player() {
         actors = new ArrayList<>();
@@ -29,13 +29,13 @@ public abstract class Player extends Entity {
     }
 
     public void init() {
-        System.out.println(name + " initialized");
+        //System.out.println(name + " initialized");
 
         onInit();
     }
 
     public void tick() {
-        System.out.println(name + " ticked");
+        //System.out.println(name + " ticked");
 
         onTick();
     }
@@ -68,6 +68,15 @@ public abstract class Player extends Entity {
 
     public boolean isReady() {
         return ready;
+    }
+
+    void setReady(boolean ready) {
+        this.ready = ready;
+
+        System.out.println(name + " is ready");
+
+        this.setChanged();
+        this.notifyObservers();
     }
 
     public void unregisterActor(Actor actor) {

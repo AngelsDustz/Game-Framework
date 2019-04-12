@@ -3,7 +3,10 @@ package group3.griddie.game;
 import group3.griddie.game.player.Player;
 import group3.griddie.model.board.actor.Actor;
 
-public class Lobby extends Entity {
+import java.util.Observable;
+import java.util.Observer;
+
+public class Lobby extends Entity implements Observer {
 
     private int size;
     private Player[] players;
@@ -20,13 +23,23 @@ public class Lobby extends Entity {
         players[count] = player;
         count++;
 
-        player.setName("Player " + count);
         player.setGame(game);
         player.setActorType(count == 1 ? Actor.Type.TYPE_1 : Actor.Type.TYPE_2); //TEMPORARILY FIX
         player.init();
 
         setChanged();
         notifyObservers();
+
+        player.addObserver(this);
+    }
+
+    public boolean allReady() {
+        for (Player p : players) {
+            if (p == null || !p.isReady())
+                return false;
+        }
+
+        return true;
     }
 
     public boolean isFull() {
@@ -47,5 +60,13 @@ public class Lobby extends Entity {
 
     public Game getGame() {
         return game;
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o instanceof Player) {
+            this.setChanged();
+            this.notifyObservers();
+        }
     }
 }

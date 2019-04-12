@@ -10,11 +10,11 @@ import group3.griddie.model.board.actor.Actor;
 import group3.griddie.model.board.actor.TicTacToeActor;
 
 public class TicTacToe extends Game {
-    private static String IP = "134.209.93.232";
-    private static int PORT = 7789;
+
+
     public TicTacToe(String game) {
         super(game);
-        //addPlayer(new RemotePlayer(this,Actor.Type.TYPE_1, "Remote Player", thread.getNetworkRunner()));
+
     }
 
     @Override
@@ -24,8 +24,6 @@ public class TicTacToe extends Game {
         if (cell.isDisabled()) {
             return false;
         }
-
-        System.out.println(player.getActorType());
 
         TicTacToeActor actor = new TicTacToeActor(player.getActorType());
 
@@ -44,8 +42,14 @@ public class TicTacToe extends Game {
 
     @Override
     protected void onInit() {
-        lobby.join(new HumanPlayer());
-        lobby.join(new RemotePlayer());
+        HumanPlayer human = new HumanPlayer();
+        human.setName("HUMAN");
+
+        RemotePlayer remotePlayer = new RemotePlayer();
+        remotePlayer.setName("REMOTE");
+
+        lobby.join(human);
+        lobby.join(remotePlayer);
     }
 
     @Override

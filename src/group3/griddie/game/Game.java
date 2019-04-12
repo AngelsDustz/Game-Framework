@@ -8,10 +8,17 @@ import group3.griddie.view.game.GameView;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
 public abstract class Game extends Scene implements Observer {
+
+    public interface PlayerMove {
+        void onMove(Player player, int x, int y);
+    }
+
+    private ArrayList<PlayerMove> playerMoveListeners;
 
     private Board board;
     private boolean started;
@@ -25,6 +32,8 @@ public abstract class Game extends Scene implements Observer {
     public Game(String game) {
         super(new AnchorPane());
 
+        playerMoveListeners = new ArrayList<>();
+
         board = createBoard();
 
         lobby = new Lobby(2, this);
@@ -34,6 +43,10 @@ public abstract class Game extends Scene implements Observer {
 
         AnchorPane root = (AnchorPane) getRoot();
         root.getChildren().add(gameView);
+    }
+
+    public void addOnPlayerMoveListener(PlayerMove listener) {
+        this.playerMoveListeners.add(listener);
     }
 
     @Override
@@ -46,6 +59,7 @@ public abstract class Game extends Scene implements Observer {
     }
 
     public final void start() {
+        System.out.println("Starting game");
         round = 0;
         started = true;
 
@@ -72,22 +86,20 @@ public abstract class Game extends Scene implements Observer {
         round++;
 
         if (playerOnTurn != null) {
-            playerOnTurn.endTurn();
+            //playerOnTurn.endTurn();
         }
 
-        playerOnTurn = getNextPlayer();
-        playerOnTurn.startTurn();
+//        playerOnTurn = getNextPlayer();
+//        playerOnTurn.startTurn();
 
         tick();
     }
 
     public void playerMove(Player player, int column, int row) {
-        if (playerOnTurn != player) {
-            return;
-        }
-
         if (onPlayerMove(player, column, row)) {
-            nextTurn();
+            for(PlayerMove listener : playerMoveListeners) {
+                listener.onMove(player, column, row);
+            }
         }
     }
 
@@ -113,7 +125,7 @@ public abstract class Game extends Scene implements Observer {
         if (o instanceof Lobby) {
             Lobby lobby = (Lobby) o;
 
-            if (!started && lobby.isFull()) {
+            if (!started && lobby.isFull() && lobby.allReady()) {
                 start();
             }
         }

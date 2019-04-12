@@ -5,6 +5,7 @@ import group3.griddie.model.board.actor.Actor;
 import group3.griddie.model.board.actor.OthelloActor;
 import group3.griddie.model.board.actor.TicTacToeActor;
 import group3.griddie.view.View;
+import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -49,19 +50,21 @@ public class CellView extends View implements Observer {
         System.out.println("UPDATE");
 
         if (o instanceof Cell) {
-            if (actorView != null) {
-                getChildren().remove(actorView);
-            }
+            Platform.runLater(() -> {
+                if (actorView != null) {
+                    getChildren().remove(actorView);
+                }
 
-            Actor actor = ((Cell) o).getOccupant();
+                Actor actor = ((Cell) o).getOccupant();
 
-            if (actor instanceof OthelloActor) {
-                getChildren().add(actorView = new OthelloActorView(actor));
-            }
+                if (actor instanceof OthelloActor) {
+                    getChildren().add(actorView = new OthelloActorView(actor));
+                }
 
-            if (actor instanceof TicTacToeActor) {
-                getChildren().add(actorView = new TicTacToeActorView(actor));
-            }
+                if (actor instanceof TicTacToeActor) {
+                    getChildren().add(actorView = new TicTacToeActorView(actor));
+                }
+            });
         }
     }
 
