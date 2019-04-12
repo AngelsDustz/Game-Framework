@@ -85,13 +85,15 @@ public class NetworkMain {
     }
 
     //reads the pops the top of the buffer
-    public synchronized String readBufferIn() {
+    public String readBufferIn() {
         return client.readBufferIn();
     }
 
     //puts a command in the buffer
     public void putInBufferOut(String command) {
-        client.sendCommand(command);
+        String message = command;
+        System.out.println("put in buffer out: " + message);
+        client.sendCommand(message);
     }
 
     //sends the command that has been put into the buffer

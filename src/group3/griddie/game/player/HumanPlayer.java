@@ -37,6 +37,10 @@ public class HumanPlayer extends Player {
                 cell.addInteractListener(() -> {
                     if (isOnTurn()) {
                         getGame().playerMove(this, column, row);
+                        int[] i = new int[2];
+                        i[0] = column;
+                        i[1] = row;
+                        getGame().sendMove(i);
                     }
                 });
             }

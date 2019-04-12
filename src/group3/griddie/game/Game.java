@@ -1,9 +1,13 @@
 package group3.griddie.game;
 
+import group3.griddie.Griddie;
 import group3.griddie.model.board.Board;
 import group3.griddie.game.player.Player;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
+import group3.griddie.network.commands.SendCommandMove;
+import group3.griddie.network.invoker.CommandInvoker;
+import group3.griddie.network.networktranslator.NetworkTranslator;
 import group3.griddie.view.game.GameView;
 import group3.griddie.viewOLD.ViewOLD;
 import javafx.scene.Scene;
@@ -20,7 +24,6 @@ public abstract class Game extends Scene implements Observer {
     private String game;
     private int round;
     protected Lobby lobby;
-    public int setter = 0;
 
     private GameView gameView;
 
@@ -42,8 +45,14 @@ public abstract class Game extends Scene implements Observer {
         return game;
     }
 
-    public int getSetter() {
-        return setter;
+    public void sendMove(int[] i) {
+        int[] xy = i;
+        int moveNumber = NetworkTranslator.translateMove(0, "tic-tac-toe", xy[0], xy[1]);
+        System.out.println("send move to server: " + moveNumber);
+        SendCommandMove move = new SendCommandMove(Griddie.networkHelperThread.getNetworkRunner(), moveNumber);
+        CommandInvoker invoker = new CommandInvoker();
+        move.setMove(moveNumber);
+        invoker.executeCommand(move);
     }
 
     @Override

@@ -21,6 +21,8 @@ import group3.griddie.viewOLD.board.tictactoe.TicTacToeBoardViewOLD;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
+
+import javax.xml.ws.spi.Invoker;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -53,9 +55,6 @@ public class TicTacToe extends Game {
 
     public TicTacToe(String game) {
         super(game);
-        sendToServer serverSend = new sendToServer(this);
-        Thread server = new Thread(serverSend);
-        server.start();
         NetworkThread.start();
         setupNetwork();
     }
@@ -68,7 +67,7 @@ public class TicTacToe extends Game {
         return networkOn;
     }
 
-    public ArrayList<String> getRemotePlayerBuffer() {
+    public static ArrayList<String> getRemotePlayerBuffer() {
         return remotePlayerBuffer;
     }
 
@@ -157,7 +156,7 @@ public class TicTacToe extends Game {
         HumanPlayer player = null;
 
         player = new HumanPlayer(this, Actor.Type.TYPE_1, ourplayerName);
-        remotePlayer = new RemotePlayer(this, Actor.Type.TYPE_2, networkSetupAccess.getOutPlayer(), remotePlayerBuffer, this);
+        remotePlayer = new RemotePlayer(this, Actor.Type.TYPE_2, networkSetupAccess.getOutPlayer(), remotePlayerBuffer);
 
         if (networkSetupAccess.getCheck() == 2) {
             System.out.println("You are the first player");
@@ -238,14 +237,6 @@ public class TicTacToe extends Game {
             this.stop();
         }
 
-    }
-
-    private void sendMove(ArrayList<Cell> cellsArray, int i) {
-        Cell send = cellsArray.get(i);
-        int moveNumber = NetworkTranslator.translateMove(0, "tic-tac-toe", send.getX(), send.getY());
-        System.out.println("send move to server: " + moveNumber);
-        move.setMove(moveNumber);
-        invoker.executeCommand(move);
     }
 
     public Actor.Type checkIfWon(Board board) {
@@ -360,55 +351,5 @@ public class TicTacToe extends Game {
         }
 
         return null;
-    }
-
-    private class sendToServer implements Runnable{
-
-        private TicTacToe ticTacToe;
-        private boolean running;
-        public sendToServer(TicTacToe ticTacToe){
-           this.ticTacToe = ticTacToe;
-           this.running = true;
-        }
-
-        @Override
-        public void run() {
-            while (running) {
-                Board board = ticTacToe.getBoard();
-                ArrayList<Cell> cellsArray = board.getCellsArray();
-                if (networkOn) {
-                    for (int i = 0; i < cellsArray.size(); i++) {
-                        if (cellsArray.get(i).isDisabled()) {
-                            if (alreadySendMoves.size() > 0) {
-                                for (int b = 0; b < alreadySendMoves.size(); b++) {
-                                    if (cellsArray.get(i).getOccupant().getType() == Actor.Type.TYPE_1) {
-                                        if (cellsArray.get(i).getX() != alreadySendMoves.get(b).getX() ||
-                                                cellsArray.get(i).getY() != alreadySendMoves.get(b).getY() && !alreadySendMoves.containsAll(cellsArray)) {
-                                            System.out.println("ONE");
-                                            System.out.println(alreadySendMoves.get(b).getOccupant().getType());
-                                            System.out.println(alreadySendMoves.get(b));
-                                            System.out.println(cellsArray.get(i));
-                                            alreadySendMoves.add(cellsArray.get(i));
-                                            sendMove(cellsArray, i);
-                                        }
-                                    }
-                                }
-                            } else if (alreadySendMoves.size() == 0 && cellsArray.get(i).getOccupant().getType() == Actor.Type.TYPE_1) {
-                                System.out.println("ZERO");
-                                alreadySendMoves.add(cellsArray.get(i));
-                                System.out.println(cellsArray.get(i));
-                                sendMove(cellsArray, i);
-                            }
-                        }
-                    }
-                }
-
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 }
