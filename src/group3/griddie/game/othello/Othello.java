@@ -30,9 +30,9 @@ public class Othello extends Game {
         aiPlayer1.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
         aiPlayer1.setGameAI(new OthelloAI(this, aiPlayer1));
 
-//        this.addPlayer(new HumanPlayer(this, Actor.Type.TYPE_2, "Human Player"));
+        this.addPlayer(new HumanPlayer(this, Actor.Type.TYPE_2, "Human Player"));
         this.addPlayer(aiPlayer);
-        this.addPlayer(aiPlayer1);
+//        this.addPlayer(aiPlayer1);
     }
 
     private void updateCellValidity(Board board, Actor.Type type) {
@@ -105,7 +105,8 @@ public class Othello extends Game {
                 continue;
             }
 
-            boolean finished = false;
+            boolean finished    = false;
+            boolean revalid     = false;
 
             while (!finished) {
 //                System.out.println(following);
@@ -127,6 +128,7 @@ public class Othello extends Game {
                     }
 
                     if (following.getOccupant().getType() == player.getActorType()) {
+                        revalid = true;
                         finished = true;
                         continue;
                     }
@@ -138,12 +140,14 @@ public class Othello extends Game {
                 following = this.getBoard().getCell(following.getX()-dirX, following.getY()-dirY);
             }
 
-            for (Cell c : updates) {
+            if (revalid) {
+                for (Cell c : updates) {
 //                System.out.println("Updating: "+c);
 
-                player.registerActor(actor);
-                c.setOccupant(actor);
-                c.setDisabled(true);
+                    player.registerActor(actor);
+                    c.setOccupant(actor);
+                    c.setDisabled(true);
+                }
             }
 
         }
