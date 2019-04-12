@@ -15,7 +15,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class CellView extends View implements Observer {
-
     private static final int WIDTH = 64;
     private static final int HEIGHT = 64;
 
@@ -28,8 +27,8 @@ public class CellView extends View implements Observer {
 
         StackPane root = (StackPane) getRoot();
 
-        canvas = new Canvas();
-        imageView = new ImageView();
+        canvas      = new Canvas();
+        imageView   = new ImageView();
 
         cell.addObserver(this);
 
@@ -47,8 +46,6 @@ public class CellView extends View implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println("UPDATE");
-
         if (o instanceof Cell) {
             Platform.runLater(() -> {
                 if (actorView != null) {
@@ -56,6 +53,12 @@ public class CellView extends View implements Observer {
                 }
 
                 Actor actor = ((Cell) o).getOccupant();
+
+                if (((Cell) o).isValidSpot()) {
+                    this.setImage(new Image("assets/images/node_valid.png"));
+                } else {
+                    this.setImage(new Image("assets/images/node.png"));
+                }
 
                 if (actor instanceof OthelloActor) {
                     getChildren().add(actorView = new OthelloActorView(actor));

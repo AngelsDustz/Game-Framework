@@ -43,11 +43,11 @@ public class RemotePlayer extends Player implements Runnable {
             e.printStackTrace();
         }
 
-        getGame().addOnPlayerMoveListener(((Player player, int x, int y) -> {
-            if (player != this) {
-                sendOpponentMove(x, y);
-            }
-        }));
+//        getGame().addOnPlayerMoveListener(((Player player, int x, int y) -> {
+//            if (player != this) {
+//                sendOpponentMove(x, y);
+//            }
+//        }));
 
         thread.start();
 
