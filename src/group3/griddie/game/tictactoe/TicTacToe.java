@@ -1,22 +1,19 @@
 package group3.griddie.game.tictactoe;
 
 import group3.griddie.game.Game;
+import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.player.Player;
+import group3.griddie.game.player.RemotePlayer;
 import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
 import group3.griddie.model.board.actor.TicTacToeActor;
-import group3.griddie.network.NetworkHelperThread;
 
 public class TicTacToe extends Game {
     private static String IP = "134.209.93.232";
     private static int PORT = 7789;
     public TicTacToe(String game) {
         super(game);
-
-        NetworkHelperThread thread = new NetworkHelperThread(IP,PORT);
-        Thread thread_network = new Thread(thread);
-        thread_network.start();
         //addPlayer(new RemotePlayer(this,Actor.Type.TYPE_1, "Remote Player", thread.getNetworkRunner()));
     }
 
@@ -47,12 +44,8 @@ public class TicTacToe extends Game {
 
     @Override
     protected void onInit() {
-//        AIPlayer aiPlayer = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player");
-//        aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
-//        aiPlayer.setGameAI(new TicTacToeAI(this, aiPlayer));
-//
-//        lobby.join(aiPlayer);
-//        lobby.join(new HumanPlayer(this,Actor.Type.TYPE_1, "Human Player"));
+        lobby.join(new HumanPlayer());
+        lobby.join(new RemotePlayer());
     }
 
     @Override

@@ -1,7 +1,6 @@
 package group3.griddie;
 
 import group3.griddie.game.Game;
-import group3.griddie.menu.MainMenu;
 import group3.griddie.viewOLD.menu.main.MainMenuViewOLD;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -14,6 +13,7 @@ public class Griddie extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         Font.loadFont("assets/fonts/Fipps-Regular.otf", 12);
 
         stage = primaryStage;

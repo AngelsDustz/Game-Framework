@@ -51,10 +51,6 @@ public abstract class Game extends Scene implements Observer {
 
         onStart();
 
-        for (Player player : lobby.getPlayers()) {
-            player.init();
-        }
-
         nextTurn();
     }
 
@@ -115,8 +111,6 @@ public abstract class Game extends Scene implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (o instanceof Lobby) {
-            System.out.println("Lobby observer");
-
             Lobby lobby = (Lobby) o;
 
             if (!started && lobby.isFull()) {

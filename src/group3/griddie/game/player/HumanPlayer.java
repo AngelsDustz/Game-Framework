@@ -41,6 +41,8 @@ public class HumanPlayer extends Player {
                 });
             }
         }
+
+        ready = true;
     }
 
     @Override

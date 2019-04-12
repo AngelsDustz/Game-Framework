@@ -31,8 +31,8 @@ public class LobbyController extends Controller<Lobby> {
     public void humanVersusRemote() {
         Lobby lobby = getModel();
 
-        lobby.join(new HumanPlayer(lobby.getGame(), Actor.Type.TYPE_1, "Player 1"));
-        lobby.join(new RemotePlayer(lobby.getGame(), Actor.Type.TYPE_1, "Player 2"));
+//        lobby.join(new HumanPlayer(lobby.getGame(), Actor.Type.TYPE_1, "Player 1"));
+//        lobby.join(new RemotePlayer(lobby.getGame(), Actor.Type.TYPE_1, "Player 2"));
     }
 
 }

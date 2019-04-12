@@ -23,6 +23,7 @@ public class Lobby extends Entity {
         player.setName("Player " + count);
         player.setGame(game);
         player.setActorType(count == 1 ? Actor.Type.TYPE_1 : Actor.Type.TYPE_2); //TEMPORARILY FIX
+        player.init();
 
         setChanged();
         notifyObservers();

@@ -1,14 +1,15 @@
 package group3.griddie.network;
 
-public class NetworkHelperThread implements Runnable {
+public class NetworkHelperRunner implements Runnable {
+
+    private static final String IP = "localhost";
+    private static final int PORT = 7789;
+
+    public static NetworkHelperRunner instance;
     //access for the class
     private NetworkMain looper;
-    private final String IP;
-    private final int PORT;
 
-    public NetworkHelperThread(final String IP, final int PORT){
-        this.IP = IP;
-        this.PORT = PORT;
+    public NetworkHelperRunner(){
         this.looper = new NetworkMain(IP, PORT);
     }
 

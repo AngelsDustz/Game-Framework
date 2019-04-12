@@ -9,11 +9,13 @@ import group3.griddie.network.commands.SendCommandLogin;
 import java.util.ArrayList;
 
 public abstract class Player extends Entity {
+
     private boolean onTurn;
     private Game game;
     private ArrayList<Actor> actors;
     private String name;
     private Actor.Type actorType;
+    protected boolean ready;
 
     public Player() {
         actors = new ArrayList<>();
@@ -62,6 +64,10 @@ public abstract class Player extends Entity {
     public Actor registerActor(Actor actor) {
         actors.add(actor);
         return actor;
+    }
+
+    public boolean isReady() {
+        return ready;
     }
 
     public void unregisterActor(Actor actor) {

@@ -2,20 +2,39 @@ package group3.griddie.game.player;
 
 import group3.griddie.game.Game;
 import group3.griddie.model.board.actor.Actor;
-import group3.griddie.network.NetworkMain;
-import group3.griddie.network.commands.SendCommandLogin;
-import group3.griddie.network.commands.SendCommandMove;
-import group3.griddie.network.commands.SendCommandSubscribe;
 
-public class RemotePlayer extends Player {
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 
-    public RemotePlayer(Game game, Actor.Type type, String name) {
-        super(game, type, name);
+public class RemotePlayer extends Player implements Runnable {
+
+    private Thread thread;
+    private Socket socket;
+    private BufferedReader in;
+    private PrintWriter out;
+
+    public RemotePlayer() {
+        thread = new Thread(this);
     }
 
     @Override
     protected void onInit() {
+        try {
+            socket = new Socket("localhost", 7789);
 
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(socket.getOutputStream(), true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        thread.start();
+
+        out.println("login jesse");
+        out.println("subscribe Tic-tac-toe");
     }
 
     @Override
@@ -31,5 +50,16 @@ public class RemotePlayer extends Player {
     @Override
     protected void onEndTurn() {
 
+    }
+
+    @Override
+    public void run() {
+        while(true) {
+            try {
+                System.out.println(in.readLine());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
