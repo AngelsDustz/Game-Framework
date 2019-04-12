@@ -22,12 +22,13 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import java.util.ArrayList;
+import java.util.Random;
 
 
 public class TicTacToe extends Game {
     private static String IP = "127.0.0.1";
     private static int PORT = 7789;
-    private String ourplayerName = "TRUMP";
+    private String ourplayerName = "TRUMP" + String.valueOf(new Random().nextInt());
     private NetworkHelperThread runner = Griddie.networkHelperThread;
     private Thread NetworkThread = new Thread(runner);
     private NetworkMain access = runner.getNetworkRunner();
@@ -130,7 +131,7 @@ public class TicTacToe extends Game {
         Task<Void> sleeper = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                while (networkSetupAccess.getOutPlayer() == null && networkSetupAccess.getCheck() < 2) {
+                while (networkSetupAccess.getOutPlayer() == null || networkSetupAccess.getCheck() < 2) {
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException e) {
@@ -382,7 +383,7 @@ public class TicTacToe extends Game {
                                 for (int b = 0; b < alreadySendMoves.size(); b++) {
                                     if (cellsArray.get(i).getOccupant().getType() == Actor.Type.TYPE_1) {
                                         if (cellsArray.get(i).getX() != alreadySendMoves.get(b).getX() ||
-                                                cellsArray.get(i).getY() != alreadySendMoves.get(b).getY() && !alreadySendMoves.contains(cellsArray.get(i))) {
+                                                cellsArray.get(i).getY() != alreadySendMoves.get(b).getY() && !alreadySendMoves.containsAll(cellsArray)) {
                                             System.out.println("ONE");
                                             System.out.println(alreadySendMoves.get(b).getOccupant().getType());
                                             System.out.println(alreadySendMoves.get(b));

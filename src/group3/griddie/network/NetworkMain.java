@@ -97,7 +97,9 @@ public class NetworkMain {
     //sends the command that has been put into the buffer
     private void checkCommand() {
         if (client.bufferOut.size() > 0) {
-            out.println(client.readBufferOut());
+            String message = client.readBufferOut();
+            System.out.println("send message: " + message);
+            out.println(message);
         }
     }
 

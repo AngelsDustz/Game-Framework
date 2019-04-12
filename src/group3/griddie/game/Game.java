@@ -20,6 +20,7 @@ public abstract class Game extends Scene implements Observer {
     private String game;
     private int round;
     protected Lobby lobby;
+    public int setter = 0;
 
     private GameView gameView;
 
@@ -39,6 +40,10 @@ public abstract class Game extends Scene implements Observer {
 
     public String getGame() {
         return game;
+    }
+
+    public int getSetter() {
+        return setter;
     }
 
     @Override
