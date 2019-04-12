@@ -26,11 +26,8 @@ public class Othello extends Game {
         aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
         aiPlayer.setGameAI(new OthelloAI(this, aiPlayer));
 
-        AIPlayer aiPlayer1 = new AIPlayer(this, Actor.Type.TYPE_2, "AI2 Player");
-        aiPlayer1.setGameAI(new OthelloAI(this, aiPlayer1));
-
+        this.addPlayer(new HumanPlayer(this, Actor.Type.TYPE_2, "Human Player"));
         this.addPlayer(aiPlayer);
-        this.addPlayer(aiPlayer1);
     }
 
     private void updateCellValidity(Board board, Actor.Type type) {
@@ -46,7 +43,7 @@ public class Othello extends Game {
     @Override
     public boolean onPlayerMove(Player player, int column, int row) {
         Cell cell = getBoard().getCell(column, row);
-        System.out.println(this.getLegalMoves(this.getBoard(), player.getActorType()));
+//        System.out.println(this.getLegalMoves(this.getBoard(), player.getActorType()));
 
 
         if (cell.isDisabled()) {
@@ -77,7 +74,7 @@ public class Othello extends Game {
                 continue;
             }
 
-            System.out.println(adjacentCell);
+//            System.out.println(adjacentCell);
             updates.add(adjacentCell);
 
             Cell following = this.getBoard().getCell(adjacentCell.getX()+dirX, adjacentCell.getY()+dirY);
@@ -93,7 +90,7 @@ public class Othello extends Game {
             boolean finished = false;
 
             while (!finished) {
-                System.out.println(following);
+//                System.out.println(following);
                 if (following == null) {
                     finished = true;
                     continue;
@@ -124,7 +121,7 @@ public class Othello extends Game {
             }
 
             for (Cell c : updates) {
-                System.out.println("Updating: "+c);
+//                System.out.println("Updating: "+c);
 
                 player.registerActor(actor);
                 c.setOccupant(actor);
@@ -216,6 +213,41 @@ public class Othello extends Game {
         }
 
         return legalMoves;
+    }
+
+    public Actor.Type checkIfWon(Board board) {
+        if (this.getLegalMoves(board, Actor.Type.TYPE_1).size() > 0) {
+            return null;
+        }
+
+        if (this.getLegalMoves(board, Actor.Type.TYPE_2).size() > 0) {
+            return null;
+        }
+
+        int actorOneScore = this.getCountByActor(board, Actor.Type.TYPE_1);
+        int actorTwoScore = this.getCountByActor(board, Actor.Type.TYPE_2);
+
+        if (actorOneScore == actorTwoScore) {
+            return null;
+        }
+
+        if (actorOneScore > actorTwoScore) {
+            return Actor.Type.TYPE_1;
+        } else {
+            return Actor.Type.TYPE_2;
+        }
+    }
+
+    public int getCountByActor(Board board, Actor.Type type) {
+        int count = 0;
+
+        for (Cell cell : board.getCellsArray()) {
+            if (cell.isOccupied() && cell.getOccupant().getType() == type) {
+                count++;
+            }
+        }
+
+        return count;
     }
 
     @Override
