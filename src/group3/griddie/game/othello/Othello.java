@@ -26,8 +26,13 @@ public class Othello extends Game {
         aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
         aiPlayer.setGameAI(new OthelloAI(this, aiPlayer));
 
+        AIPlayer aiPlayer1 = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player2");
+        aiPlayer1.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
+        aiPlayer1.setGameAI(new OthelloAI(this, aiPlayer1));
+
         this.addPlayer(new HumanPlayer(this, Actor.Type.TYPE_2, "Human Player"));
         this.addPlayer(aiPlayer);
+//        this.addPlayer(aiPlayer1);
     }
 
     private void updateCellValidity(Board board, Actor.Type type) {
@@ -35,6 +40,7 @@ public class Othello extends Game {
             cell.setValidSpot(false);
         }
 
+        type = (type == Actor.Type.TYPE_1)? Actor.Type.TYPE_2 : Actor.Type.TYPE_1;
         for (Cell cell: this.getLegalMoves(board, type)) {
             cell.setValidSpot(true);
         }
@@ -136,7 +142,7 @@ public class Othello extends Game {
         cell.setOccupant(actor);
         cell.setDisabled(true);
 
-        this.updateCellValidity(this.getBoard(), (player.getActorType() == Actor.Type.TYPE_1)? Actor.Type.TYPE_2 : Actor.Type.TYPE_1);
+        this.updateCellValidity(this.getBoard(), player.getActorType());
 
         return true;
     }
@@ -176,7 +182,7 @@ public class Othello extends Game {
                     continue;
                 }
 
-                if (following.isOccupied() && following.getOccupant().getType() != type) {
+                if (following.isOccupied() && following.getOccupant().getType() == type) {
                     continue;
                 }
 
@@ -271,6 +277,8 @@ public class Othello extends Game {
         getBoard().getCell(4,4).setOccupant(new OthelloActor(OthelloActor.Type.TYPE_2));
         getBoard().getCell(4,3).setOccupant(new OthelloActor(OthelloActor.Type.TYPE_1));
         getBoard().getCell(3,4).setOccupant(new OthelloActor(OthelloActor.Type.TYPE_1));
+
+        this.updateCellValidity(this.getBoard(), Actor.Type.TYPE_2);
     }
 
     @Override
