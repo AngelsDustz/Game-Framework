@@ -4,12 +4,13 @@ import group3.griddie.Griddie;
 import group3.griddie.controllerOLD.Controller;
 import group3.griddie.game.othello.Othello;
 import group3.griddie.game.tictactoe.TicTacToe;
+import group3.griddie.network.NetworkHelperThread;
 import group3.griddie.network.bufferThread;
 
 public class MainMenuController extends Controller {
-
     public MainMenuController() {
         super(null);
+
     }
 
     public void startOthello() {

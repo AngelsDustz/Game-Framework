@@ -67,12 +67,20 @@ public class bufferThread implements Runnable {
     }
 
     private void setupMatch() {
+        
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         String incomingDataBuffer = access.readBufferIn();
         if (incomingDataBuffer != null) {
             System.out.println(incomingDataBuffer);
             System.out.println("buffer thread incomingdataBuffer: " + incomingDataBuffer);
             calculatedDataBuffer.add(incomingDataBuffer);
         }
+
         if (incomingDataBuffer == null && check == 1) {
             check = check + 2;
             System.out.println("setup completed");

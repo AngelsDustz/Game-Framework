@@ -1,5 +1,6 @@
 package group3.griddie.game.tictactoe;
 
+import group3.griddie.Griddie;
 import group3.griddie.game.Game;
 import group3.griddie.game.player.AIPlayer;
 import group3.griddie.game.player.HumanPlayer;
@@ -17,23 +18,17 @@ import group3.griddie.network.invoker.CommandInvoker;
 import group3.griddie.network.networktranslator.NetworkTranslator;
 import group3.griddie.viewOLD.ViewOLD;
 import group3.griddie.viewOLD.board.tictactoe.TicTacToeBoardViewOLD;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
-import javafx.util.Duration;
-
-import java.io.BufferedReader;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 
 public class TicTacToe extends Game {
     private static String IP = "127.0.0.1";
     private static int PORT = 7789;
     private String ourplayerName = "TRUMP";
-    private NetworkHelperThread runner = new NetworkHelperThread(IP, PORT);
+    private NetworkHelperThread runner = Griddie.networkHelperThread;
     private Thread NetworkThread = new Thread(runner);
     private NetworkMain access = runner.getNetworkRunner();
     private boolean networkOn = true;
