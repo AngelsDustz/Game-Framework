@@ -50,6 +50,39 @@ public class Board extends Model {
         return cells[column][row];
     }
 
+    public Cell[] getAdjacentCells(Cell cell) {
+        Cell[] cells = new Cell[9];
+        cells[0] = getCell(cell.getX()-1, cell.getY()-1);
+        cells[1] = getCell(cell.getX(), cell.getY()-1);
+        cells[2] = getCell(cell.getX()+1, cell.getY()-1);
+        cells[3] = getCell(cell.getX()-1, cell.getY());
+        cells[4] = cell; // We are in the middle.
+        cells[5] = getCell(cell.getX()+1, cell.getY());
+        cells[6] = getCell(cell.getX()-1, cell.getY()+1);
+        cells[7] = getCell(cell.getX(), cell.getY()+1);
+        cells[8] = getCell(cell.getX()+1, cell.getY()+1);
+
+        return cells;
+    }
+
+    public ArrayList<Cell> getSpotsByActorType(Actor.Type type) {
+        ArrayList<Cell> cells = new ArrayList<>();
+
+        for (int i=0;i<this.width;i++) {
+            for (int c=0;c<this.height;c++) {
+                Cell cell = this.getCell(i, c);
+
+                if (cell != null) {
+                    if (cell.isOccupied() && cell.getOccupant().getType() == type) {
+                        cells.add(cell);
+                    }
+                }
+            }
+        }
+
+        return cells;
+    }
+
     public ArrayList<Cell> getCellsArray() {
         ArrayList<Cell> cells = new ArrayList<>();
 

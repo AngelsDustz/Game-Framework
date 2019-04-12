@@ -12,11 +12,11 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class CellViewOLD extends ViewOLD<Cell> implements Observer {
-
-    private static final int WIDTH = 64;
+    private static final int WIDTH  = 64;
     private static final int HEIGHT = 64;
 
     private ActorViewOLD actorView;
+    private ImageView imageView;
 
     public CellViewOLD(Cell cell, ActorViewOLD actorView) {
         super(cell, new StackPane());
@@ -33,15 +33,24 @@ public class CellViewOLD extends ViewOLD<Cell> implements Observer {
         if (o instanceof Cell) {
             Actor occupant = ((Cell) o).getOccupant();
 
-            actorView.setModel(occupant);
+            if (actorView.getModel() != occupant) {
+                actorView.setModel(occupant);
+            }
+
+            if (((Cell) o).isValidSpot()) {
+                this.imageView.setImage(new Image("assets/images/node_valid.png"));
+            } else {
+                this.imageView.setImage(new Image("assets/images/node.png"));
+            }
         }
     }
 
     @Override
     public void initializeView() {
         StackPane stackPane = (StackPane) getNode();
+        this.imageView = new ImageView(new Image("assets/images/node.png"));
 
-        stackPane.getChildren().add(new ImageView(new Image("assets/images/node.png")));
+        stackPane.getChildren().add(this.imageView);
         stackPane.getChildren().add(actorView.getNode());
     }
 

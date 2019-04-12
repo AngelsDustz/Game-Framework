@@ -7,6 +7,7 @@ public class Cell extends Model
 {
     private Actor occupant;
     private boolean disabled;
+    private boolean validSpot;
     private int x;
     private int y;
 
@@ -14,7 +15,8 @@ public class Cell extends Model
         this.x = x;
         this.y = y;
 
-        disabled = false;
+        disabled        = false;
+        this.validSpot  = false;
     }
 
     public boolean isOccupied() {
@@ -58,5 +60,16 @@ public class Cell extends Model
 
     public void testOccupant(Actor occupant) {
         this.occupant = occupant;
+    }
+
+    public boolean isValidSpot() {
+        return validSpot;
+    }
+
+    public void setValidSpot(boolean validSpot) {
+        this.validSpot = validSpot;
+
+        setChanged();
+        notifyObservers();
     }
 }
