@@ -71,6 +71,15 @@ public class TicTacToe extends Game {
         }
     }
 
+    @Override
+    public boolean canDoTurn(Player player) {
+        if (this.getBoard().getFreeSpots().size() > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
     public Actor.Type checkIfWon(Board board) {
         Actor.Type check = checkIfColumnWon(board);
         if (check != null) return check;

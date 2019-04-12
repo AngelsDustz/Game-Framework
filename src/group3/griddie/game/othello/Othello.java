@@ -99,7 +99,8 @@ public class Othello extends Game {
                 continue;
             }
 
-            boolean finished = false;
+            boolean finished    = false;
+            boolean revalid     = false;
 
             while (!finished) {
 //                System.out.println(following);
@@ -121,6 +122,7 @@ public class Othello extends Game {
                     }
 
                     if (following.getOccupant().getType() == player.getActorType()) {
+                        revalid = true;
                         finished = true;
                         continue;
                     }
@@ -132,12 +134,14 @@ public class Othello extends Game {
                 following = this.getBoard().getCell(following.getX()-dirX, following.getY()-dirY);
             }
 
-            for (Cell c : updates) {
+            if (revalid) {
+                for (Cell c : updates) {
 //                System.out.println("Updating: "+c);
 
-                player.registerActor(actor);
-                c.setOccupant(actor);
-                c.setDisabled(true);
+                    player.registerActor(actor);
+                    c.setOccupant(actor);
+                    c.setDisabled(true);
+                }
             }
 
         }
@@ -289,5 +293,20 @@ public class Othello extends Game {
 
     @Override
     protected void onTick() {
+        if (this.getLegalMoves(this.getBoard(), Actor.Type.TYPE_1).size() == 0) {
+            if (this.getLegalMoves(this.getBoard(), Actor.Type.TYPE_2).size() == 0) {
+                System.out.println("Game ended.");
+                this.stop();
+            }
+        }
+    }
+
+    @Override
+    public boolean canDoTurn(Player player) {
+        if (this.getLegalMoves(this.getBoard(), player.getActorType()).size() == 0) {
+            return false;
+        }
+
+        return true;
     }
 }

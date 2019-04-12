@@ -19,7 +19,7 @@ public class RemotePlayer extends Player implements Runnable {
 
     public RemotePlayer() {
         thread = new Thread(this);
-
+        thread.setDaemon(true);
         ServerResponse gameSR = new ServerResponse("GAME");
         gameSR.addSub(new ServerResponse("MOVE", this::handleMove));
         gameSR.addSub(new ServerResponse("YOURTURN", this::handleYourTurn));
@@ -43,11 +43,11 @@ public class RemotePlayer extends Player implements Runnable {
             e.printStackTrace();
         }
 
-        getGame().addOnPlayerMoveListener(((Player player, int x, int y) -> {
-            if (player != this) {
-                sendOpponentMove(x, y);
-            }
-        }));
+//        getGame().addOnPlayerMoveListener(((Player player, int x, int y) -> {
+//            if (player != this) {
+//                sendOpponentMove(x, y);
+//            }
+//        }));
 
         thread.start();
 

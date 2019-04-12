@@ -1,12 +1,11 @@
-package group3.griddie.controllerOLD.menu;
+package group3.griddie.controller.menu;
 
 import group3.griddie.Griddie;
-import group3.griddie.controllerOLD.Controller;
+import group3.griddie.controller.Controller;
 import group3.griddie.game.othello.Othello;
 import group3.griddie.game.tictactoe.TicTacToe;
 
 public class MainMenuController extends Controller {
-
     public MainMenuController() {
         super(null);
     }
