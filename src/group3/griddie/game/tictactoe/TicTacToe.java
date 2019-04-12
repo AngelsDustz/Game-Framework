@@ -7,8 +7,6 @@ import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
 import group3.griddie.model.board.actor.TicTacToeActor;
 import group3.griddie.network.NetworkHelperThread;
-import group3.griddie.viewOLD.ViewOLD;
-import group3.griddie.viewOLD.board.tictactoe.TicTacToeBoardViewOLD;
 
 public class TicTacToe extends Game {
     private static String IP = "134.209.93.232";
@@ -45,11 +43,6 @@ public class TicTacToe extends Game {
     @Override
     protected Board createBoard() {
         return new Board(3, 3);
-    }
-
-    @Override
-    protected ViewOLD<Board> createBoardView(Board board) {
-        return new TicTacToeBoardViewOLD(board);
     }
 
     @Override

@@ -5,7 +5,6 @@ import group3.griddie.game.player.Player;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
 import group3.griddie.view.game.GameView;
-import group3.griddie.viewOLD.ViewOLD;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 
@@ -137,8 +136,6 @@ public abstract class Game extends Scene implements Observer {
     protected abstract boolean onPlayerMove(Player player, int column, int row);
 
     protected abstract Board createBoard();
-
-    protected abstract ViewOLD<Board> createBoardView(Board board);
 
     protected abstract void onInit();
 

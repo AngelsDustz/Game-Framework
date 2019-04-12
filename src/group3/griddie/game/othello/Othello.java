@@ -9,8 +9,6 @@ import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
 import group3.griddie.model.board.actor.OthelloActor;
-import group3.griddie.viewOLD.ViewOLD;
-import group3.griddie.viewOLD.board.othello.OthelloBoardViewOLD;
 
 import java.util.ArrayList;
 
@@ -19,19 +17,16 @@ public class Othello extends Game {
     public Othello() {
         super("Othello");
 
-        lobby.join(new HumanPlayer(this, Actor.Type.TYPE_1, "Player 1"));
-//        this.addPlayer(new HumanPlayer(this, Actor.Type.TYPE_1, "Player 1"));
-
         AIPlayer aiPlayer = new AIPlayer(this, Actor.Type.TYPE_1, "AI Player");
         aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
         aiPlayer.setGameAI(new OthelloAI(this, aiPlayer));
 
-        lobby.join(aiPlayer);
+        AIPlayer aiPlayer1 = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player2");
         aiPlayer1.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
         aiPlayer1.setGameAI(new OthelloAI(this, aiPlayer1));
 
-        this.addPlayer(new HumanPlayer(this, Actor.Type.TYPE_2, "Human Player"));
-//        this.addPlayer(aiPlayer1);
+        lobby.join(new HumanPlayer(this, Actor.Type.TYPE_2, "Human Player"));
+        lobby.join(aiPlayer);
     }
 
     private void updateCellValidity(Board board, Actor.Type type) {
@@ -62,9 +57,12 @@ public class Othello extends Game {
             return false;
         }
 
+
         if (cell.isDisabled()) {
             return false;
         }
+
+
         OthelloActor actor  = new OthelloActor(player.getActorType());
         Cell[] adjacent     = this.getBoard().getAdjacentCells(cell);
 
@@ -85,8 +83,7 @@ public class Othello extends Game {
             }
 
             if (adjacentCell.getOccupant().getType() == player.getActorType() || adjacentCell.getOccupant().getType() == null) {
-    protected ViewOLD<Board> createBoardView(Board board) {
-        return new OthelloBoardViewOLD(board);
+                continue;
             }
 
 //            System.out.println(adjacentCell);
@@ -268,11 +265,6 @@ public class Othello extends Game {
     @Override
     protected Board createBoard() {
         return new Board(8,8);
-    }
-
-    @Override
-    protected View createBoardView(Board board) {
-        return new OthelloBoardView(board);
     }
 
     @Override
