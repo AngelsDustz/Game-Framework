@@ -37,7 +37,6 @@ public class Griddie extends Application {
         Scene scene = new Scene(menu);
         scene.getStylesheets().add(Griddie.class.getResource("/assets/css/custom-font-style.css").toExternalForm());
         stage.setScene(scene);
-        stage.setFullScreen(true);
     }
 
     public static void launchGame(Game game) {
@@ -45,6 +44,5 @@ public class Griddie extends Application {
         game.init();
         game.getStylesheets().add(Griddie.class.getResource("/assets/css/custom-font-style.css").toExternalForm());
         stage.setScene(game);
-        stage.setFullScreen(true);
     }
 }

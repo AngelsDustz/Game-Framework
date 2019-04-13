@@ -6,6 +6,7 @@ import group3.griddie.view.View;
 import group3.griddie.view.game.GameButton;
 import group3.griddie.view.game.GameView;
 import javafx.scene.control.Button;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 
 public class OpponentSelectView extends View {

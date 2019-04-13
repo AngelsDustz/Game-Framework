@@ -17,12 +17,12 @@ public class MainMenuButtonsView extends View {
         GridPane root_ = (GridPane) getRoot();
         MainMenuController controller_ = (MainMenuController) getController();
 
-        GameButton button1 = new GameButton("Orthello", GameButton.Size.LARGE, "text-button");
-        GameButton button2 = new GameButton("Tic-tac-toe", GameButton.Size.LARGE, "text-button");
-        GameButton button3 = new GameButton("Quit", GameButton.Size.MEDIUM, "text-button");
+        GameButton button1 = new GameButton("Orthello", GameButton.Size.MEDIUM, "text-button");
+        GameButton button2 = new GameButton("Tic-tac-toe", GameButton.Size.MEDIUM, "text-button");
+        GameButton button3 = new GameButton("Quit", GameButton.Size.SMALL, "text-button");
 
-        root_.getColumnConstraints().add(new ColumnConstraints( 740));
-        root_.getRowConstraints().add(new RowConstraints(100));
+        root_.getColumnConstraints().add(new ColumnConstraints( 170));
+        root_.getRowConstraints().add(new RowConstraints(50));
 
         root_.add(button1, 1, 1);
         root_.add(button2, 1, 2);
