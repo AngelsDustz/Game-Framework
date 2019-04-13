@@ -13,7 +13,7 @@ public class QuitView extends View {
         super(root, controller);
         Pane root_ = (Pane) getRoot();
         QuitController controller_ = (QuitController) controller;
-        GameButton quitButton = new GameButton("Quit", GameButton.Size.SMALL);
+        GameButton quitButton = new GameButton("Quit", GameButton.Size.SMALL, "text-button-game");
         root_.getChildren().addAll(quitButton);
 
         quitButton.setOnMouseClicked(event -> {

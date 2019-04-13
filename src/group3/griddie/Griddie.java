@@ -33,8 +33,6 @@ public class Griddie extends Application {
 
     public static void launchMenu(){
         BorderPane mainMenu = new BorderPane();
-        mainMenu.setPrefWidth(1980);
-        mainMenu.setPrefHeight(1080);
         MainMenuView menu = new MainMenuView(mainMenu, null);
         Scene scene = new Scene(menu);
         scene.getStylesheets().add(Griddie.class.getResource("/assets/css/custom-font-style.css").toExternalForm());
@@ -45,6 +43,7 @@ public class Griddie extends Application {
     public static void launchGame(Game game) {
         Griddie.game = game;
         game.init();
+        game.getStylesheets().add(Griddie.class.getResource("/assets/css/custom-font-style.css").toExternalForm());
         stage.setScene(game);
         stage.setFullScreen(true);
     }

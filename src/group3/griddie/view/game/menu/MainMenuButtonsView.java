@@ -17,9 +17,9 @@ public class MainMenuButtonsView extends View {
         GridPane root_ = (GridPane) getRoot();
         MainMenuController controller_ = (MainMenuController) getController();
 
-        GameButton button1 = new GameButton("Orthello", GameButton.Size.LARGE);
-        GameButton button2 = new GameButton("Tic-tac-toe", GameButton.Size.LARGE);
-        GameButton button3 = new GameButton("Quit", GameButton.Size.MEDIUM);
+        GameButton button1 = new GameButton("Orthello", GameButton.Size.LARGE, "text-button");
+        GameButton button2 = new GameButton("Tic-tac-toe", GameButton.Size.LARGE, "text-button");
+        GameButton button3 = new GameButton("Quit", GameButton.Size.MEDIUM, "text-button");
 
         root_.getColumnConstraints().add(new ColumnConstraints( 740));
         root_.getRowConstraints().add(new RowConstraints(100));

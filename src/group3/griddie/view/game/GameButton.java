@@ -21,7 +21,7 @@ public class GameButton extends StackPane {
     private ImageView imageView;
     private StackPane textPane;
 
-    public GameButton(String text, Size size) {
+    public GameButton(String text, Size size, String css) {
         this.size = size;
         this.text = new Text(text);
         this.textPane = new StackPane();
@@ -30,12 +30,13 @@ public class GameButton extends StackPane {
         imageView.setPreserveRatio(true);
         setImage(new Image("assets/images/gamebutton.png"));
         this.textPane.getChildren().add(this.text);
-        this.textPane.getStyleClass().add("text-button");
+        this.textPane.getStyleClass().add(css);
         StackPane.setAlignment(this.text, Pos.CENTER);
         getChildren().add(imageView);
         getChildren().add(textPane);
 
     }
+
 
     private void setImage(Image image) {
         imageView.setImage(image);
@@ -45,7 +46,7 @@ public class GameButton extends StackPane {
                 imageView.setFitHeight(250);
                 break;
             case SMALL:
-                imageView.setFitHeight(50);
+                imageView.setFitHeight(120);
                 break;
             case MEDIUM:
                 imageView.setFitHeight(180);

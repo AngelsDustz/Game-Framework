@@ -23,9 +23,7 @@ public abstract class Game extends Scene implements Observer {
     private GameView gameView;
 
     public Game(String game) {
-
         super(new AnchorPane());
-
         board = createBoard();
 
         lobby = new Lobby(2, this);

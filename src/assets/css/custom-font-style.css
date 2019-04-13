@@ -8,6 +8,10 @@
     -fx-font-size: 40;
 }
 
+.text-button-game{
+    -fx-font-family: "Fipps";
+    -fx-font-size: 20;
+}
 .title{
     -fx-font-family: "Fipps";
     -fx-font-size: 70;
