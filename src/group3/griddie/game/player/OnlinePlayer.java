@@ -1,6 +1,6 @@
 package group3.griddie.game.player;
 
-import group3.griddie.game.Communication;
+import group3.griddie.game.server.Communication;
 
 public class OnlinePlayer extends Player {
 

@@ -1,4 +1,4 @@
-package group3.griddie.game;
+package group3.griddie.game.server;
 
 import group3.griddie.game.player.Player;
 import group3.griddie.util.event.ArgEvent;
@@ -47,7 +47,7 @@ public class Connection implements Runnable {
             try {
                 String input = in.readLine();
 
-//                System.out.println(input);
+                //System.out.println(input);
 
                 synchronized (this) {
                     inputEvent.call(input);
@@ -70,8 +70,8 @@ public class Connection implements Runnable {
         out.println("login " + player.getName());
     }
 
-    public void subscribe() {
-        out.println("subscribe " + "Tic-tac-toe");
+    public void subscribe(String game) {
+        out.println("subscribe " + game);
     }
 
 }

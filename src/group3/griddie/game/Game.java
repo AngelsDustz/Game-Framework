@@ -1,6 +1,8 @@
 package group3.griddie.game;
 
 import group3.griddie.game.player.HumanPlayer;
+import group3.griddie.game.server.Communication;
+import group3.griddie.game.server.Connection;
 import group3.griddie.model.board.Board;
 import group3.griddie.game.player.Player;
 import group3.griddie.model.board.Cell;
@@ -17,6 +19,7 @@ public abstract class Game extends Scene {
 
     public final ArgEvent<Move> onMove;
 
+    private String name;
     private Connection connection;
     private Communication communication;
     private Lobby lobby;
@@ -24,8 +27,10 @@ public abstract class Game extends Scene {
     private Board board;
     private GameThread thread;
 
-    public Game(String game) {
+    public Game(String name) {
         super(new AnchorPane());
+
+        this.name = name;
 
         onMove = new ArgEvent<>();
 
@@ -62,7 +67,7 @@ public abstract class Game extends Scene {
             lobby.join(player);
 
             connection.login(player);
-            connection.subscribe();
+            connection.subscribe(name);
         }
     }
 
@@ -98,9 +103,16 @@ public abstract class Game extends Scene {
         if (moveIsValid(player, x, y)) {
             onPlayerMove(player, x, y);
 
-            onMove.call(new Move(player, x, y));
+            Move move = new Move(player, x, y);
+
+            onMove.call(move);
 
             activePlayer.endTurn();
+
+            if (checkWin(move)) {
+                System.out.println(player.getName() + " wins the game!");
+                stop();
+            }
         }
     }
 
@@ -124,7 +136,16 @@ public abstract class Game extends Scene {
         return activePlayer;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public boolean isRunning() {
+        return this.started;
+    }
+
     public abstract boolean moveIsValid(Player player, int x, int y);
+    public abstract boolean checkWin(Move move);
     protected abstract void onPlayerMove(Player player, int column, int row);
 
 

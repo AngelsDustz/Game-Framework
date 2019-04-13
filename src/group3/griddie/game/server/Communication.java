@@ -1,7 +1,9 @@
-package group3.griddie.game;
+package group3.griddie.game.server;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import group3.griddie.game.Game;
+import group3.griddie.game.Move;
 import group3.griddie.game.player.OnlinePlayer;
 import group3.griddie.game.player.Player;
 import group3.griddie.util.event.ArgEvent;
@@ -49,8 +51,7 @@ public class Communication {
         public void execute(String data) {
             if (action != null) {
                 Gson gson = new Gson();
-                Type type = new TypeToken<Map<String, String>>() {
-                }.getType();
+                Type type = new TypeToken<Map<String, String>>() {}.getType();
                 Map<String, String> converted = gson.fromJson(data, type);
                 action.doAction(converted);
             }
@@ -73,28 +74,22 @@ public class Communication {
 
         rootCommand = new Command("");
         Command svrCommand = new Command("SVR");
-
         Command gameCommand = new Command("GAME");
-
-        Command matchCommand = new Command("MATCH", (data) -> {
-            OnlinePlayer onlinePlayer = new OnlinePlayer(data.get("OPPONENT"), this);
-            game.getLobby().join(onlinePlayer);
-
-            Player startPlayer = game.getLobby().getPlayer(data.get("PLAYERTOMOVE"));
-            game.setActivePlayer(startPlayer);
-        });
-
+        Command matchCommand = new Command("MATCH", this::handleMatch);
         Command moveCommand = new Command("MOVE", this::handleMove);
-
-        Command yourTurnCommand = new Command("YOURTURN", (data) -> {
-
-        });
+        Command winCommand = new Command("WIN", this::handleWin);
+        Command lossCommand = new Command("LOSS", this::handleLoss);
+        Command yourTurnCommand = new Command("YOURTURN", (data) -> { });
 
         rootCommand.addSubCommand(svrCommand);
+
         svrCommand.addSubCommand(gameCommand);
+
         gameCommand.addSubCommand(matchCommand);
         gameCommand.addSubCommand(yourTurnCommand);
         gameCommand.addSubCommand(moveCommand);
+        gameCommand.addSubCommand(winCommand);
+        gameCommand.addSubCommand(lossCommand);
     }
 
     public void handle(String input) {
@@ -124,6 +119,22 @@ public class Communication {
         int y = move / game.getBoard().getWidth();
 
         moveReceivedEvent.call(new Move(player, x, y));
+    }
+
+    private void handleMatch(Map<String, String> data) {
+        OnlinePlayer onlinePlayer = new OnlinePlayer(data.get("OPPONENT"), this);
+        game.getLobby().join(onlinePlayer);
+
+        Player startPlayer = game.getLobby().getPlayer(data.get("PLAYERTOMOVE"));
+        game.setActivePlayer(startPlayer);
+    }
+
+    private void handleWin(Map<String, String> data) {
+        game.stop();
+    }
+
+    private void handleLoss(Map<String, String> data) {
+        game.stop();
     }
 
     public void sendMove(int move) {

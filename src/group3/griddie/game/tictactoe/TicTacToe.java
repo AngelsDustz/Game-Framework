@@ -1,6 +1,7 @@
 package group3.griddie.game.tictactoe;
 
 import group3.griddie.game.Game;
+import group3.griddie.game.Move;
 import group3.griddie.game.player.Player;
 import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;
@@ -57,8 +58,50 @@ public class TicTacToe extends Game {
         return new Board(3, 3);
     }
 
+    @Override
+    public boolean checkWin(Move move) {
+        Cell[][] cells = getBoard().getCells();
 
+        return horizontalWin(move, cells) || verticalWin(move, cells) || diagonalWin(move, cells);
+    }
 
+    private boolean horizontalWin(Move move, Cell[][] cells) {
+        for (int i = 0; i < 3; i++) {
+            Cell cell = cells[i][move.getY()];
+
+            if (!cell.isOccupied() || cell.getOccupant().getType() != move.getPlayer().getActorType()) {
+                return false;
+            }
+        }
+
+        System.out.println("HORIZONTAL WIN");
+
+        return  true;
+    }
+
+    private boolean verticalWin(Move move, Cell[][] cells) {
+        for (int i = 0; i < 3; i++) {
+            Cell cell = cells[move.getX()][i];
+
+            if (!cell.isOccupied() ||cell.getOccupant().getType() != move.getPlayer().getActorType()) {
+                return false;
+            }
+        }
+
+        System.out.println("VERTICAL WIN");
+
+        return  true;
+    }
+
+    private boolean diagonalWin(Move move, Cell[][] cells) {
+        if (move.getX() % 2 == 1 || move.getY() % 2 == 1 || !cells[1][1].isOccupied()) {
+            return false;
+        }
+
+        //TODO
+
+        return false;
+    }
 
 
 
