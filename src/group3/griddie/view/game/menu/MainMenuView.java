@@ -24,7 +24,7 @@ public class MainMenuView extends View {
 
         Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
 
-        Text topText = new Text(130, 120, "Griddie");
+        Text topText = new Text(150, 140, "Griddie");
         Pane topPane = new Pane();
         topPane.getStyleClass().add("title");
         Pane bottomPane = new Pane();
@@ -38,7 +38,7 @@ public class MainMenuView extends View {
         mainMenuRoot.setBackground(new Background(image));
 
         topPane.getChildren().add(topText);
-        bottomPane.setPrefSize(650, 127);
+        bottomPane.setPrefSize(675, 127);
         mainMenuRoot.setTop(topPane);
         mainMenuRoot.setCenter(buttonsView);
         mainMenuRoot.setBottom(bottomPane);
