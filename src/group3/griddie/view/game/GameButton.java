@@ -30,6 +30,7 @@ public class GameButton extends StackPane {
         imageView.setPreserveRatio(true);
         setImage(new Image("assets/images/gamebutton.png"));
         this.textPane.getChildren().add(this.text);
+        this.textPane.getStyleClass().add("text-button");
         StackPane.setAlignment(this.text, Pos.CENTER);
         getChildren().add(imageView);
         getChildren().add(textPane);

@@ -24,9 +24,9 @@ public class MainMenuView extends View {
 
         Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
 
-        Text topText = new Text(primScreenBounds.getWidth()/2 - 110, 100, "Griddie");
-        topText.setFont(Font.font("Verdana", FontWeight.BOLD, 70));
+        Text topText = new Text(primScreenBounds.getWidth()/2 - 170, 120, "Griddie");
         Pane topPane = new Pane();
+        topPane.getStyleClass().add("title");
         Pane bottomPane = new Pane();
 
         BackgroundImage image = new BackgroundImage(new Image("/assets/images/top.png"), null, null,null, null);

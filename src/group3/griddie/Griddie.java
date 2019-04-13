@@ -24,13 +24,7 @@ public class Griddie extends Application {
         stage = primaryStage;
         stage.setTitle("Griddie Game Framework");
         stage.show();
-        BorderPane mainMenu = new BorderPane();
-        mainMenu.setPrefWidth(1980);
-        mainMenu.setPrefHeight(1080);
-        MainMenuView menu = new MainMenuView(mainMenu, null);
-        Scene scene = new Scene(menu);
-        stage.setScene(scene);
-        stage.setFullScreen(true);
+        launchMenu();
     }
 
     public static Stage getStage(){
@@ -43,6 +37,7 @@ public class Griddie extends Application {
         mainMenu.setPrefHeight(1080);
         MainMenuView menu = new MainMenuView(mainMenu, null);
         Scene scene = new Scene(menu);
+        scene.getStylesheets().add(Griddie.class.getResource("/assets/css/custom-font-style.css").toExternalForm());
         stage.setScene(scene);
         stage.setFullScreen(true);
     }
