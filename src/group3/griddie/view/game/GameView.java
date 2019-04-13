@@ -2,11 +2,13 @@ package group3.griddie.view.game;
 
 import group3.griddie.controller.game.GameController;
 import group3.griddie.controller.game.QuitController;
+import group3.griddie.controller.menu.ChallengePlayerController;
 import group3.griddie.game.Game;
 import group3.griddie.game.othello.Othello;
 import group3.griddie.game.tictactoe.TicTacToe;
 import group3.griddie.view.View;
 import group3.griddie.view.game.board.BoardView;
+import group3.griddie.view.game.menu.ChallengePlayerView;
 import group3.griddie.view.game.sidebar.OpponentSelectView;
 import group3.griddie.view.game.sidebar.QuitView;
 import javafx.geometry.Pos;
@@ -41,7 +43,9 @@ public class GameView extends View {
         BorderPane root = new BorderPane();
         boardView = new BoardView(game.getBoard());
         VBox boardViewRoot = new VBox();
-        OpponentSelectView rightSidebar = new OpponentSelectView(this, root_, menu);
+        GridPane ChallengePlayer = new GridPane();
+        ChallengePlayerView challengePlayerView = new ChallengePlayerView(ChallengePlayer, new ChallengePlayerController(root_, ChallengePlayer));
+        OpponentSelectView rightSidebar = new OpponentSelectView(this, root_, menu, (GridPane) challengePlayerView.getRoot());
         Pane topPane = new Pane();
         QuitView quit = new QuitView(new Pane(), new QuitController());
         Pane bottomPane = new Pane();

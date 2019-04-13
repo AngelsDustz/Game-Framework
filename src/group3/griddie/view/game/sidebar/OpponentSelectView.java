@@ -16,7 +16,7 @@ import javafx.scene.layout.VBox;
 public class OpponentSelectView extends View {
 
 
-    public OpponentSelectView(GameView gameView, StackPane pane, VBox box) {
+    public OpponentSelectView(GameView gameView, StackPane pane, VBox box, GridPane challengeMenu) {
         super(new GridPane(), new LobbyController());
 
         GridPane root = (GridPane) getRoot();
@@ -48,6 +48,13 @@ public class OpponentSelectView extends View {
             ((LobbyController) controller).setRoot(pane);
             ((LobbyController) controller).setMenu(box);
             ((LobbyController) controller).removePane();
+        });
+
+        button4.setOnMouseClicked(event -> {
+            ((LobbyController) controller).setRoot(pane);
+            ((LobbyController) controller).setMenu(box);
+            ((LobbyController) controller).removePane();
+            ((LobbyController) controller).addPane(challengeMenu);
         });
 
     }
