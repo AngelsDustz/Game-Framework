@@ -9,6 +9,8 @@ import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
 import group3.griddie.model.board.actor.TicTacToeActor;
 
+import java.util.Random;
+
 public class TicTacToe extends Game {
 
 
@@ -46,7 +48,7 @@ public class TicTacToe extends Game {
         human.setName("HUMAN");
 
         RemotePlayer remotePlayer = new RemotePlayer();
-        remotePlayer.setName("REMOTE");
+        remotePlayer.setName("REMOTE " + new Random().nextInt());
 
         lobby.join(human);
         lobby.join(remotePlayer);
