@@ -16,10 +16,10 @@ public class OpponentSelectView extends View {
 
         GridPane root = (GridPane) getRoot();
 
-        GameButton button1 = new GameButton("Human vs Human", GameButton.Size.SMALL, "text-button-game");
-        GameButton button2 = new GameButton("Human vs AI", GameButton.Size.SMALL, "text-button-game");
-        GameButton button3 = new GameButton("Human vs Remote", GameButton.Size.SMALL, "text-button-game");
-        GameButton button4 = new GameButton("AI vs Remote", GameButton.Size.SMALL, "text-button-game");
+        GameButton button1 = new GameButton("Human vs Human", GameButton.Size.SMALL, "text-button-game-right");
+        GameButton button2 = new GameButton("Human vs AI", GameButton.Size.SMALL, "text-button-game-right");
+        GameButton button3 = new GameButton("Human vs Remote", GameButton.Size.SMALL, "text-button-game-right");
+        GameButton button4 = new GameButton("AI vs Remote", GameButton.Size.SMALL, "text-button-game-right");
 
         root.add(button1, 0, 0);
         root.add(button2, 0, 1);
