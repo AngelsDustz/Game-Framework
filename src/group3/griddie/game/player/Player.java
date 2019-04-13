@@ -9,10 +9,17 @@ import java.util.ArrayList;
 
 public abstract class Player extends Entity {
 
+    public final Event turnEndEvent;
+    public final Event turnStartEvent;
+
     private String name;
+    private boolean onTurn;
+    private Game game;
 
     public Player(String name) {
         this.name = name;
+        turnEndEvent = new Event();
+        turnStartEvent = new Event();
     }
 
     public void init() {
@@ -21,51 +28,14 @@ public abstract class Player extends Entity {
         onInit();
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    private boolean onTurn = true;
-    private Game game;
-    private ArrayList<Actor> actors;
-    private Actor.Type actorType;
-
-    public Player(Game game, Actor.Type type, String name) {
-        this.game = game;
-        actors = new ArrayList<>();
-        this.name = name;
-        this.actorType = type;
-    }
-
-    public void tick() {
-        //System.out.println(name + " ticked");
-
-        onTick();
-    }
-
     public void startTurn() {
         System.out.println(name + " turn started");
 
         onTurn = true;
 
         onStartTurn();
+
+        turnStartEvent.call();
     }
 
     public void endTurn() {
@@ -74,6 +44,46 @@ public abstract class Player extends Entity {
         onTurn = false;
 
         onEndTurn();
+
+        turnEndEvent.call();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private ArrayList<Actor> actors;
+    private Actor.Type actorType;
+
+    public Player(Game game, Actor.Type type, String name) {
+        this.game = game;
+        actors = new ArrayList<>();
+        this.name = name;
+        this.actorType = type;
+        turnEndEvent = new Event();
+        turnStartEvent = new Event();
+    }
+
+    public void tick() {
+        //System.out.println(name + " ticked");
+
+        onTick();
     }
 
     public ArrayList<Actor> getActors() {

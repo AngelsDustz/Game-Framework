@@ -49,18 +49,27 @@ public class Communication {
         public void execute(String data) {
             if (action != null) {
                 Gson gson = new Gson();
-                Type type = new TypeToken<Map<String, String>>() {}.getType();
+                Type type = new TypeToken<Map<String, String>>() {
+                }.getType();
                 Map<String, String> converted = gson.fromJson(data, type);
                 action.doAction(converted);
             }
         }
     }
 
+    public final ArgEvent<Move> moveReceivedEvent;
+
     private Command rootCommand;
     private Game game;
+    private Connection connection;
 
-    public Communication(Game game) {
+    public Communication(Game game, Connection connection) {
+        moveReceivedEvent = new ArgEvent<>();
+
         this.game = game;
+        this.connection = connection;
+
+        connection.inputEvent.addListener(this::handle);
 
         rootCommand = new Command("");
         Command svrCommand = new Command("SVR");
@@ -68,14 +77,15 @@ public class Communication {
         Command gameCommand = new Command("GAME");
 
         Command matchCommand = new Command("MATCH", (data) -> {
-            OnlinePlayer onlinePlayer = new OnlinePlayer(data.get("OPPONENT"));
+            OnlinePlayer onlinePlayer = new OnlinePlayer(data.get("OPPONENT"), this);
             game.getLobby().join(onlinePlayer);
 
             Player startPlayer = game.getLobby().getPlayer(data.get("PLAYERTOMOVE"));
             game.setActivePlayer(startPlayer);
         });
 
-        Command moveCommand = new Command("MOVE", (data) -> { });
+        Command moveCommand = new Command("MOVE", this::handleMove);
+
         Command yourTurnCommand = new Command("YOURTURN", (data) -> {
 
         });
@@ -104,6 +114,20 @@ public class Communication {
                 current.execute(data.toString());
             }
         }
+    }
+
+    private void handleMove(Map<String, String> data) {
+        Player player = game.getLobby().getPlayer(data.get("PLAYER"));
+
+        int move = Integer.parseInt(data.get("MOVE"));
+        int x = move % game.getBoard().getWidth();
+        int y = move / game.getBoard().getWidth();
+
+        moveReceivedEvent.call(new Move(player, x, y));
+    }
+
+    public void sendMove(int move) {
+        connection.send("MOVE " + move);
     }
 
 }

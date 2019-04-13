@@ -5,6 +5,7 @@ import group3.griddie.model.board.Board;
 import group3.griddie.game.player.Player;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
+import group3.griddie.util.event.ArgEvent;
 import group3.griddie.view.game.GameView;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -14,19 +15,26 @@ import java.util.Random;
 
 public abstract class Game extends Scene {
 
+    public final ArgEvent<Move> onMove;
+
     private Connection connection;
     private Communication communication;
     private Lobby lobby;
     private Player activePlayer;
     private Board board;
+    private GameThread thread;
 
     public Game(String game) {
         super(new AnchorPane());
 
-        communication = new Communication(this);
-        connection = new Connection(communication);
+        onMove = new ArgEvent<>();
+
+        connection = new Connection();
+        communication = new Communication(this, connection);
+
         lobby = new Lobby(2);
         board = createBoard();
+        thread = new GameThread(this);
     }
 
     public final void init() {
@@ -61,34 +69,63 @@ public abstract class Game extends Scene {
     private void onPlayerJoined(Player player) {
         player.setGame(this);
         player.init();
-
-        if (lobby.isFull()) {
-            start();
-        }
     }
 
     public final void start() {
         System.out.println("Starting game");
 
+        activePlayer.setActorType(Actor.Type.TYPE_1);
+        getNextPlayer().setActorType(Actor.Type.TYPE_2);
+
         onStart();
+
+        started = true;
+
+        thread.start();
     }
 
     public void setActivePlayer(Player player) {
-        if (activePlayer != null) {
-            activePlayer.endTurn();
-        }
-
         this.activePlayer = player;
 
+        if (!started && lobby.isFull()) {
+            start();
+        }
+
         player.startTurn();
+    }
+
+    public void playerMove(Player player, int x, int y) {
+        if (moveIsValid(player, x, y)) {
+            onPlayerMove(player, x, y);
+
+            onMove.call(new Move(player, x, y));
+
+            activePlayer.endTurn();
+        }
     }
 
     public Lobby getLobby() {
         return lobby;
     }
 
+    public Player getNextPlayer() {
+        Player[] players = lobby.getPlayers();
 
+        for (int i = 0; i < players.length; i++) {
+            if (players[i] == activePlayer) {
+                return players[(i + 1) % players.length];
+            }
+        }
 
+        return null;
+    }
+
+    public Player getActivePlayer() {
+        return activePlayer;
+    }
+
+    public abstract boolean moveIsValid(Player player, int x, int y);
+    protected abstract void onPlayerMove(Player player, int column, int row);
 
 
 
@@ -168,24 +205,12 @@ public abstract class Game extends Scene {
         tick();
     }
 
-    public void playerMove(Player player, int column, int row) {
-        if (onPlayerMove(player, column, row)) {
-            for(PlayerMove listener : playerMoveListeners) {
-                listener.onMove(player, column, row);
-            }
-        }
-    }
-
     public Board getBoard() {
         return board;
     }
 
     public Player getPlayerOnTurn() {
         return playerOnTurn;
-    }
-
-    private Player getNextPlayer() {
-        return null;
     }
 
     public void placeActor(Actor actor, int x, int y) {
@@ -196,8 +221,6 @@ public abstract class Game extends Scene {
     public void setBoard(Board board) {
         this.board = board;
     }
-
-    protected abstract boolean onPlayerMove(Player player, int column, int row);
 
     protected abstract Board createBoard();
 

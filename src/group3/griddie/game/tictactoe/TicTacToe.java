@@ -1,21 +1,30 @@
 package group3.griddie.game.tictactoe;
 
 import group3.griddie.game.Game;
-import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.player.Player;
-import group3.griddie.game.player.OnlinePlayer;
 import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
 import group3.griddie.model.board.actor.TicTacToeActor;
-
-import java.util.Random;
 
 public class TicTacToe extends Game {
 
 
     public TicTacToe(String game) {
         super(game);
+    }
+
+    @Override
+    public boolean moveIsValid(Player player, int x, int y) {
+        Cell cell = getBoard().getCell(x, y);
+
+        try {
+            boolean test = !cell.isOccupied();
+        } catch (Exception e) {
+            System.out.println("ERROR X: " + x + " Y:" + y);
+        }
+
+        return !cell.isOccupied();
     }
 
     @Override
@@ -39,8 +48,8 @@ public class TicTacToe extends Game {
     }
 
     @Override
-    public boolean onPlayerMove(Player player, int column, int row) {
-        return true;
+    public void onPlayerMove(Player player, int x, int y) {
+        getBoard().getCell(x, y).setOccupant(new TicTacToeActor(player.getActorType()));
     }
 
     @Override

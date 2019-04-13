@@ -1,9 +1,6 @@
 package group3.griddie.game.othello;
 
 import group3.griddie.game.Game;
-import group3.griddie.game.ai.OthelloAI;
-import group3.griddie.game.player.AIPlayer;
-import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.player.Player;
 import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;
@@ -30,7 +27,12 @@ public class Othello extends Game {
     }
 
     @Override
-    public boolean onPlayerMove(Player player, int column, int row) {
+    public boolean moveIsValid(Player player, int x, int y) {
+        return false;
+    }
+
+    @Override
+    public void onPlayerMove(Player player, int column, int row) {
         Cell cell = getBoard().getCell(column, row);
 
         boolean valid = false;
@@ -43,12 +45,12 @@ public class Othello extends Game {
         }
 
         if (!valid) {
-            return false;
+
         }
 
 
         if (cell.isDisabled()) {
-            return false;
+
         }
 
 
@@ -139,7 +141,6 @@ public class Othello extends Game {
 
         this.updateCellValidity(this.getBoard(), player.getActorType());
 
-        return true;
     }
 
     public ArrayList<Cell> getLegalMoves(Board board, Actor.Type type) {

@@ -1,14 +1,31 @@
 package group3.griddie.game.player;
 
+import group3.griddie.game.Communication;
+
 public class OnlinePlayer extends Player {
 
-    public OnlinePlayer(String name) {
+    private Communication communication;
+
+    public OnlinePlayer(String name, Communication communication) {
         super(name);
+
+        this.communication = communication;
     }
 
     @Override
     protected void onInit() {
+        getGame().onMove.addListener(move -> {
+            if (move.getPlayer() != this) {
+                int num = move.getX() + (move.getY() * getGame().getBoard().getWidth());
+                communication.sendMove(num);
+            }
+        });
 
+        communication.moveReceivedEvent.addListener(move -> {
+            if (isOnTurn() && move.getPlayer() == this) {
+                getGame().playerMove(this, move.getX(), move.getY());
+            }
+        });
     }
 
     @Override

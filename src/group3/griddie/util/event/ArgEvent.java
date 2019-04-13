@@ -14,6 +14,10 @@ public class ArgEvent<T> {
         listeners.add(listener);
     }
 
+    public void removeListener(ArgListener<T> listener) {
+        listeners.remove(listener);
+    }
+
     public void call(T arg) {
         for (ArgListener<T> listener : listeners) {
             listener.call(arg);

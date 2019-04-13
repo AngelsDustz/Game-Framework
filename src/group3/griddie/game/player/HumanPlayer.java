@@ -16,11 +16,11 @@ public class HumanPlayer extends Player {
         for (int x = 0; x < board.getWidth(); x++) {
             for (int y = 0; y < board.getHeight(); y++) {
                 Cell cell = board.getCell(x, y);
-                int finalX = x;
-                int finalY = y;
+
+                int fX = x; int fY = y;
                 cell.addInteractListener(() -> {
                     if (isOnTurn()) {
-                        System.out.println("Interacted with cell " + finalX + " " + finalY);
+                        getGame().playerMove(this, fX, fY);
                     }
                 });
             }

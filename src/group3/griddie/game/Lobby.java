@@ -58,6 +58,10 @@ public class Lobby extends Entity  {
         return players[index];
     }
 
+    public Player[] getPlayers() {
+        return players.clone();
+    }
+
     public boolean isFull() {
         return count == size;
     }

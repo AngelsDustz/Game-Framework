@@ -47,8 +47,6 @@ public class CellView extends View implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println("UPDATE");
-
         if (o instanceof Cell) {
             Platform.runLater(() -> {
                 if (actorView != null) {
