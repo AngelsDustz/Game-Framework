@@ -29,9 +29,10 @@ public class MainMenuView extends View {
         topPane.getStyleClass().add("title");
         Pane bottomPane = new Pane();
 
-        BackgroundImage image = new BackgroundImage(new Image("/assets/images/top.png"), null, null,null, null);
+        BackgroundSize backgroundSize = new BackgroundSize(300, 300, true, true, true, false);
+        BackgroundImage image = new BackgroundImage(new Image("/assets/images/top.png"), null, null,null, backgroundSize);
         topPane.setBackground(new Background(image));
-        image = new BackgroundImage(new Image("/assets/images/bottom.png"), null, null,null, null);
+        image = new BackgroundImage(new Image("/assets/images/bottom.png"), null, null,null, backgroundSize);
         bottomPane.setBackground(new Background(image));
         image = new BackgroundImage(new Image("/assets/images/middle.png"), null, null,null, null);
         mainMenuRoot.setBackground(new Background(image));

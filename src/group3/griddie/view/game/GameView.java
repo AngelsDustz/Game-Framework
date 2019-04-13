@@ -34,8 +34,8 @@ public class GameView extends View {
         Pane bottomPane = new Pane();
 
         //set sizes
-        topPane.setPrefWidth(650);
-        bottomPane.setPrefWidth(650);
+        topPane.setPrefWidth(900);
+        bottomPane.setPrefWidth(900);
 
         if (getGame() instanceof Othello) {
             topPane.setPrefHeight(200);
@@ -48,7 +48,7 @@ public class GameView extends View {
             topPane.setPrefHeight(200);
             bottomPane.setPrefHeight(200);
             rightSidebar.setPrefWidth(200);
-            quit.setPrefWidth(200);
+            quit.setPrefWidth(350);
         }
 
         //setup background
