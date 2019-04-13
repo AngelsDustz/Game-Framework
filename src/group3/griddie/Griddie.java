@@ -37,9 +37,20 @@ public class Griddie extends Application {
         return stage;
     }
 
+    public static void launchMenu(){
+        BorderPane mainMenu = new BorderPane();
+        mainMenu.setPrefWidth(1980);
+        mainMenu.setPrefHeight(1080);
+        MainMenuView menu = new MainMenuView(mainMenu, null);
+        Scene scene = new Scene(menu);
+        stage.setScene(scene);
+        stage.setFullScreen(true);
+    }
+
     public static void launchGame(Game game) {
         Griddie.game = game;
         game.init();
         stage.setScene(game);
+        stage.setFullScreen(true);
     }
 }
