@@ -22,8 +22,10 @@ public class Griddie extends Application {
         Font.loadFont("assets/fonts/Fipps-Regular.otf", 12);
 
         stage = primaryStage;
+
         stage.setTitle("Griddie Game Framework");
         stage.show();
+        setMiddle();
         launchMenu();
     }
 
@@ -37,6 +39,13 @@ public class Griddie extends Application {
         Scene scene = new Scene(menu);
         scene.getStylesheets().add(Griddie.class.getResource("/assets/css/custom-font-style.css").toExternalForm());
         stage.setScene(scene);
+        setMiddle();
+    }
+
+    private static void setMiddle(){
+        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+        stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
+        stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 2);
     }
 
     public static void launchGame(Game game) {
@@ -44,5 +53,6 @@ public class Griddie extends Application {
         game.init();
         game.getStylesheets().add(Griddie.class.getResource("/assets/css/custom-font-style.css").toExternalForm());
         stage.setScene(game);
+        setMiddle();
     }
 }

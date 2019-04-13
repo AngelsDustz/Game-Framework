@@ -5,6 +5,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ChallengePlayerController extends Controller {
 
@@ -24,8 +25,8 @@ public class ChallengePlayerController extends Controller {
         return new ArrayList<>();
     }
 
-    public ArrayList<String> getPlayerList(){
-        return new ArrayList<>();
+    public HashMap<String, ArrayList<String>> getPlayerList(){
+        return new HashMap<>();
     }
 
     public void sendText(String text){

@@ -26,6 +26,8 @@ public class ChallengePlayerView extends View {
 
         Label tablePlayerLabel = new Label("PlayerList");
         Label tableChallengerLabel = new Label("Players Challenging You");
+        tableChallengerLabel.getStyleClass().add("text-button");
+        tablePlayerLabel.getStyleClass().add("text-button");
         TableView tablePlayer = new TableView();
         TableView tableChallengers = new TableView();
 
@@ -33,10 +35,16 @@ public class ChallengePlayerView extends View {
         tableChallengers.setEditable(true);
 
         TableColumn Player = new TableColumn("Player name");
-        TableColumn Game = new TableColumn("Game");
+        TableColumn Game = new TableColumn("Challenge number");
         GameButton button = new GameButton("Get Player List", GameButton.Size.SMALL, "text-button-game-right");
         GameButton button1 = new GameButton("Send command", GameButton.Size.SMALL, "text-button-game-right");
         TextField inputField = new TextField();
+
+        tablePlayer.setPrefWidth(500);
+        tableChallengers.setPrefWidth(500);
+
+        Player.prefWidthProperty().bind(tablePlayer.widthProperty().multiply(0.5));
+        Game.prefWidthProperty().bind(tablePlayer.widthProperty().multiply(0.5));
 
         button.setOnMouseClicked(event -> {
 
@@ -44,6 +52,7 @@ public class ChallengePlayerView extends View {
 
         button1.setOnMouseClicked(event -> {
             controller_.removePane();
+            controller_.sendText(inputField.getText());
         });
 
         tablePlayer.getColumns().add(Player);
