@@ -13,6 +13,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 
 public class GameView extends View {
 
@@ -20,43 +21,57 @@ public class GameView extends View {
 
     private BoardView boardView;
     private VBox sidebar;
+    private BorderPane root;
 
     public GameView(Game game) {
         //init
-        super(new BorderPane(), new GameController());
+        super(new StackPane(), new GameController());
+
         this.game = game;
-        BorderPane root = (BorderPane) getRoot();
+        StackPane root_ = (StackPane) getRoot();
+        VBox menu = new VBox();
+        Pane topMenuPane = new Pane();
+        Pane bottomMenuPane = new Pane();
+        Text topText = new Text(10, 140, "SELECT OPPONENT");
+        topMenuPane.getStyleClass().add("title");
+        topMenuPane.getChildren().add(topText);
+        bottomMenuPane.prefWidthProperty().bind(topMenuPane.widthProperty());
+        bottomMenuPane.setPrefHeight(140);
+
+        BorderPane root = new BorderPane();
         boardView = new BoardView(game.getBoard());
         VBox boardViewRoot = new VBox();
-        OpponentSelectView rightSidebar = new OpponentSelectView(this);
+        OpponentSelectView rightSidebar = new OpponentSelectView(this, root_, menu);
         Pane topPane = new Pane();
         QuitView quit = new QuitView(new Pane(), new QuitController());
         Pane bottomPane = new Pane();
 
         //set sizes
-        topPane.setPrefWidth(900);
-        bottomPane.setPrefWidth(900);
+        topPane.prefWidthProperty().bind(root_.widthProperty());
+        bottomPane.prefWidthProperty().bind(root_.widthProperty());
 
         if (getGame() instanceof Othello) {
             topPane.setPrefHeight(200);
-            bottomPane.setPrefHeight(200);
+            bottomPane.setPrefHeight(300);
             rightSidebar.setPrefWidth(100);
             quit.setPrefWidth(100);
         }
 
         else if(getGame() instanceof TicTacToe){
-            topPane.setPrefHeight(200);
-            bottomPane.setPrefHeight(200);
+            topPane.setPrefHeight(400);
+            bottomPane.setPrefHeight(425);
             rightSidebar.setPrefWidth(200);
-            quit.setPrefWidth(350);
+            quit.setPrefWidth(400);
         }
 
         //setup background
         BackgroundSize backgroundSize = new BackgroundSize(300, 300, true, true, true, false);
         BackgroundImage image = new BackgroundImage(new Image("/assets/images/top.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT,null, backgroundSize);
         topPane.setBackground(new Background(image));
+        topMenuPane.setBackground(new Background(image));
         image = new BackgroundImage(new Image("/assets/images/bottom.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT,null, backgroundSize);
         bottomPane.setBackground(new Background(image));
+        bottomMenuPane.setBackground(new Background(image));
         image = new BackgroundImage(new Image("/assets/images/middle.png"), null, null,null, null);
         boardView.setBackground(new Background(image));
         quit.setBackground(new Background(image));
@@ -71,7 +86,9 @@ public class GameView extends View {
         root.setBottom(bottomPane);
         root.setTop(topPane);
         root.setLeft(quit);
-        setSideBar(rightSidebar);
+        menu.getChildren().addAll(topMenuPane, rightSidebar, bottomMenuPane);
+        root_.getChildren().add(root);
+        root_.getChildren().add(menu);
     }
 
     public void setSideBar(Node node) {
