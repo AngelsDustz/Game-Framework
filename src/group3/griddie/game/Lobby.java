@@ -1,72 +1,65 @@
 package group3.griddie.game;
 
 import group3.griddie.game.player.Player;
-import group3.griddie.model.board.actor.Actor;
+import group3.griddie.util.event.ArgEvent;
+import group3.griddie.util.event.Event;
 
-import java.util.Observable;
-import java.util.Observer;
+public class Lobby extends Entity  {
 
-public class Lobby extends Entity implements Observer {
+    public final ArgEvent<Player> playerJoinedEvent;
+    public final Event allPlayersReadyEvent;
 
     private int size;
-    private Player[] players;
     private int count;
-    private Game game;
+    private Player[] players;
 
-    public Lobby(int size, Game game) {
+    public Lobby(int size) {
         this.size = size;
         players = new Player[size];
-        this.game = game;
+
+        playerJoinedEvent = new ArgEvent<>();
+        allPlayersReadyEvent = new Event();
     }
 
     public void join(Player player) {
-        players[count] = player;
-        count++;
-
-        player.setGame(game);
-        player.setActorType(count == 1 ? Actor.Type.TYPE_1 : Actor.Type.TYPE_2); //TEMPORARILY FIX
-        player.init();
-
-        setChanged();
-        notifyObservers();
-
-        player.addObserver(this);
-    }
-
-    public boolean allReady() {
-        for (Player p : players) {
-            if (p == null || !p.isReady())
-                return false;
+        for (int i = 0; i < players.length; i++) {
+            if (players[i] == null) {
+                players[i] = player;
+                count++;
+                break;
+            }
         }
 
-        return true;
+        playerJoinedEvent.call(player);
     }
 
-    public boolean isFull() {
-        return count == size;
+
+    public void kick(Player player) {
+        for (int i = 0; i < players.length; i++) {
+            if (players[i] == player) {
+                players[i] = null;
+                count--;
+                System.out.println("Kicked player " + player.getName());
+            }
+        }
     }
 
-    public Player[] getPlayers() {
-        return players.clone();
+    public Player getPlayer(String name) {
+        for (Player player : players) {
+            if (player != null && player.getName().equals(name)) {
+                return player;
+            }
+        }
+
+        return null;
     }
 
     public Player getPlayer(int index) {
         return players[index];
     }
 
-    public int getSize() {
-        return size;
+    public boolean isFull() {
+        return count == size;
     }
 
-    public Game getGame() {
-        return game;
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-        if (o instanceof Player) {
-            this.setChanged();
-            this.notifyObservers();
-        }
-    }
 }

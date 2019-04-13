@@ -23,8 +23,7 @@ public class OpponentSelectView extends View {
         root.add(button3, 0, 2);
 
         button1.setOnMouseClicked(event -> {
-            gameView.getGame().getLobby().join(new HumanPlayer());
-            gameView.getGame().getLobby().join(new HumanPlayer());
+
         });
 
         button2.setOnMouseClicked(event -> {

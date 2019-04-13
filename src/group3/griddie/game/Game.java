@@ -1,5 +1,6 @@
 package group3.griddie.game;
 
+import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.model.board.Board;
 import group3.griddie.game.player.Player;
 import group3.griddie.model.board.Cell;
@@ -9,41 +10,131 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.Random;
 
-public abstract class Game extends Scene implements Observer {
+public abstract class Game extends Scene {
+
+    private Connection connection;
+    private Communication communication;
+    private Lobby lobby;
+    private Player activePlayer;
+    private Board board;
+
+    public Game(String game) {
+        super(new AnchorPane());
+
+        communication = new Communication(this);
+        connection = new Connection(communication);
+        lobby = new Lobby(2);
+        board = createBoard();
+    }
+
+    public final void init() {
+        lobby.playerJoinedEvent.addListener(this::onPlayerJoined);
+        lobby.allPlayersReadyEvent.addListener(this::start);
+
+        createView();
+        onInit();
+    }
+
+    private void createView() {
+        GameView gameView = new GameView(this);
+
+        AnchorPane root = (AnchorPane) getRoot();
+        root.getChildren().add(gameView);
+    }
+
+    public void startOnlineGame() {
+        connection.connect();
+
+        if (!connection.isConnected()) {
+            System.out.println("Not possible to create connection");
+        } else {
+            HumanPlayer player = new HumanPlayer("Jesse" + new Random().nextInt());
+            lobby.join(player);
+
+            connection.login(player);
+            connection.subscribe();
+        }
+    }
+
+    private void onPlayerJoined(Player player) {
+        player.setGame(this);
+        player.init();
+
+        if (lobby.isFull()) {
+            start();
+        }
+    }
+
+    public final void start() {
+        System.out.println("Starting game");
+
+        onStart();
+    }
+
+    public void setActivePlayer(Player player) {
+        if (activePlayer != null) {
+            activePlayer.endTurn();
+        }
+
+        this.activePlayer = player;
+
+        player.startTurn();
+    }
+
+    public Lobby getLobby() {
+        return lobby;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public interface PlayerMove {
         void onMove(Player player, int x, int y);
     }
 
-    private ArrayList<PlayerMove> playerMoveListeners;
 
-    private Board board;
     private boolean started;
     private Player playerOnTurn;
     private String game;
     private int round;
-    protected Lobby lobby;
-
     private GameView gameView;
+    private ArrayList<PlayerMove> playerMoveListeners;
 
-    public Game(String game) {
-        super(new AnchorPane());
 
-        playerMoveListeners = new ArrayList<>();
 
-        board = createBoard();
 
-        lobby = new Lobby(2, this);
-        lobby.addObserver(this);
 
-        gameView = new GameView(this);
 
-        AnchorPane root = (AnchorPane) getRoot();
-        root.getChildren().add(gameView);
-    }
 
     public void addOnPlayerMoveListener(PlayerMove listener) {
         this.playerMoveListeners.add(listener);
@@ -54,20 +145,6 @@ public abstract class Game extends Scene implements Observer {
         return game;
     }
 
-    public final void init() {
-        onInit();
-    }
-
-    public final void start() {
-        System.out.println("Starting game");
-        round = 0;
-        started = true;
-
-        onStart();
-
-        nextTurn();
-    }
-
     public final void stop() {
         started = false;
 
@@ -75,11 +152,7 @@ public abstract class Game extends Scene implements Observer {
     }
 
     public final void tick() {
-        for (Player player : lobby.getPlayers()) {
-            player.tick();
-        }
 
-        onTick();
     }
 
     public void nextTurn() {
@@ -112,27 +185,12 @@ public abstract class Game extends Scene implements Observer {
     }
 
     private Player getNextPlayer() {
-        return lobby.getPlayer(round % 2);
+        return null;
     }
 
     public void placeActor(Actor actor, int x, int y) {
         Cell cell = board.getCell(x, y);
         cell.setOccupant(actor);
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-        if (o instanceof Lobby) {
-            Lobby lobby = (Lobby) o;
-
-            if (!started && lobby.isFull() && lobby.allReady()) {
-                start();
-            }
-        }
-    }
-
-    public Lobby getLobby() {
-        return lobby;
     }
 
     public void setBoard(Board board) {

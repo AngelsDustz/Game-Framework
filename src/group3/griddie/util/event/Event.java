@@ -7,7 +7,7 @@ public class Event {
     private ArrayList<Listener> listeners;
 
     public Event() {
-        listeners = new ArrayList<>();
+        listeners = new ArrayList<Listener>();
     }
 
     public void addListener(Listener listener) {

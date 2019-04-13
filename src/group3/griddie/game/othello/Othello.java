@@ -16,17 +16,6 @@ public class Othello extends Game {
 
     public Othello() {
         super("Othello");
-
-        AIPlayer aiPlayer = new AIPlayer(this, Actor.Type.TYPE_1, "AI Player");
-        aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
-        aiPlayer.setGameAI(new OthelloAI(this, aiPlayer));
-
-        AIPlayer aiPlayer1 = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player2");
-        aiPlayer1.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
-        aiPlayer1.setGameAI(new OthelloAI(this, aiPlayer1));
-
-        lobby.join(new HumanPlayer(this, Actor.Type.TYPE_2, "Human Player"));
-        lobby.join(aiPlayer);
     }
 
     private void updateCellValidity(Board board, Actor.Type type) {
