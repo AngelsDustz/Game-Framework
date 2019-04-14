@@ -1,126 +1,119 @@
 package group3.griddie.game;
 
-import group3.griddie.game.player.HumanPlayer;
-import group3.griddie.game.server.Communication;
-import group3.griddie.game.server.Connection;
 import group3.griddie.model.board.Board;
 import group3.griddie.game.player.Player;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
-import group3.griddie.util.event.ArgEvent;
 import group3.griddie.view.game.GameView;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.Observable;
+import java.util.Observer;
 
-public abstract class Game extends Scene {
+public abstract class Game extends Scene implements Observer {
 
-    public final ArgEvent<Move> onMove;
-
-    private String name;
-    private Connection connection;
-    private Communication communication;
-    private Lobby lobby;
-    private Player activePlayer;
     private Board board;
-    private GameThread thread;
     private boolean started;
+    private Player playerOnTurn;
+    private String game;
+    private int round;
+    protected Lobby lobby;
 
-    public Game(String name) {
+    private GameView gameView;
+
+    public Game(String game) {
         super(new AnchorPane());
-
-        this.name = name;
-
-        onMove = new ArgEvent<>();
-
-        connection = new Connection();
-        communication = new Communication(this, connection);
-
-        lobby = new Lobby(2);
         board = createBoard();
-        thread = new GameThread(this);
-    }
 
-    public final void init() {
-        lobby.playerJoinedEvent.addListener(this::onPlayerJoined);
-        lobby.allPlayersReadyEvent.addListener(this::start);
+        lobby = new Lobby(2, this);
+        lobby.addObserver(this);
 
-        createView();
-        onInit();
-    }
-
-    private void createView() {
-        GameView gameView = new GameView(this);
+        gameView = new GameView(this);
 
         AnchorPane root = (AnchorPane) getRoot();
         root.getChildren().add(gameView);
     }
 
-    public void startOnlineGame() {
-        connection.connect();
-
-        if (!connection.isConnected()) {
-            System.out.println("Not possible to create connection");
-        } else {
-            HumanPlayer player = new HumanPlayer("Jesse" + new Random().nextInt());
-            lobby.join(player);
-
-            connection.login(player);
-            connection.subscribe(name);
-        }
+    @Override
+    public String toString() {
+        return game;
     }
 
-    private void onPlayerJoined(Player player) {
-        player.setGame(this);
-        player.init();
+    public final void init() {
+        onInit();
     }
 
     public final void start() {
-        System.out.println("Starting game");
-
-        activePlayer.setActorType(Actor.Type.TYPE_1);
-        getNextPlayer().setActorType(Actor.Type.TYPE_2);
+        round = 0;
+        started = true;
 
         onStart();
 
-        started = true;
-
-        thread.start();
+        nextTurn();
     }
 
     public final void stop() {
         started = false;
 
-        System.out.println("Game ended");
-
         onStop();
     }
 
-    public void setActivePlayer(Player player) {
-        this.activePlayer = player;
-
-        if (!started && lobby.isFull()) {
-            start();
+    public final void tick() {
+        for (Player player : lobby.getPlayers()) {
+            player.tick();
         }
 
-        player.startTurn();
+        onTick();
     }
 
-    public void playerMove(Player player, int x, int y) {
-        if (moveIsValid(player, x, y)) {
-            onPlayerMove(player, x, y);
+    public void nextTurn() {
+        round++;
 
-            Move move = new Move(player, x, y);
+        if (playerOnTurn != null) {
+            playerOnTurn.endTurn();
+        }
 
-            onMove.call(move);
+        playerOnTurn = getNextPlayer();
+        playerOnTurn.startTurn();
 
-            activePlayer.endTurn();
+        tick();
+    }
 
-            if (checkWin(move)) {
-                System.out.println(player.getName() + " wins the game!");
-                stop();
+    public void playerMove(Player player, int column, int row) {
+        if (playerOnTurn != player) {
+            return;
+        }
+
+        if (onPlayerMove(player, column, row)) {
+            nextTurn();
+        }
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public Player getPlayerOnTurn() {
+        return playerOnTurn;
+    }
+
+    private Player getNextPlayer() {
+        return lobby.getPlayer(round % 2);
+    }
+
+    public void placeActor(Actor actor, int x, int y) {
+        Cell cell = board.getCell(x, y);
+        cell.setOccupant(actor);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o instanceof Lobby) {
+            Lobby lobby = (Lobby) o;
+
+            if (!started && lobby.isFull()) {
+                start();
             }
         }
     }
@@ -129,43 +122,11 @@ public abstract class Game extends Scene {
         return lobby;
     }
 
-    public Player getNextPlayer() {
-        Player[] players = lobby.getPlayers();
-
-        for (int i = 0; i < players.length; i++) {
-            if (players[i] == activePlayer) {
-                return players[(i + 1) % players.length];
-            }
-        }
-
-        return null;
-    }
-
-    public Player getActivePlayer() {
-        return activePlayer;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public boolean isRunning() {
-        return this.started;
-    }
-
-    public abstract boolean moveIsValid(Player player, int x, int y);
-
-    public abstract boolean checkWin(Move move);
-
-    protected abstract void onPlayerMove(Player player, int column, int row);
-
-    public Board getBoard() {
-        return board;
-    }
-
     public void setBoard(Board board) {
         this.board = board;
     }
+
+    protected abstract boolean onPlayerMove(Player player, int column, int row);
 
     protected abstract Board createBoard();
 

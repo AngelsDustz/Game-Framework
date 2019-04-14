@@ -3,29 +3,41 @@ package group3.griddie.game.player;
 import group3.griddie.game.Entity;
 import group3.griddie.game.Game;
 import group3.griddie.model.board.actor.Actor;
-import group3.griddie.util.event.Event;
+import group3.griddie.network.NetworkMain;
+import group3.griddie.network.commands.SendCommandLogin;
 
 import java.util.ArrayList;
 
 public abstract class Player extends Entity {
 
-    public final Event turnEndEvent;
-    public final Event turnStartEvent;
-
-    private String name;
-    private boolean onTurn;
+    private boolean onTurn = true;
     private Game game;
+    private ArrayList<Actor> actors;
+    private String name;
+    private Actor.Type actorType;
+    private boolean ready;
 
-    public Player(String name) {
+    public Player() {
+        actors = new ArrayList<>();
+    }
+
+    public Player(Game game, Actor.Type type, String name) {
+        this.game = game;
+        actors = new ArrayList<>();
         this.name = name;
-        turnEndEvent = new Event();
-        turnStartEvent = new Event();
+        this.actorType = type;
     }
 
     public void init() {
-        System.out.println(name + " initialized");
+        //System.out.println(name + " initialized");
 
         onInit();
+    }
+
+    public void tick() {
+        //System.out.println(name + " ticked");
+
+        onTick();
     }
 
     public void startTurn() {
@@ -34,8 +46,6 @@ public abstract class Player extends Entity {
         onTurn = true;
 
         onStartTurn();
-
-        turnStartEvent.call();
     }
 
     public void endTurn() {
@@ -44,46 +54,6 @@ public abstract class Player extends Entity {
         onTurn = false;
 
         onEndTurn();
-
-        turnEndEvent.call();
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    private ArrayList<Actor> actors;
-    private Actor.Type actorType;
-
-    public Player(Game game, Actor.Type type, String name) {
-        this.game = game;
-        actors = new ArrayList<>();
-        this.name = name;
-        this.actorType = type;
-        turnEndEvent = new Event();
-        turnStartEvent = new Event();
-    }
-
-    public void tick() {
-        //System.out.println(name + " ticked");
-
-        onTick();
     }
 
     public ArrayList<Actor> getActors() {
@@ -94,6 +64,19 @@ public abstract class Player extends Entity {
     public Actor registerActor(Actor actor) {
         actors.add(actor);
         return actor;
+    }
+
+    public boolean isReady() {
+        return ready;
+    }
+
+    void setReady(boolean ready) {
+        this.ready = ready;
+
+        System.out.println(name + " is ready");
+
+        this.setChanged();
+        this.notifyObservers();
     }
 
     public void unregisterActor(Actor actor) {

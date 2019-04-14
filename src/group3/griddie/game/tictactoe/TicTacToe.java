@@ -1,8 +1,9 @@
 package group3.griddie.game.tictactoe;
 
 import group3.griddie.game.Game;
-import group3.griddie.game.Move;
+import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.player.Player;
+import group3.griddie.game.player.RemotePlayer;
 import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
@@ -13,24 +14,42 @@ public class TicTacToe extends Game {
 
     public TicTacToe(String game) {
         super(game);
+
     }
 
     @Override
-    public boolean moveIsValid(Player player, int x, int y) {
-        Cell cell = getBoard().getCell(x, y);
+    public boolean onPlayerMove(Player player, int column, int row) {
+        Cell cell = getBoard().getCell(column, row);
 
-        try {
-            boolean test = !cell.isOccupied();
-        } catch (Exception e) {
-            System.out.println("ERROR X: " + x + " Y:" + y);
+        if (cell.isDisabled()) {
+            return false;
         }
 
-        return !cell.isOccupied();
+        TicTacToeActor actor = new TicTacToeActor(player.getActorType());
+
+        player.registerActor(actor);
+
+        cell.setOccupant(actor);
+        cell.setDisabled(true);
+
+        return true;
+    }
+
+    @Override
+    protected Board createBoard() {
+        return new Board(3, 3);
     }
 
     @Override
     protected void onInit() {
-        startOnlineGame();
+        HumanPlayer human = new HumanPlayer();
+        human.setName("HUMAN");
+
+        RemotePlayer remotePlayer = new RemotePlayer();
+        remotePlayer.setName("REMOTE");
+
+        lobby.join(human);
+        lobby.join(remotePlayer);
     }
 
     @Override
@@ -45,86 +64,21 @@ public class TicTacToe extends Game {
 
     @Override
     protected void onTick() {
+        Board board = this.getBoard();
 
+        if (this.checkIfWon(board) != null) {
+            this.stop();
+        }
     }
 
     @Override
-    public void onPlayerMove(Player player, int x, int y) {
-        getBoard().getCell(x, y).setOccupant(new TicTacToeActor(player.getActorType()));
-    }
-
-    @Override
-    protected Board createBoard() {
-        return new Board(3, 3);
-    }
-
-    @Override
-    public boolean checkWin(Move move) {
-        Cell[][] cells = getBoard().getCells();
-
-        return horizontalWin(move, cells) || verticalWin(move, cells) || diagonalWin(move, cells);
-    }
-
-    private boolean horizontalWin(Move move, Cell[][] cells) {
-        for (int i = 0; i < 3; i++) {
-            Cell cell = cells[i][move.getY()];
-
-            if (!cell.isOccupied() || cell.getOccupant().getType() != move.getPlayer().getActorType()) {
-                return false;
-            }
+    public boolean canDoTurn(Player player) {
+        if (this.getBoard().getFreeSpots().size() > 0) {
+            return true;
         }
-
-        System.out.println("HORIZONTAL WIN");
-
-        return  true;
-    }
-
-    private boolean verticalWin(Move move, Cell[][] cells) {
-        for (int i = 0; i < 3; i++) {
-            Cell cell = cells[move.getX()][i];
-
-            if (!cell.isOccupied() ||cell.getOccupant().getType() != move.getPlayer().getActorType()) {
-                return false;
-            }
-        }
-
-        System.out.println("VERTICAL WIN");
-
-        return  true;
-    }
-
-    private boolean diagonalWin(Move move, Cell[][] cells) {
-        if (move.getX() % 2 == 1 || move.getY() % 2 == 1 || !cells[1][1].isOccupied()) {
-            return false;
-        }
-
-        //TODO
 
         return false;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     public Actor.Type checkIfWon(Board board) {
         Actor.Type check = checkIfColumnWon(board);

@@ -1,30 +1,48 @@
 package group3.griddie.game.player;
 
-import group3.griddie.model.board.Board;
+import group3.griddie.game.Game;
 import group3.griddie.model.board.Cell;
+import group3.griddie.model.board.actor.Actor;
+import group3.griddie.network.NetworkMain;
+import group3.griddie.network.commands.SendCommandLogin;
+import group3.griddie.network.commands.SendCommandMove;
+import group3.griddie.network.commands.SendCommandSubscribe;
+import group3.griddie.network.invoker.CommandInvoker;
 
 public class HumanPlayer extends Player {
 
-    public HumanPlayer(String name) {
-        super(name);
+    private SendCommandLogin login;
+    private SendCommandSubscribe subscribe;
+    private SendCommandMove move;
+    private CommandInvoker invoker;
+
+    public HumanPlayer() {
+
+    }
+
+    public HumanPlayer(Game game, Actor.Type type, String name) {
+        super(game, type, name);
     }
 
     @Override
     protected void onInit() {
-        Board board = getGame().getBoard();
+        Cell[][] cells = getGame().getBoard().getCells();
 
-        for (int x = 0; x < board.getWidth(); x++) {
-            for (int y = 0; y < board.getHeight(); y++) {
-                Cell cell = board.getCell(x, y);
+        for (int c = 0; c < cells.length; c++ ){
+            for (int r = 0; r < cells[c].length; r++) {
+                final int column = c;
+                final int row = r;
 
-                int fX = x; int fY = y;
+                Cell cell = cells[c][r];
                 cell.addInteractListener(() -> {
-                    if (isOnTurn()) {
-                        getGame().playerMove(this, fX, fY);
-                    }
+                    System.out.println("CLICkING");
+                    getGame().playerMove(this, column, row);
+                    endTurn();
                 });
             }
         }
+
+        this.setReady(true);
     }
 
     @Override
@@ -44,5 +62,4 @@ public class HumanPlayer extends Player {
     protected void onEndTurn() {
 
     }
-
 }

@@ -1,69 +1,72 @@
 package group3.griddie.game;
 
 import group3.griddie.game.player.Player;
-import group3.griddie.util.event.ArgEvent;
-import group3.griddie.util.event.Event;
+import group3.griddie.model.board.actor.Actor;
 
-public class Lobby extends Entity  {
+import java.util.Observable;
+import java.util.Observer;
 
-    public final ArgEvent<Player> playerJoinedEvent;
-    public final Event allPlayersReadyEvent;
+public class Lobby extends Entity implements Observer {
 
     private int size;
-    private int count;
     private Player[] players;
+    private int count;
+    private Game game;
 
-    public Lobby(int size) {
+    public Lobby(int size, Game game) {
         this.size = size;
         players = new Player[size];
-
-        playerJoinedEvent = new ArgEvent<>();
-        allPlayersReadyEvent = new Event();
+        this.game = game;
     }
 
     public void join(Player player) {
-        for (int i = 0; i < players.length; i++) {
-            if (players[i] == null) {
-                players[i] = player;
-                count++;
-                break;
-            }
+        players[count] = player;
+        count++;
+
+        player.setGame(game);
+        player.setActorType(count == 1 ? Actor.Type.TYPE_1 : Actor.Type.TYPE_2); //TEMPORARILY FIX
+        player.init();
+
+        setChanged();
+        notifyObservers();
+
+        player.addObserver(this);
+    }
+
+    public boolean allReady() {
+        for (Player p : players) {
+            if (p == null || !p.isReady())
+                return false;
         }
 
-        playerJoinedEvent.call(player);
-    }
-
-
-    public void kick(Player player) {
-        for (int i = 0; i < players.length; i++) {
-            if (players[i] == player) {
-                players[i] = null;
-                count--;
-                System.out.println("Kicked player " + player.getName());
-            }
-        }
-    }
-
-    public Player getPlayer(String name) {
-        for (Player player : players) {
-            if (player != null && player.getName().equals(name)) {
-                return player;
-            }
-        }
-
-        return null;
-    }
-
-    public Player getPlayer(int index) {
-        return players[index];
-    }
-
-    public Player[] getPlayers() {
-        return players.clone();
+        return true;
     }
 
     public boolean isFull() {
         return count == size;
     }
 
+    public Player[] getPlayers() {
+        return players.clone();
+    }
+
+    public Player getPlayer(int index) {
+        return players[index];
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o instanceof Player) {
+            this.setChanged();
+            this.notifyObservers();
+        }
+    }
 }
