@@ -11,6 +11,7 @@ import group3.griddie.view.game.board.BoardView;
 import group3.griddie.view.game.menu.ChallengePlayerView;
 import group3.griddie.view.game.sidebar.OpponentSelectView;
 import group3.griddie.view.game.sidebar.QuitView;
+import group3.griddie.view.game.sidebar.RightBarGameView;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -55,12 +56,17 @@ public class GameView extends View {
         bottomPane.prefWidthProperty().bind(root.widthProperty());
         root_.prefWidthProperty().bind(root.widthProperty());
         root_.prefHeightProperty().bind(root.heightProperty());
-
+        RightBarGameView rightBarGameView;
+        VBox rightbarBox = null;
+        
         if (getGame() instanceof Othello) {
             topPane.setPrefHeight(200);
             bottomPane.setPrefHeight(300);
             rightSidebar.setPrefWidth(100);
             quit.setPrefWidth(100);
+            VBox rightbar = new VBox();
+            rightBarGameView = new RightBarGameView(rightbar, null, game, root_);
+            rightbarBox = (VBox) rightBarGameView.getRoot();
         }
 
         else if(getGame() instanceof TicTacToe){
@@ -92,6 +98,9 @@ public class GameView extends View {
         root.setBottom(bottomPane);
         root.setTop(topPane);
         root.setLeft(quit);
+        if (game instanceof Othello){
+            root.setRight(rightbarBox);
+        }
         menu.getChildren().addAll(topMenuPane, rightSidebar, bottomMenuPane);
         root_.getChildren().add(root);
         root_.getChildren().add(menu);

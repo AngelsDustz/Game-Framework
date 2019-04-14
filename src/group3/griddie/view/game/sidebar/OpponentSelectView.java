@@ -26,6 +26,7 @@ public class OpponentSelectView extends View {
         GameButton button2 = new GameButton("Human vs AI", GameButton.Size.MEDIUM, "text-button-game");
         GameButton button3 = new GameButton("Human vs Remote", GameButton.Size.MEDIUM, "text-button-game");
         GameButton button4 = new GameButton("AI vs Remote", GameButton.Size.MEDIUM, "text-button-game");
+
         root.getColumnConstraints().add(new ColumnConstraints(1000));
         root.add(button1, 0, 0);
         root.add(button2, 0, 1);
@@ -48,6 +49,7 @@ public class OpponentSelectView extends View {
             ((LobbyController) controller).setRoot(pane);
             ((LobbyController) controller).setMenu(box);
             ((LobbyController) controller).removePane();
+            ((LobbyController) controller).addPane(challengeMenu);
         });
 
         button4.setOnMouseClicked(event -> {
@@ -56,6 +58,10 @@ public class OpponentSelectView extends View {
             ((LobbyController) controller).removePane();
             ((LobbyController) controller).addPane(challengeMenu);
         });
+
+    }
+
+    public void addChallengeMenu(){
 
     }
 
