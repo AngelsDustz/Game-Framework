@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ChallengePlayerView extends View {
+    private String[] playerlist;
 
     public ChallengePlayerView(Parent root, Controller controller, Game game) {
         super(root, controller);
@@ -53,15 +54,15 @@ public class ChallengePlayerView extends View {
 
         GameButton button = new GameButton("Get Player List", GameButton.Size.SMALL, "text-button-game-right");
         GameButton button1 = new GameButton("Send command", GameButton.Size.SMALL, "text-button-game-right");
-        TextField inputField = new TextField("send command via: Challenge");
+        GameButton button2 = new GameButton("Subscribe", GameButton.Size.SMALL, "text-button-game-right");
 
         button.setOnMouseClicked(event -> {
-            ArrayList<String> playerlist = controller_.getPlayerList();
+            String[] buttonPlayerList = playerlist;
             ObservableList<String> data = FXCollections.observableArrayList(playerlist);
             listView.setCellFactory(ComboBoxListCell.forListView(data));
             listView.setItems(data);
 
-
+            game.getConnection().fetchPlayerList();
             //HashMap<String, ArrayList<String>> challengePlayerList = controller_.getDate();
             //tableChallengers.getItems().clear();
             //tableChallengers.getItems().addAll(challengePlayerList.get("PLAYER"));
@@ -70,7 +71,11 @@ public class ChallengePlayerView extends View {
 
         button1.setOnMouseClicked(event -> {
             controller_.removePane();
-            controller_.sendText(inputField.getText());
+        });
+
+        button2.setOnMouseClicked(event -> {
+            game.getConnection().subscribe(game.getName());
+            controller_.removePane();
         });
 
 
@@ -84,22 +89,21 @@ public class ChallengePlayerView extends View {
         root_.add(listView, 0,2);
         root_.add(listView1, 1,2);
         root_.add(listView2, 2,2);
-        root_.add(inputField, 1, 3);
-        root_.add(button1, 2,3);
-        root_.add(button, 2, 4);
+        root_.add(button1, 0,3);
+        root_.add(button2, 1,3);
+        root_.add(button, 2, 3);
 
         BackgroundImage image = new BackgroundImage(new Image("/assets/images/middle.png"), null, null,null, null);
         root_.setBackground(new Background(image));
 
 
-        game.getCommunication().playerListReceivedEvent.addListener(names -> {
-            System.out.println("PRINTING PLAYER LIST");
-            for (String name : names) {
-                System.out.println(name);
-            }
-        });
 
-        //game.getConnection().fetchPlayerList(); <---- TO UPDATE PLAYER DOE DIT
+        game.getCommunication().playerListReceivedEvent.addListener(this::updatePlayerList);
+
+    }
+
+    private void updatePlayerList(String[] names){
+        this.playerlist = names;
     }
 
 }
