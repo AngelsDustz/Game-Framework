@@ -86,6 +86,10 @@ public class Connection implements Runnable {
         out.println("challenge \"" + name + "\" " + " \"" + game + "\"");
     }
 
+    public void logout() {
+        out.println("logout");
+    }
+
     public void challengeAccept(int num) {
         out.println("challenge accept " + num);
     }
