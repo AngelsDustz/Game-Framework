@@ -44,7 +44,8 @@ public abstract class Player extends Entity {
         onTurn = false;
 
         onEndTurn();
-
+        this.setChanged();
+        this.notifyObservers();
         turnEndEvent.call();
     }
 

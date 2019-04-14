@@ -8,6 +8,7 @@ import group3.griddie.game.server.Connection;
 import group3.griddie.model.board.Board;
 import group3.griddie.game.player.Player;
 import group3.griddie.model.board.actor.Actor;
+import group3.griddie.util.event.Event;
 import group3.griddie.util.event.ArgEvent;
 import group3.griddie.view.game.GameView;
 import javafx.scene.Scene;
@@ -18,7 +19,7 @@ import java.util.Random;
 public abstract class Game extends Scene {
 
     public final ArgEvent<Move> onMove;
-
+    public final Event onStart;
     private String name;
     private Connection connection;
     private Communication communication;
@@ -34,6 +35,7 @@ public abstract class Game extends Scene {
         this.name = name;
 
         onMove = new ArgEvent<>();
+        onStart = new Event();
 
         connection = new Connection();
         communication = new Communication(this, connection);
@@ -112,6 +114,7 @@ public abstract class Game extends Scene {
         started = true;
 
         thread.start();
+        onStart.call();
     }
 
     public final void stop() {
