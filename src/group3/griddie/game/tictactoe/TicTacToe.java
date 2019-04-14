@@ -2,11 +2,16 @@ package group3.griddie.game.tictactoe;
 
 import group3.griddie.game.Game;
 import group3.griddie.game.Move;
+import group3.griddie.game.ai.OthelloAI;
+import group3.griddie.game.ai.TicTacToeAI;
+import group3.griddie.game.player.AIPlayer;
 import group3.griddie.game.player.Player;
 import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
 import group3.griddie.model.board.actor.TicTacToeActor;
+
+import java.util.Random;
 
 public class TicTacToe extends Game {
 
@@ -101,6 +106,13 @@ public class TicTacToe extends Game {
         //TODO
 
         return false;
+    }
+
+    @Override
+    protected AIPlayer createAiPlayer() {
+        AIPlayer aiPlayer = new AIPlayer("AI Player" + new Random().nextInt(), AIPlayer.Difficulty.DIFFICULTY_HARD);
+        aiPlayer.setGameAI(new TicTacToeAI(this, aiPlayer));
+        return aiPlayer;
     }
 
     @Override

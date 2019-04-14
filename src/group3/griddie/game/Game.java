@@ -61,20 +61,29 @@ public abstract class Game extends Scene {
         root.getChildren().add(gameView);
     }
 
-    public void startOnlineGame() {
+    public void startHumanVsRemote() {
         connection.connect();
 
         if (!connection.isConnected()) {
             System.out.println("Not possible to create connection");
         } else {
-//            HumanPlayer player = new HumanPlayer("Jesse" + new Random().nextInt());
-//            lobby.join(player);
+            HumanPlayer player = new HumanPlayer("Jesse" + new Random().nextInt());
+            lobby.join(player);
 
-            AIPlayer aiPlayer = new AIPlayer("AI" + new Random().nextInt(), AIPlayer.Difficulty.DIFFICULTY_HARD);
-            aiPlayer.setGameAI(new OthelloAI(this, aiPlayer));
-            lobby.join(aiPlayer);
+            connection.login(player);
+            connection.subscribe(name);
+        }
+    }
 
-            connection.login(aiPlayer);
+    public void startAiVsRemote() {
+        connection.connect();
+
+        if (!connection.isConnected()) {
+            System.out.println("Not possible to create connection");
+        } else {
+            Player player = createAiPlayer();
+            lobby.join(player);
+            connection.login(player);
             connection.subscribe(name);
         }
     }
@@ -196,5 +205,7 @@ public abstract class Game extends Scene {
     protected abstract void onStop();
 
     protected abstract void onTick();
+
+    protected abstract AIPlayer createAiPlayer();
 
 }
