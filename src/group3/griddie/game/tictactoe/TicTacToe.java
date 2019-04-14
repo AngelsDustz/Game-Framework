@@ -3,7 +3,6 @@ package group3.griddie.game.tictactoe;
 import group3.griddie.game.Game;
 import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.player.Player;
-import group3.griddie.game.player.RemotePlayer;
 import group3.griddie.model.board.Board;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
