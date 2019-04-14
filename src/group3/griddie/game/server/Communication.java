@@ -130,11 +130,11 @@ public class Communication {
     }
 
     private void handleWin(Map<String, String> data) {
-        game.stop();
+
     }
 
     private void handleLoss(Map<String, String> data) {
-        game.stop();
+
     }
 
     public void sendMove(int move) {

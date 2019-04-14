@@ -26,6 +26,7 @@ public abstract class Game extends Scene {
     private Player activePlayer;
     private Board board;
     private GameThread thread;
+    private boolean started;
 
     public Game(String name) {
         super(new AnchorPane());
@@ -89,6 +90,14 @@ public abstract class Game extends Scene {
         thread.start();
     }
 
+    public final void stop() {
+        started = false;
+
+        System.out.println("Game ended");
+
+        onStop();
+    }
+
     public void setActivePlayer(Player player) {
         this.activePlayer = player;
 
@@ -145,98 +154,13 @@ public abstract class Game extends Scene {
     }
 
     public abstract boolean moveIsValid(Player player, int x, int y);
+
     public abstract boolean checkWin(Move move);
+
     protected abstract void onPlayerMove(Player player, int column, int row);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public interface PlayerMove {
-        void onMove(Player player, int x, int y);
-    }
-
-
-    private boolean started;
-    private Player playerOnTurn;
-    private String game;
-    private int round;
-    private GameView gameView;
-    private ArrayList<PlayerMove> playerMoveListeners;
-
-
-
-
-
-
-
-    public void addOnPlayerMoveListener(PlayerMove listener) {
-        this.playerMoveListeners.add(listener);
-    }
-
-    @Override
-    public String toString() {
-        return game;
-    }
-
-    public final void stop() {
-        started = false;
-
-        onStop();
-    }
-
-    public final void tick() {
-
-    }
-
-    public void nextTurn() {
-        round++;
-
-        if (playerOnTurn != null) {
-            //playerOnTurn.endTurn();
-        }
-
-//        playerOnTurn = getNextPlayer();
-//        playerOnTurn.startTurn();
-
-        tick();
-    }
 
     public Board getBoard() {
         return board;
-    }
-
-    public Player getPlayerOnTurn() {
-        return playerOnTurn;
-    }
-
-    public void placeActor(Actor actor, int x, int y) {
-        Cell cell = board.getCell(x, y);
-        cell.setOccupant(actor);
     }
 
     public void setBoard(Board board) {

@@ -27,7 +27,10 @@ public class GameThread extends Thread implements Runnable {
             }
 
             currentPlayer.turnEndEvent.removeListener(this::touch);
-            game.setActivePlayer(game.getNextPlayer());
+
+            if (game.isRunning()) {
+                game.setActivePlayer(game.getNextPlayer());
+            }
         }
     }
 
