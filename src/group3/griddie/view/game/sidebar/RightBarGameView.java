@@ -16,6 +16,8 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -51,10 +53,19 @@ public class RightBarGameView extends View {
                     public void run() {
                         scoreText.textProperty().setValue(String.valueOf("Player 1: " + ((Othello) game).getCountByActor(game.getBoard(), Actor.Type.TYPE_1)));
                         scoreText2.textProperty().setValue(String.valueOf("Player 2: " + ((Othello) game).getCountByActor(game.getBoard(), Actor.Type.TYPE_2)));
+                        if (game.isRunning()) {
+                            if (game.getActivePlayer().getActorType() == Actor.Type.TYPE_1) {
+                                scoreText.setTextFill(Color.YELLOW);
+                                scoreText2.setTextFill(Color.BLACK);
+                            } else if (game.getActivePlayer().getActorType() == Actor.Type.TYPE_2) {
+                                scoreText.setTextFill(Color.BLACK);
+                                scoreText2.setTextFill(Color.YELLOW);
+                            }
+                        }
                     }
                 });
             }
-        }, 0, 1000);
+        }, 0, 1);
 
         BackgroundImage imagebg = new BackgroundImage(new Image("/assets/images/middle.png"), null, null,null, null);
         root_.setBackground(new Background(imagebg));
