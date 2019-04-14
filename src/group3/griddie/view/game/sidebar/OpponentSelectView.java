@@ -56,6 +56,7 @@ public class OpponentSelectView extends View {
             ((LobbyController) controller).setMenu(box);
             ((LobbyController) controller).removePane();
             ((LobbyController) controller).addPane(challengeMenu);
+            gameView.getGame().startAiVsRemote();
         });
 
     }
