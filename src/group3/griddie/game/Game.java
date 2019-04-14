@@ -1,6 +1,5 @@
 package group3.griddie.game;
 
-import group3.griddie.game.ai.OthelloAI;
 import group3.griddie.game.ai.TicTacToeAI;
 import group3.griddie.game.player.AIPlayer;
 import group3.griddie.game.player.HumanPlayer;
@@ -8,14 +7,12 @@ import group3.griddie.game.server.Communication;
 import group3.griddie.game.server.Connection;
 import group3.griddie.model.board.Board;
 import group3.griddie.game.player.Player;
-import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
 import group3.griddie.util.event.ArgEvent;
 import group3.griddie.view.game.GameView;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public abstract class Game extends Scene {
@@ -48,10 +45,13 @@ public abstract class Game extends Scene {
 
     public final void init() {
         lobby.playerJoinedEvent.addListener(this::onPlayerJoined);
-        lobby.allPlayersReadyEvent.addListener(this::start);
 
         createView();
         onInit();
+
+        connection.connect();
+        connection.login(new HumanPlayer("Griddie")); //TEMP FIX
+        connection.fetchPlayerList();
     }
 
     private void createView() {
@@ -67,10 +67,10 @@ public abstract class Game extends Scene {
         if (!connection.isConnected()) {
             System.out.println("Not possible to create connection");
         } else {
-            HumanPlayer player = new HumanPlayer("Jesse" + new Random().nextInt());
+            HumanPlayer player = new HumanPlayer("Jesse");
             lobby.join(player);
 
-            connection.login(player);
+            //connection.login(player);
             connection.subscribe(name);
         }
     }
@@ -83,7 +83,7 @@ public abstract class Game extends Scene {
         } else {
             Player player = createAiPlayer();
             lobby.join(player);
-            connection.login(player);
+            //connection.login(player);
             connection.subscribe(name);
         }
     }
@@ -166,6 +166,14 @@ public abstract class Game extends Scene {
         }
 
         return null;
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
+
+    public Communication getCommunication() {
+        return communication;
     }
 
     public Player getActivePlayer() {

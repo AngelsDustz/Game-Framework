@@ -7,7 +7,6 @@ import group3.griddie.util.event.Event;
 public class Lobby extends Entity  {
 
     public final ArgEvent<Player> playerJoinedEvent;
-    public final Event allPlayersReadyEvent;
 
     private int size;
     private int count;
@@ -18,7 +17,6 @@ public class Lobby extends Entity  {
         players = new Player[size];
 
         playerJoinedEvent = new ArgEvent<>();
-        allPlayersReadyEvent = new Event();
     }
 
     public void join(Player player) {
