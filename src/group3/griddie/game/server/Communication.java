@@ -168,7 +168,7 @@ public class Communication {
     }
 
     private void handleChallenge(Map<String, String> data) {
-        challengeReceivedEvent.call(Integer.parseInt(data.get("CHALLANGENUMBER")));
+        challengeReceivedEvent.call(Integer.parseInt(data.get("CHALLENGENUMBER")));
     }
 
     public void sendMove(int move) {
