@@ -82,4 +82,12 @@ public class Connection implements Runnable {
         out.println("get playerlist");
     }
 
+    public void challenge(String name, String game) {
+        out.println("challenge \"" + name + "\" " + " \"" + game + "\"");
+    }
+
+    public void challengeAccept(int num) {
+        out.println("challenge accept " + num);
+    }
+
 }
