@@ -77,6 +77,7 @@ public class Communication {
 
     public final ArgEvent<Move> moveReceivedEvent;
     public final ArgEvent<String[]> playerListReceivedEvent;
+    public final ArgEvent<Integer> challengeReceivedEvent;
 
     private Command rootCommand;
     private Game game;
@@ -85,6 +86,7 @@ public class Communication {
     public Communication(Game game, Connection connection) {
         moveReceivedEvent = new ArgEvent<>();
         playerListReceivedEvent = new ArgEvent<>();
+        challengeReceivedEvent = new ArgEvent<>();
 
         this.game = game;
         this.connection = connection;
@@ -97,6 +99,7 @@ public class Communication {
         Command gameCommand = new Command("GAME");
         Command matchCommand = new Command("MATCH", this::handleMatch);
         Command moveCommand = new Command("MOVE", this::handleMove);
+        Command challangeCommand = new Command("CHALLENGE", this::handleChallenge);
         Command winCommand = new Command("WIN", this::handleWin);
         Command lossCommand = new Command("LOSS", this::handleLoss);
         Command yourTurnCommand = new Command("YOURTURN", (data) -> {
@@ -161,6 +164,10 @@ public class Communication {
 
     private void handlePlayerList(Map<String, String> data) {
         playerListReceivedEvent.call(data.get("players").split(" "));
+    }
+
+    private void handleChallenge(Map<String, String> data) {
+        challengeReceivedEvent.call(Integer.parseInt(data.get("CHALLANGENUMBER")));
     }
 
     public void sendMove(int move) {
