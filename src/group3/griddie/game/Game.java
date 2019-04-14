@@ -167,6 +167,8 @@ public abstract class Game extends Scene {
         this.board = board;
     }
 
+    public abstract boolean canDoTurn(Player player);
+
     protected abstract Board createBoard();
 
     protected abstract void onInit();

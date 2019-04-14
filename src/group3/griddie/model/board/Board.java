@@ -22,6 +22,11 @@ public class Board extends Model {
         }
     }
 
+    /**
+     * Constructor to make a hard copy.
+     *
+     * @param board The board to clone.
+     */
     public Board(Board board) {
         this.width  = board.width;
         this.height = board.height;
@@ -34,6 +39,11 @@ public class Board extends Model {
         }
     }
 
+    /**
+     * Cells getter.
+     *
+     * @return All cells in 2d array.
+     */
     public Cell[][] getCells() {
         return cells;
     }
@@ -50,6 +60,12 @@ public class Board extends Model {
         return cells[column][row];
     }
 
+    /**
+     * Function to find all ajacent cells.
+     *
+     * @param cell The cell to check around.
+     * @return Array of all adjacent cells, including NULL.
+     */
     public Cell[] getAdjacentCells(Cell cell) {
         Cell[] cells = new Cell[9];
         cells[0] = getCell(cell.getX()-1, cell.getY()-1);

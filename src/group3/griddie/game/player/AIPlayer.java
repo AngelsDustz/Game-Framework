@@ -9,7 +9,6 @@ public class AIPlayer extends Player {
     private Difficulty difficulty;
     private AI gameAI;
 
-
     /**
      * Difficulty ENUMs.
      */
@@ -55,12 +54,14 @@ public class AIPlayer extends Player {
 
     @Override
     protected void onStartTurn() {
-        Cell predicted = this.gameAI.predictMove();
+        new Thread(() -> {
+            Cell predicted = this.gameAI.predictMove();
 
-        if (predicted != null) {
-            System.out.println("AI move: " + predicted);
-            this.getGame().playerMove(this, predicted.getX(), predicted.getY());
-        }
+            if (predicted != null) {
+                System.out.println("AI move: " + predicted);
+                this.getGame().playerMove(this, predicted.getX(), predicted.getY());
+            }
+        }).start();
     }
 
     @Override
