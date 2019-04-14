@@ -48,14 +48,6 @@ public abstract class Game extends Scene {
 
         createView();
         onInit();
-
-        //TEMP FIX IN LOBBY
-        HumanPlayer player = new HumanPlayer("Jesse");
-        lobby.join(player);
-
-        connection.connect();
-        connection.login(player); //TEMP FIX
-        connection.fetchPlayerList();
     }
 
     private void createView() {
@@ -71,8 +63,11 @@ public abstract class Game extends Scene {
         if (!connection.isConnected()) {
             System.out.println("Not possible to create connection");
         } else {
-            //connection.login(player);
-            //connection.subscribe(name);
+            HumanPlayer player = new HumanPlayer("Griddie");
+            lobby.join(player);
+
+            connection.connect();
+            connection.login(player);
         }
     }
 
@@ -84,8 +79,9 @@ public abstract class Game extends Scene {
         } else {
             Player player = createAiPlayer();
             lobby.join(player);
-            //connection.login(player);
-            //connection.subscribe(name);
+
+            connection.connect();
+            connection.login(player);
         }
     }
 
