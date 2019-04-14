@@ -1,5 +1,7 @@
 package group3.griddie.game;
 
+import group3.griddie.game.ai.TicTacToeAI;
+import group3.griddie.game.player.AIPlayer;
 import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.server.Communication;
 import group3.griddie.game.server.Connection;
@@ -70,6 +72,17 @@ public abstract class Game extends Scene {
             connection.login(player);
             connection.subscribe(name);
         }
+    }
+
+    public void startAiGame() {
+        HumanPlayer player = new HumanPlayer("Jesse" + new Random().nextInt());
+        lobby.join(player);
+
+        AIPlayer aiPlayer = new AIPlayer("AI", AIPlayer.Difficulty.DIFFICULTY_HARD);
+        aiPlayer.setGameAI(new TicTacToeAI(this, aiPlayer));
+        lobby.join(aiPlayer);
+
+        setActivePlayer(player);
     }
 
     private void onPlayerJoined(Player player) {
