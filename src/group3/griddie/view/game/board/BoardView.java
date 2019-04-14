@@ -21,7 +21,6 @@ public class BoardView extends View {
             for (int r = 0; r < board.getHeight(); r++) {
                 CellView cellView = new CellView(board.getCell(c, r));
                 cellView.setImage(new Image("assets/images/node.png"));
-
                 root.add(cellView, c, r);
             }
         }

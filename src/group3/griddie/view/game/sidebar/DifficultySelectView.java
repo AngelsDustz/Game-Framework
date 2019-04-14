@@ -25,9 +25,6 @@ public class DifficultySelectView extends View {
         root.add(button3, 0, 2);
         root.add(button4, 0, 3);
 
-        button4.setOnMouseClicked(event -> {
-            gameView.setSideBar(new OpponentSelectView(gameView));
-        });
 
         button3.setOnMouseClicked(event -> {
             gameView.getGame().getLobby().join(new HumanPlayer());

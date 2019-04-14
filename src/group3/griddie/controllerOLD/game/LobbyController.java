@@ -7,6 +7,8 @@ import group3.griddie.game.player.AIPlayer;
 import group3.griddie.game.player.HumanPlayer;
 import group3.griddie.game.player.RemotePlayer;
 import group3.griddie.model.board.actor.Actor;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 public class LobbyController extends Controller<Lobby> {
 
@@ -34,5 +36,6 @@ public class LobbyController extends Controller<Lobby> {
 //        lobby.join(new HumanPlayer(lobby.getGame(), Actor.Type.TYPE_1, "Player 1"));
 //        lobby.join(new RemotePlayer(lobby.getGame(), Actor.Type.TYPE_1, "Player 2"));
     }
+
 
 }

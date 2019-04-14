@@ -1,0 +1,23 @@
+.title {
+    -fx-font-family: "Fipps";
+    -fx-font-size: 20;
+}
+
+.text-button {
+    -fx-font-family: "Fipps";
+    -fx-font-size: 25;
+}
+
+.text-button-game{
+    -fx-font-family: "Fipps";
+    -fx-font-size: 20;
+}
+
+.text-button-game-right{
+    -fx-font-family: "Fipps";
+    -fx-font-size: 15;
+}
+.title{
+    -fx-font-family: "Fipps";
+    -fx-font-size: 70;
+}
