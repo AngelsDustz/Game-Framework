@@ -5,6 +5,7 @@ import group3.griddie.game.Game;
 import group3.griddie.game.othello.Othello;
 import group3.griddie.model.board.actor.Actor;
 import group3.griddie.view.View;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
@@ -15,6 +16,8 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class RightBarGameView extends View {
@@ -39,13 +42,19 @@ public class RightBarGameView extends View {
         Label scoreText2 = new Label("score");
         scoreText2.getStyleClass().add("text-button-game-right");
 
-        parent.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
             @Override
-            public void handle(MouseEvent event) {
-                scoreText.textProperty().setValue(String.valueOf("Player 1: " + ((Othello) game).getCountByActor(game.getBoard(), Actor.Type.TYPE_1)));
-                scoreText2.textProperty().setValue(String.valueOf("Player 2: " + ((Othello) game).getCountByActor(game.getBoard(), Actor.Type.TYPE_2)));
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        scoreText.textProperty().setValue(String.valueOf("Player 1: " + ((Othello) game).getCountByActor(game.getBoard(), Actor.Type.TYPE_1)));
+                        scoreText2.textProperty().setValue(String.valueOf("Player 2: " + ((Othello) game).getCountByActor(game.getBoard(), Actor.Type.TYPE_2)));
+                    }
+                });
             }
-        });
+        }, 0, 1000);
 
         BackgroundImage imagebg = new BackgroundImage(new Image("/assets/images/middle.png"), null, null,null, null);
         root_.setBackground(new Background(imagebg));
