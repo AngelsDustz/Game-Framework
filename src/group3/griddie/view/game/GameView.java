@@ -64,7 +64,7 @@ public class GameView extends View {
             bottomPane.setPrefHeight(300);
             rightSidebar.setPrefWidth(100);
             quit.setPrefWidth(100);
-            VBox rightbar = new VBox();
+            VBox rightbar = new VBox(15);
             rightBarGameView = new RightBarGameView(rightbar, null, game, root_);
             rightbarBox = (VBox) rightBarGameView.getRoot();
         }
