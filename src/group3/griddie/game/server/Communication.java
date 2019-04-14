@@ -64,7 +64,7 @@ public class Communication {
 
                     StringBuilder str = new StringBuilder();
                     for (String name : list) {
-                        str.append(name).append(" ");
+                        str.append(name).append("-");
                     }
 
                     Map<String, String> map = new HashMap<>();
@@ -164,7 +164,7 @@ public class Communication {
     }
 
     private void handlePlayerList(Map<String, String> data) {
-        playerListReceivedEvent.call(data.get("players").split(" "));
+        playerListReceivedEvent.call(data.get("players").split("-"));
     }
 
     private void handleChallenge(Map<String, String> data) {
