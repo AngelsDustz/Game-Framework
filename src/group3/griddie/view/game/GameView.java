@@ -51,8 +51,10 @@ public class GameView extends View {
         Pane bottomPane = new Pane();
 
         //set sizes
-        topPane.prefWidthProperty().bind(root_.widthProperty());
-        bottomPane.prefWidthProperty().bind(root_.widthProperty());
+        topPane.prefWidthProperty().bind(root.widthProperty());
+        bottomPane.prefWidthProperty().bind(root.widthProperty());
+        root_.prefWidthProperty().bind(root.widthProperty());
+        root_.prefHeightProperty().bind(root.heightProperty());
 
         if (getGame() instanceof Othello) {
             topPane.setPrefHeight(200);
