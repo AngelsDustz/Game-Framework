@@ -3,7 +3,6 @@ package group3.griddie.view.game.board;
 import group3.griddie.model.board.Board;
 import group3.griddie.view.View;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
@@ -13,7 +12,6 @@ public class BoardView extends View {
 
     public BoardView(Board board) {
         super(new GridPane(), null);
-        ImageView border = new ImageView("/assets/images/borderrevisiongame.png");
 
         this.board = board;
 

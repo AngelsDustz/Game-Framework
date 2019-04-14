@@ -3,6 +3,7 @@ package group3.griddie.view.game.sidebar;
 import group3.griddie.controller.Controller;
 import group3.griddie.controller.menu.LobbyController;
 import group3.griddie.game.player.HumanPlayer;
+import group3.griddie.game.player.RemotePlayer;
 import group3.griddie.view.View;
 import group3.griddie.view.game.GameButton;
 import group3.griddie.view.game.GameView;

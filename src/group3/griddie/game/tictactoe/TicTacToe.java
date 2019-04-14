@@ -30,7 +30,7 @@ public class TicTacToe extends Game {
 
     @Override
     protected void onInit() {
-
+        startOnlineGame();
     }
 
     @Override
@@ -103,14 +103,28 @@ public class TicTacToe extends Game {
         return false;
     }
 
-    @Override
-    public boolean canDoTurn(Player player) {
-        if (this.getBoard().getFreeSpots().size() > 0) {
-            return true;
-        }
 
-        return false;
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public Actor.Type checkIfWon(Board board) {
         Actor.Type check = checkIfColumnWon(board);

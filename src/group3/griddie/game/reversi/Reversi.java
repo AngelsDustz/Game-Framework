@@ -27,11 +27,6 @@ public class Reversi extends Game {
     }
 
     @Override
-    public boolean canDoTurn(Player player) {
-        return false;
-    }
-
-    @Override
     protected Board createBoard() {
         return null;
     }
