@@ -24,6 +24,7 @@ import java.util.List;
 
 public class ChallengePlayerView extends View {
     private String[] playerlist;
+    private int challengeNumber;
 
     public ChallengePlayerView(Parent root, Controller controller, Game game) {
         super(root, controller);
@@ -53,28 +54,40 @@ public class ChallengePlayerView extends View {
         listView2.setEditable(true);
 
         GameButton button = new GameButton("Get Player List", GameButton.Size.SMALL, "text-button-game-right");
-        GameButton button1 = new GameButton("Send command", GameButton.Size.SMALL, "text-button-game-right");
+        GameButton button1 = new GameButton("Send Challenge", GameButton.Size.SMALL, "text-button-game-right");
         GameButton button2 = new GameButton("Subscribe", GameButton.Size.SMALL, "text-button-game-right");
+        GameButton button3 = new GameButton("Accept Challenge", GameButton.Size.SMALL, "text-button-game-right");
 
         button.setOnMouseClicked(event -> {
+            game.getConnection().fetchPlayerList();
             String[] buttonPlayerList = playerlist;
             ObservableList<String> data = FXCollections.observableArrayList(playerlist);
             listView.setCellFactory(ComboBoxListCell.forListView(data));
+            listView.getItems().clear();
             listView.setItems(data);
 
-            game.getConnection().fetchPlayerList();
-            //HashMap<String, ArrayList<String>> challengePlayerList = controller_.getDate();
-            //tableChallengers.getItems().clear();
-            //tableChallengers.getItems().addAll(challengePlayerList.get("PLAYER"));
-            //tableChallengers.getItems().addAll(challengePlayerList.get("CHALLENGENUMBER"));
+
+            int buttonChallengeNumber = challengeNumber;
+            ArrayList<Integer> challengenumbers = new ArrayList<>();
+            listView2.getItems().add(challengenumbers);
         });
 
         button1.setOnMouseClicked(event -> {
-            controller_.removePane();
+            if(listView.getSelectionModel().getSelectedItem().toString() != null) {
+                String name = listView.getSelectionModel().getSelectedItem().toString();
+                game.getConnection().challenge(name, game.getName());
+                controller_.removePane();
+            }
         });
 
         button2.setOnMouseClicked(event -> {
             game.getConnection().subscribe(game.getName());
+            controller_.removePane();
+        });
+
+        button3.setOnMouseClicked(event -> {
+            int challengenumber = Integer.valueOf(listView2.getSelectionModel().getSelectedItem().toString());
+            game.getConnection().challengeAccept(challengenumber);
             controller_.removePane();
         });
 
@@ -99,11 +112,15 @@ public class ChallengePlayerView extends View {
 
 
         game.getCommunication().playerListReceivedEvent.addListener(this::updatePlayerList);
-
+        game.getCommunication().challengeReceivedEvent.addListener(this::updateChallengeNumberList);
     }
 
     private void updatePlayerList(String[] names){
         this.playerlist = names;
     }
 
+    private void updateChallengeNumberList(int challengenumber){
+        this.challengeNumber = challengenumber;
+        System.out.println("recieved challenge number " + challengenumber);
+    }
 }

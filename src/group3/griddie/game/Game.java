@@ -50,7 +50,7 @@ public abstract class Game extends Scene {
         onInit();
 
         connection.connect();
-        connection.login(new HumanPlayer("Griddie")); //TEMP FIX
+        connection.login(new HumanPlayer("Griddie" + new Random().nextInt())); //TEMP FIX
         connection.fetchPlayerList();
     }
 
@@ -84,7 +84,7 @@ public abstract class Game extends Scene {
             Player player = createAiPlayer();
             lobby.join(player);
             //connection.login(player);
-            connection.subscribe(name);
+            //connection.subscribe(name);
         }
     }
 
