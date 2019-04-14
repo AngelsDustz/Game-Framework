@@ -63,7 +63,7 @@ public abstract class Game extends Scene {
         if (!connection.isConnected()) {
             System.out.println("Not possible to create connection");
         } else {
-            HumanPlayer player = new HumanPlayer("Griddie");
+            HumanPlayer player = new HumanPlayer("NIGGER " + new Random().nextInt());
             lobby.join(player);
 
             connection.connect();

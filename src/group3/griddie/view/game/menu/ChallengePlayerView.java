@@ -61,10 +61,12 @@ public class ChallengePlayerView extends View {
         button.setOnMouseClicked(event -> {
             game.getConnection().fetchPlayerList();
             String[] buttonPlayerList = playerlist;
-            ObservableList<String> data = FXCollections.observableArrayList(playerlist);
-            listView.setCellFactory(ComboBoxListCell.forListView(data));
-            listView.getItems().clear();
-            listView.setItems(data);
+            if (buttonPlayerList != null) {
+                ObservableList<String> data = FXCollections.observableArrayList(playerlist);
+                listView.setCellFactory(ComboBoxListCell.forListView(data));
+                listView.getItems().clear();
+                listView.setItems(data);
+            }
 
             int buttonChallengeNumber = challengeNumber;
             listView2.getItems().add(buttonChallengeNumber);
