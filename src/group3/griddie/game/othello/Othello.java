@@ -1,6 +1,7 @@
 package group3.griddie.game.othello;
 
 import group3.griddie.game.Game;
+import group3.griddie.game.Move;
 import group3.griddie.game.ai.OthelloAI;
 import group3.griddie.game.player.AIPlayer;
 import group3.griddie.game.player.HumanPlayer;
@@ -16,17 +17,6 @@ public class Othello extends Game {
 
     public Othello() {
         super("Othello");
-
-        AIPlayer aiPlayer = new AIPlayer(this, Actor.Type.TYPE_1, "AI Player");
-        aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
-        aiPlayer.setGameAI(new OthelloAI(this, aiPlayer));
-
-        AIPlayer aiPlayer1 = new AIPlayer(this, Actor.Type.TYPE_2, "AI Player2");
-        aiPlayer1.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
-        aiPlayer1.setGameAI(new OthelloAI(this, aiPlayer1));
-
-        lobby.join(new HumanPlayer(this, Actor.Type.TYPE_2, "Human Player"));
-        lobby.join(aiPlayer);
     }
 
     private void updateCellValidity(Board board, Actor.Type type) {
@@ -41,28 +31,32 @@ public class Othello extends Game {
     }
 
     @Override
-    public boolean onPlayerMove(Player player, int column, int row) {
-        Cell cell = getBoard().getCell(column, row);
+    public boolean moveIsValid(Player player, int x, int y) {
+        Cell cell = this.getBoard().getCell(x, y);
 
-        boolean valid = false;
+        if (cell.isOccupied()) {
+            return false;
+        }
+
         for (Cell c : this.getLegalMoves(this.getBoard(), player.getActorType())) {
             if (c.getX() == cell.getX()) {
                 if (c.getY() == cell.getY()) {
-                    valid = true;
+                    return true;
                 }
             }
         }
 
-        if (!valid) {
-            return false;
-        }
+        return false;
+    }
 
+    @Override
+    public boolean checkWin(Move move) {
+        return false;
+    }
 
-        if (cell.isDisabled()) {
-            return false;
-        }
-
-
+    @Override
+    public void onPlayerMove(Player player, int column, int row) {
+        Cell cell           = getBoard().getCell(column, row);
         OthelloActor actor  = new OthelloActor(player.getActorType());
         Cell[] adjacent     = this.getBoard().getAdjacentCells(cell);
 
@@ -154,7 +148,7 @@ public class Othello extends Game {
 
         this.updateCellValidity(this.getBoard(), player.getActorType());
 
-        return true;
+        //return true;
     }
 
     public ArrayList<Cell> getLegalMoves(Board board, Actor.Type type) {

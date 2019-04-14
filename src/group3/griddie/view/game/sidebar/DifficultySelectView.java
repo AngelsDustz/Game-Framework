@@ -25,15 +25,6 @@ public class DifficultySelectView extends View {
         root.add(button3, 0, 2);
         root.add(button4, 0, 3);
 
-
-        button3.setOnMouseClicked(event -> {
-            gameView.getGame().getLobby().join(new HumanPlayer());
-
-            AIPlayer aiPlayer = new AIPlayer(AIPlayer.Difficulty.DIFFICULTY_HARD);
-            aiPlayer.setGameAI(new TicTacToeAI(gameView.getGame(), aiPlayer));
-
-            gameView.getGame().getLobby().join(aiPlayer);
-        });
     }
 
 }

@@ -29,6 +29,7 @@ public class CellView extends View implements Observer {
 
         canvas      = new Canvas();
         imageView   = new ImageView();
+
         cell.addObserver(this);
 
         root.getChildren().add(canvas);

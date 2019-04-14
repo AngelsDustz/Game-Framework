@@ -2,6 +2,9 @@ package group3.griddie.view.game.sidebar;
 
 import group3.griddie.controller.Controller;
 import group3.griddie.controller.menu.LobbyController;
+import group3.griddie.game.ai.OthelloAI;
+import group3.griddie.game.othello.Othello;
+import group3.griddie.game.player.AIPlayer;
 import group3.griddie.view.View;
 import group3.griddie.view.game.GameButton;
 import group3.griddie.view.game.GameView;
@@ -40,6 +43,8 @@ public class OpponentSelectView extends View {
             ((LobbyController) controller).setRoot(pane);
             ((LobbyController) controller).setMenu(box);
             ((LobbyController) controller).removePane();
+
+            gameView.getGame().startAiGame();
         });
 
         button3.setOnMouseClicked(event -> {
@@ -47,6 +52,7 @@ public class OpponentSelectView extends View {
             ((LobbyController) controller).setMenu(box);
             ((LobbyController) controller).removePane();
             ((LobbyController) controller).addPane(challengeMenu);
+            gameView.getGame().startOnlineGame();
         });
 
         button4.setOnMouseClicked(event -> {
