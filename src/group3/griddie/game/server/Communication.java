@@ -10,6 +10,7 @@ import group3.griddie.util.event.ArgEvent;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Communication {
@@ -51,14 +52,31 @@ public class Communication {
         public void execute(String data) {
             if (action != null) {
                 Gson gson = new Gson();
-                Type type = new TypeToken<Map<String, String>>() {}.getType();
-                Map<String, String> converted = gson.fromJson(data, type);
-                action.doAction(converted);
+
+                //SUPER HACKY FOR NOW
+                if (command != "PLAYERLIST") {
+                    Type type = new TypeToken<Map<String, String>>() {}.getType();
+                    Map<String, String> converted = gson.fromJson(data, type);
+                    action.doAction(converted);
+                } else {
+                    Type type = new TypeToken<ArrayList<String>>() {}.getType();
+                    ArrayList<String> list = gson.fromJson(data, type);
+
+                    StringBuilder str = new StringBuilder();
+                    for (String name : list) {
+                        str.append(name).append(" ");
+                    }
+
+                    Map<String, String> map = new HashMap<>();
+                    map.put("players", str.toString());
+                    action.doAction(map);
+                }
             }
         }
     }
 
     public final ArgEvent<Move> moveReceivedEvent;
+    public final ArgEvent<String[]> playerListReceivedEvent;
 
     private Command rootCommand;
     private Game game;
@@ -66,6 +84,7 @@ public class Communication {
 
     public Communication(Game game, Connection connection) {
         moveReceivedEvent = new ArgEvent<>();
+        playerListReceivedEvent = new ArgEvent<>();
 
         this.game = game;
         this.connection = connection;
@@ -74,15 +93,18 @@ public class Communication {
 
         rootCommand = new Command("");
         Command svrCommand = new Command("SVR");
+        Command playerListCommand = new Command("PLAYERLIST", this::handlePlayerList);
         Command gameCommand = new Command("GAME");
         Command matchCommand = new Command("MATCH", this::handleMatch);
         Command moveCommand = new Command("MOVE", this::handleMove);
         Command winCommand = new Command("WIN", this::handleWin);
         Command lossCommand = new Command("LOSS", this::handleLoss);
-        Command yourTurnCommand = new Command("YOURTURN", (data) -> { });
+        Command yourTurnCommand = new Command("YOURTURN", (data) -> {
+        });
 
         rootCommand.addSubCommand(svrCommand);
 
+        svrCommand.addSubCommand(playerListCommand);
         svrCommand.addSubCommand(gameCommand);
 
         gameCommand.addSubCommand(matchCommand);
@@ -135,6 +157,10 @@ public class Communication {
 
     private void handleLoss(Map<String, String> data) {
 
+    }
+
+    private void handlePlayerList(Map<String, String> data) {
+        playerListReceivedEvent.call(data.get("players").split(" "));
     }
 
     public void sendMove(int move) {

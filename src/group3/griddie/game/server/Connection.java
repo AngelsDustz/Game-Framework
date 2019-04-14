@@ -26,6 +26,10 @@ public class Connection implements Runnable {
     }
 
     public void connect() {
+        if (connected) {
+            return;
+        }
+
         System.out.println("Connecting to server");
 
         try {
@@ -72,6 +76,10 @@ public class Connection implements Runnable {
 
     public void subscribe(String game) {
         out.println("subscribe " + game);
+    }
+
+    public void fetchPlayerList() {
+        out.println("get playerlist");
     }
 
 }

@@ -3,6 +3,7 @@ package group3.griddie.view.game.menu;
 import group3.griddie.Griddie;
 import group3.griddie.controller.Controller;
 import group3.griddie.controller.menu.ChallengePlayerController;
+import group3.griddie.game.Game;
 import group3.griddie.view.View;
 import group3.griddie.view.game.GameButton;
 import javafx.collections.FXCollections;
@@ -23,7 +24,7 @@ import java.util.List;
 
 public class ChallengePlayerView extends View {
 
-    public ChallengePlayerView(Parent root, Controller controller) {
+    public ChallengePlayerView(Parent root, Controller controller, Game game) {
         super(root, controller);
 
         GridPane root_ = (GridPane) getRoot();
@@ -89,6 +90,16 @@ public class ChallengePlayerView extends View {
 
         BackgroundImage image = new BackgroundImage(new Image("/assets/images/middle.png"), null, null,null, null);
         root_.setBackground(new Background(image));
+
+
+        game.getCommunication().playerListReceivedEvent.addListener(names -> {
+            System.out.println("PRINTING PLAYER LIST");
+            for (String name : names) {
+                System.out.println(name);
+            }
+        });
+
+        //game.getConnection().fetchPlayerList(); <---- TO UPDATE PLAYER DOE DIT
     }
 
 }
