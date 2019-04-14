@@ -13,7 +13,6 @@ public class GameThread extends Thread implements Runnable {
     @Override
     public void run() {
         while (game.isRunning()) {
-            game.setActivePlayer(game.getNextPlayer());
             Player currentPlayer = game.getActivePlayer();
             currentPlayer.turnEndEvent.addListener(this::touch);
 
@@ -28,6 +27,7 @@ public class GameThread extends Thread implements Runnable {
             }
 
             currentPlayer.turnEndEvent.removeListener(this::touch);
+            game.setActivePlayer(game.getNextPlayer());
         }
     }
 
