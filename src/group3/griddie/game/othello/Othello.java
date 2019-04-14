@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class Othello extends Game {
 
     public Othello() {
-        super("Othello");
+        super("Reversi");
     }
 
     private void updateCellValidity(Board board, Actor.Type type) {

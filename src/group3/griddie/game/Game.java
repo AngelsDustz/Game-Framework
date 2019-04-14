@@ -1,5 +1,6 @@
 package group3.griddie.game;
 
+import group3.griddie.game.ai.OthelloAI;
 import group3.griddie.game.ai.TicTacToeAI;
 import group3.griddie.game.player.AIPlayer;
 import group3.griddie.game.player.HumanPlayer;
@@ -66,10 +67,14 @@ public abstract class Game extends Scene {
         if (!connection.isConnected()) {
             System.out.println("Not possible to create connection");
         } else {
-            HumanPlayer player = new HumanPlayer("Jesse" + new Random().nextInt());
-            lobby.join(player);
+//            HumanPlayer player = new HumanPlayer("Jesse" + new Random().nextInt());
+//            lobby.join(player);
 
-            connection.login(player);
+            AIPlayer aiPlayer = new AIPlayer("AI" + new Random().nextInt(), AIPlayer.Difficulty.DIFFICULTY_HARD);
+            aiPlayer.setGameAI(new OthelloAI(this, aiPlayer));
+            lobby.join(aiPlayer);
+
+            connection.login(aiPlayer);
             connection.subscribe(name);
         }
     }

@@ -92,8 +92,8 @@ public abstract class Player extends Entity {
 
 
     public Actor registerActor(Actor actor) {
-        actors.add(actor);
-        return actor;
+        //actors.add(actor);
+        return null;
     }
 
     public void unregisterActor(Actor actor) {
