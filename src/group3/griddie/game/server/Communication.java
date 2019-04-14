@@ -115,6 +115,7 @@ public class Communication {
         gameCommand.addSubCommand(moveCommand);
         gameCommand.addSubCommand(winCommand);
         gameCommand.addSubCommand(lossCommand);
+        gameCommand.addSubCommand(challangeCommand);
     }
 
     public void handle(String input) {

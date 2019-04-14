@@ -71,7 +71,7 @@ public abstract class Game extends Scene {
             lobby.join(player);
 
             //connection.login(player);
-            connection.subscribe(name);
+            //connection.subscribe(name);
         }
     }
 
@@ -84,7 +84,7 @@ public abstract class Game extends Scene {
             Player player = createAiPlayer();
             lobby.join(player);
             //connection.login(player);
-            connection.subscribe(name);
+            //connection.subscribe(name);
         }
     }
 
