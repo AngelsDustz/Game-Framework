@@ -32,6 +32,20 @@ public class Othello extends Game {
 
     @Override
     public boolean moveIsValid(Player player, int x, int y) {
+        Cell cell = this.getBoard().getCell(x, y);
+
+        if (cell.isOccupied()) {
+            return false;
+        }
+
+        for (Cell c : this.getLegalMoves(this.getBoard(), player.getActorType())) {
+            if (c.getX() == cell.getX()) {
+                if (c.getY() == cell.getY()) {
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 
@@ -42,27 +56,7 @@ public class Othello extends Game {
 
     @Override
     public void onPlayerMove(Player player, int column, int row) {
-        Cell cell = getBoard().getCell(column, row);
-
-        boolean valid = false;
-        for (Cell c : this.getLegalMoves(this.getBoard(), player.getActorType())) {
-            if (c.getX() == cell.getX()) {
-                if (c.getY() == cell.getY()) {
-                    valid = true;
-                }
-            }
-        }
-
-        if (!valid) {
-            //return false;
-        }
-
-
-        if (cell.isDisabled()) {
-            //return false;
-        }
-
-
+        Cell cell           = getBoard().getCell(column, row);
         OthelloActor actor  = new OthelloActor(player.getActorType());
         Cell[] adjacent     = this.getBoard().getAdjacentCells(cell);
 
