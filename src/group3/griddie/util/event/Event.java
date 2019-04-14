@@ -7,11 +7,15 @@ public class Event {
     private ArrayList<Listener> listeners;
 
     public Event() {
-        listeners = new ArrayList<>();
+        listeners = new ArrayList<Listener>();
     }
 
     public void addListener(Listener listener) {
         listeners.add(listener);
+    }
+
+    public void removeListener(Listener listener) {
+        listeners.remove(listener);
     }
 
     public void call() {

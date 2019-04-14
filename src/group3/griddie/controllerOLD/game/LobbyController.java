@@ -13,28 +13,15 @@ import javafx.scene.layout.VBox;
 public class LobbyController extends Controller<Lobby> {
 
     public void humanVersusHuman() {
-        Lobby lobby = getModel();
 
-        lobby.join(new HumanPlayer(lobby.getGame(), Actor.Type.TYPE_1, "Player 1"));
-        lobby.join(new HumanPlayer(lobby.getGame(), Actor.Type.TYPE_2, "Player 2"));
     }
 
     public void humanVersusAI() {
-        Lobby lobby = getModel();
 
-        AIPlayer aiPlayer = new AIPlayer(lobby.getGame(), Actor.Type.TYPE_2, "AI Player");
-        aiPlayer.setDifficulty(AIPlayer.Difficulty.DIFFICULTY_HARD);
-        aiPlayer.setGameAI(new TicTacToeAI(lobby.getGame(), aiPlayer));
-
-        lobby.join(new HumanPlayer(lobby.getGame(), Actor.Type.TYPE_1, "Player 1"));
-        lobby.join(aiPlayer);
     }
 
     public void humanVersusRemote() {
-        Lobby lobby = getModel();
 
-//        lobby.join(new HumanPlayer(lobby.getGame(), Actor.Type.TYPE_1, "Player 1"));
-//        lobby.join(new RemotePlayer(lobby.getGame(), Actor.Type.TYPE_1, "Player 2"));
     }
 
 

@@ -19,6 +19,7 @@ public class AIPlayer extends Player {
     }
 
     public AIPlayer(Difficulty difficulty) {
+        super("");
         this.difficulty = difficulty;
     }
 
