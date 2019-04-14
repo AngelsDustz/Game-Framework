@@ -66,10 +66,8 @@ public class ChallengePlayerView extends View {
             listView.getItems().clear();
             listView.setItems(data);
 
-
             int buttonChallengeNumber = challengeNumber;
-            ArrayList<Integer> challengenumbers = new ArrayList<>();
-            listView2.getItems().add(challengenumbers);
+            listView2.getItems().add(buttonChallengeNumber);
         });
 
         button1.setOnMouseClicked(event -> {
@@ -105,11 +103,10 @@ public class ChallengePlayerView extends View {
         root_.add(button1, 0,3);
         root_.add(button2, 1,3);
         root_.add(button, 2, 3);
+        root_.add(button3,0,4);
 
         BackgroundImage image = new BackgroundImage(new Image("/assets/images/middle.png"), null, null,null, null);
         root_.setBackground(new Background(image));
-
-
 
         game.getCommunication().playerListReceivedEvent.addListener(this::updatePlayerList);
         game.getCommunication().challengeReceivedEvent.addListener(this::updateChallengeNumberList);
