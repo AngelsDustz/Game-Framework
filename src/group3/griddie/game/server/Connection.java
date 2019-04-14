@@ -47,7 +47,7 @@ public class Connection implements Runnable {
             try {
                 String input = in.readLine();
 
-                //System.out.println(input);
+                System.out.println(input);
 
                 synchronized (this) {
                     inputEvent.call(input);
