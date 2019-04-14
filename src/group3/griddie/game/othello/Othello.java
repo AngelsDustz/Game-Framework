@@ -12,6 +12,7 @@ import group3.griddie.model.board.actor.Actor;
 import group3.griddie.model.board.actor.OthelloActor;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Othello extends Game {
 
@@ -293,6 +294,13 @@ public class Othello extends Game {
                 this.stop();
             }
         }
+    }
+
+    @Override
+    protected AIPlayer createAiPlayer() {
+        AIPlayer aiPlayer = new AIPlayer("AI Player" + new Random().nextInt(), AIPlayer.Difficulty.DIFFICULTY_HARD);
+        aiPlayer.setGameAI(new OthelloAI(this, aiPlayer));
+        return aiPlayer;
     }
 
     @Override

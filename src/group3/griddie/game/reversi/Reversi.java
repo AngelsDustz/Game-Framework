@@ -2,6 +2,7 @@ package group3.griddie.game.reversi;
 
 import group3.griddie.game.Game;
 import group3.griddie.game.Move;
+import group3.griddie.game.player.AIPlayer;
 import group3.griddie.game.player.Player;
 import group3.griddie.model.board.Board;
 
@@ -54,5 +55,10 @@ public class Reversi extends Game {
     @Override
     protected void onTick() {
 
+    }
+
+    @Override
+    protected AIPlayer createAiPlayer() {
+        return null;
     }
 }
