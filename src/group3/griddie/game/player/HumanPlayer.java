@@ -19,7 +19,7 @@ public class HumanPlayer extends Player {
 
                 int fX = x; int fY = y;
                 cell.addInteractListener(() -> {
-                    if (isOnTurn()) {
+                    if (isOnTurn() && getGame().moveIsValid(this, fX, fY)) {
                         getGame().playerMove(this, fX, fY);
                     }
                 });

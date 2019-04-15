@@ -22,10 +22,12 @@ public class OnlinePlayer extends Player {
         });
 
         communication.moveReceivedEvent.addListener(move -> {
-            if (isOnTurn() && move.getPlayer() == this) {
+            if (isOnTurn() && move.getPlayer() == this && getGame().moveIsValid(this, move.getX(), move.getY())) {
                 getGame().playerMove(this, move.getX(), move.getY());
             }
         });
+
+        communication.onYourTurnReceivedEvent.addListener(this::endTurn);
     }
 
     @Override
