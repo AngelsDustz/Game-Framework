@@ -3,6 +3,7 @@ package group3.griddie.view.game;
 import group3.griddie.controller.game.GameController;
 import group3.griddie.controller.game.QuitController;
 import group3.griddie.controller.menu.ChallengePlayerController;
+import group3.griddie.controller.menu.MainMenuController;
 import group3.griddie.game.Game;
 import group3.griddie.game.othello.Othello;
 import group3.griddie.game.tictactoe.TicTacToe;
@@ -50,7 +51,7 @@ public class GameView extends View {
         OpponentSelectView rightSidebar = new OpponentSelectView(this, root_, menu, (GridPane) challengePlayerView.getRoot());
         Pane topPane = new Pane();
         QuitView quit = new QuitView(new Pane(), new QuitController(), game);
-        RestartView restart = new RestartView(new Pane(), null, game);
+        RestartView restart = new RestartView(new Pane(), new MainMenuController(), game);
         VBox left = new VBox();
         Pane bottomPane = new Pane();
 
