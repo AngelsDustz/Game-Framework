@@ -1,5 +1,6 @@
 package group3.griddie.game.server;
 
+import group3.griddie.Griddie;
 import group3.griddie.game.player.Player;
 import group3.griddie.util.event.ArgEvent;
 
@@ -33,7 +34,7 @@ public class Connection implements Runnable {
         System.out.println("Connecting to server");
 
         try {
-            socket = new Socket("145.33.225.170", 7791);
+            socket = new Socket("localhost", 7789);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 
@@ -70,8 +71,8 @@ public class Connection implements Runnable {
         return connected;
     }
 
-    public void login(Player player) {
-        out.println("login " + player.getName());
+    public void login() {
+        out.println("login " + Griddie.NAME);
     }
 
     public void subscribe(String game) {

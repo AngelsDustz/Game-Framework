@@ -58,7 +58,7 @@ public class Reversi extends Game {
     }
 
     @Override
-    protected AIPlayer createAiPlayer() {
+    public AIPlayer createAiPlayer() {
         return null;
     }
 }

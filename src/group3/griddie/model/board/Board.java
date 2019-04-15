@@ -60,6 +60,15 @@ public class Board extends Model {
         return cells[column][row];
     }
 
+    public void clear() {
+        for (int x = 0; x < getWidth(); x++) {
+            for (int y = 0; y < getHeight(); y++ ){
+                cells[x][y].setOccupant(null);
+                cells[x][y].setValidSpot(true);
+            }
+        }
+    }
+
     /**
      * Function to find all ajacent cells.
      *

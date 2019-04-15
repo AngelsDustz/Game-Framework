@@ -37,15 +37,14 @@ public abstract class Game extends Scene {
         onMove = new ArgEvent<>();
         onStart = new Event();
 
-        connection = new Connection();
-        communication = new Communication(this, connection);
-
         lobby = new Lobby(2);
         board = createBoard();
-        thread = new GameThread(this);
     }
 
-    public final void init() {
+    public final void init(Connection connection) {
+        this.connection = connection;
+        communication = new Communication(this, connection);
+
         lobby.playerJoinedEvent.addListener(this::onPlayerJoined);
 
         createView();
@@ -60,7 +59,7 @@ public abstract class Game extends Scene {
     }
 
     public void startHumanVsRemote() {
-        connection.connect();
+        //connection.connect();
 
         if (!connection.isConnected()) {
             System.out.println("Not possible to create connection");
@@ -68,22 +67,18 @@ public abstract class Game extends Scene {
             HumanPlayer player = new HumanPlayer("SFC " + new Random().nextInt());
             lobby.join(player);
 
-            connection.connect();
-            connection.login(player);
+            //connection.connect();
         }
     }
 
     public void startAiVsRemote() {
-        connection.connect();
+        //connection.connect();
 
         if (!connection.isConnected()) {
             System.out.println("Not possible to create connection");
         } else {
-            Player player = createAiPlayer();
-            lobby.join(player);
-
             connection.connect();
-            connection.login(player);
+            //connection.login(player);
         }
     }
 
@@ -112,7 +107,7 @@ public abstract class Game extends Scene {
         onStart();
 
         started = true;
-
+        thread = new GameThread(this);
         thread.start();
         onStart.call();
     }
@@ -125,6 +120,8 @@ public abstract class Game extends Scene {
         }
 
         activePlayer = null;
+
+        board.clear();
 
         System.out.println("Game ended");
 
@@ -216,6 +213,6 @@ public abstract class Game extends Scene {
 
     protected abstract void onTick();
 
-    protected abstract AIPlayer createAiPlayer();
+    public abstract AIPlayer createAiPlayer();
 
 }

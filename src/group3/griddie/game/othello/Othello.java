@@ -1,5 +1,6 @@
 package group3.griddie.game.othello;
 
+import group3.griddie.Griddie;
 import group3.griddie.game.Game;
 import group3.griddie.game.Move;
 import group3.griddie.game.ai.OthelloAI;
@@ -297,8 +298,8 @@ public class Othello extends Game {
     }
 
     @Override
-    protected AIPlayer createAiPlayer() {
-        AIPlayer aiPlayer = new AIPlayer("B3", AIPlayer.Difficulty.DIFFICULTY_HARD);
+    public AIPlayer createAiPlayer() {
+        AIPlayer aiPlayer = new AIPlayer(Griddie.NAME, AIPlayer.Difficulty.DIFFICULTY_HARD);
         aiPlayer.setGameAI(new OthelloAI(this, aiPlayer));
         return aiPlayer;
     }
