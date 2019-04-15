@@ -26,7 +26,10 @@ public class Griddie extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         connection.connect();
-        connection.login();
+
+        if (connection.isConnected()) {
+            connection.login();
+        }
 
         Font.loadFont("assets/fonts/Fipps-Regular.otf", 12);
 
