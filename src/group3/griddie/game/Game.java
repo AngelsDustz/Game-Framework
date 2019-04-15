@@ -1,5 +1,6 @@
 package group3.griddie.game;
 
+import group3.griddie.game.ai.OthelloAI;
 import group3.griddie.game.ai.TicTacToeAI;
 import group3.griddie.game.player.AIPlayer;
 import group3.griddie.game.player.HumanPlayer;
@@ -86,9 +87,7 @@ public abstract class Game extends Scene {
         HumanPlayer player = new HumanPlayer("Jesse" + new Random().nextInt());
         lobby.join(player);
 
-        AIPlayer aiPlayer = new AIPlayer("AI", AIPlayer.Difficulty.DIFFICULTY_HARD);
-        aiPlayer.setGameAI(new TicTacToeAI(this, aiPlayer));
-        lobby.join(aiPlayer);
+        lobby.join(createAiPlayer());
 
         setActivePlayer(player);
     }
