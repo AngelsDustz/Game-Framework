@@ -121,6 +121,9 @@ public class Communication {
     }
 
     public void handle(String input) {
+        if(input == null){
+            return;
+        }
         String[] split = input.split(" ");
 
         Command current = rootCommand;

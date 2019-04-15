@@ -298,7 +298,7 @@ public class Othello extends Game {
 
     @Override
     protected AIPlayer createAiPlayer() {
-        AIPlayer aiPlayer = new AIPlayer("AI-Player" + new Random().nextInt(), AIPlayer.Difficulty.DIFFICULTY_HARD);
+        AIPlayer aiPlayer = new AIPlayer("AI-Player" + new Random().nextInt(30), AIPlayer.Difficulty.DIFFICULTY_HARD);
         aiPlayer.setGameAI(new OthelloAI(this, aiPlayer));
         return aiPlayer;
     }

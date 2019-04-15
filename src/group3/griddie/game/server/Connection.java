@@ -33,7 +33,7 @@ public class Connection implements Runnable {
         System.out.println("Connecting to server");
 
         try {
-            socket = new Socket("gameserver.edu.janyksteenbeek.nl", 7789);
+            socket = new Socket("localhost", 7789);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 

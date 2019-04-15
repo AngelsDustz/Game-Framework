@@ -39,12 +39,17 @@ public abstract class Player extends Entity {
     }
 
     public void endTurn() {
+        if (!isOnTurn()) {
+            return;
+        }
+
         System.out.println(name + " turn ended");
 
         onTurn = false;
 
         onEndTurn();
-
+        this.setChanged();
+        this.notifyObservers();
         turnEndEvent.call();
     }
 
