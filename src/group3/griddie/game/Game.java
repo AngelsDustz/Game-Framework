@@ -1,5 +1,6 @@
 package group3.griddie.game;
 
+import group3.griddie.Griddie;
 import group3.griddie.game.ai.TicTacToeAI;
 import group3.griddie.game.player.AIPlayer;
 import group3.griddie.game.player.HumanPlayer;
@@ -37,15 +38,15 @@ public abstract class Game extends Scene {
         onMove = new ArgEvent<>();
         onStart = new Event();
 
-        connection = new Connection();
-        communication = new Communication(this, connection);
-
         lobby = new Lobby(2);
         board = createBoard();
         thread = new GameThread(this);
     }
 
-    public final void init() {
+    public final void init(Connection connection) {
+
+        this.connection = connection;
+        communication = new Communication(this, connection);
         lobby.playerJoinedEvent.addListener(this::onPlayerJoined);
 
         createView();
@@ -65,11 +66,10 @@ public abstract class Game extends Scene {
         if (!connection.isConnected()) {
             System.out.println("Not possible to create connection");
         } else {
-            HumanPlayer player = new HumanPlayer("SFC " + new Random().nextInt());
+            HumanPlayer player = new HumanPlayer(Griddie.NAME);
             lobby.join(player);
 
             connection.connect();
-            connection.login(player);
         }
     }
 
@@ -83,7 +83,6 @@ public abstract class Game extends Scene {
             lobby.join(player);
 
             connection.connect();
-            connection.login(player);
         }
     }
 

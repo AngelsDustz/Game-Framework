@@ -1,5 +1,6 @@
 package group3.griddie.game.tictactoe;
 
+import group3.griddie.Griddie;
 import group3.griddie.game.Game;
 import group3.griddie.game.Move;
 import group3.griddie.game.ai.OthelloAI;
@@ -110,7 +111,7 @@ public class TicTacToe extends Game {
 
     @Override
     protected AIPlayer createAiPlayer() {
-        AIPlayer aiPlayer = new AIPlayer("AI Player" + new Random().nextInt(), AIPlayer.Difficulty.DIFFICULTY_HARD);
+        AIPlayer aiPlayer = new AIPlayer(Griddie.NAME, AIPlayer.Difficulty.DIFFICULTY_HARD);
         aiPlayer.setGameAI(new TicTacToeAI(this, aiPlayer));
         return aiPlayer;
     }
