@@ -1,5 +1,6 @@
 package group3.griddie.game.server;
 
+import group3.griddie.Griddie;
 import group3.griddie.game.player.Player;
 import group3.griddie.util.event.ArgEvent;
 
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Random;
 
 public class Connection implements Runnable {
 
@@ -51,7 +53,7 @@ public class Connection implements Runnable {
             try {
                 String input = in.readLine();
 
-                System.out.println(input);
+                //System.out.println(input);
 
                 synchronized (this) {
                     inputEvent.call(input);
@@ -70,8 +72,8 @@ public class Connection implements Runnable {
         return connected;
     }
 
-    public void login(Player player) {
-        out.println("login " + player.getName());
+    public void login() {
+        out.println("login " + Griddie.NAME);
     }
 
     public void subscribe(String game) {

@@ -1,9 +1,8 @@
 package group3.griddie;
 
-import group3.griddie.controller.menu.MainMenuController;
 import group3.griddie.game.Game;
+import group3.griddie.game.server.Connection;
 import group3.griddie.view.game.menu.MainMenuView;
-import group3.griddie.viewOLD.menu.main.MainMenuViewOLD;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -12,12 +11,20 @@ import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import java.util.Random;
+
 public class Griddie extends Application {
     private static Stage stage;
     private static Game game;
+    private static Connection connection;
+
+    public final static String NAME = "GRIDDIE" + new Random().nextInt();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        connection = new Connection();
+        connection.connect();
+        connection.login();
 
         Font.loadFont("assets/fonts/Fipps-Regular.otf", 12);
 
@@ -50,7 +57,7 @@ public class Griddie extends Application {
 
     public static void launchGame(Game game) {
         Griddie.game = game;
-        game.init();
+        game.init(connection);
         game.getStylesheets().add(Griddie.class.getResource("/assets/css/custom-font-style.css").toExternalForm());
         stage.setScene(game);
         setMiddle();
