@@ -52,9 +52,11 @@ public class AIPlayer extends Player {
         new Thread(() -> {
             Cell predicted = this.gameAI.predictMove();
 
-            if (predicted != null) {
+            if (predicted != null && getGame().moveIsValid(this, predicted.getX(), predicted.getY())) {
                 System.out.println("AI move: " + predicted);
                 this.getGame().playerMove(this, predicted.getX(), predicted.getY());
+            } else if (predicted == null) {
+                endTurn();
             }
         }).start();
     }
