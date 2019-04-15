@@ -16,13 +16,9 @@ import java.util.Random;
 public class Griddie extends Application {
     private static Stage stage;
     private static Game game;
-    private static Connection connection;
-
-    public final static String NAME = "Griddie";
-
     private static Connection connection = new Connection();
 
-    public static final String NAME = "B3";
+    public static final String NAME = "B3" + new Random().nextInt(30);
 
     @Override
     public void start(Stage primaryStage) throws Exception {

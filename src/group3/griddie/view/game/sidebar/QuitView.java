@@ -18,7 +18,9 @@ public class QuitView extends View {
         root_.getChildren().addAll(quitButton);
 
         quitButton.setOnMouseClicked(event -> {
-            game.stop();
+            if (game.isRunning()) {
+                game.stop();
+            }
             controller_.quitGame();
         });
 

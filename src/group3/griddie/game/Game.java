@@ -1,5 +1,6 @@
 package group3.griddie.game;
 
+import group3.griddie.Griddie;
 import group3.griddie.game.ai.OthelloAI;
 import group3.griddie.game.ai.TicTacToeAI;
 import group3.griddie.game.player.AIPlayer;
@@ -30,7 +31,6 @@ public abstract class Game extends Scene {
     private Board board;
     private GameThread thread;
     private boolean started;
-    public final Event onEnd;
 
     public Game(String name) {
         super(new AnchorPane());

@@ -57,6 +57,7 @@ public class ChallengePlayerView extends View {
         GameButton button1 = new GameButton("Send Challenge", GameButton.Size.SMALL, "text-button-game-right");
         GameButton button2 = new GameButton("Subscribe", GameButton.Size.SMALL, "text-button-game-right");
         GameButton button3 = new GameButton("Accept Challenge", GameButton.Size.SMALL, "text-button-game-right");
+        GameButton button4 = new GameButton("Close", GameButton.Size.SMALL, "text-button-game-right");
 
         button.setOnMouseClicked(event -> {
             game.getConnection().fetchPlayerList();
@@ -91,6 +92,10 @@ public class ChallengePlayerView extends View {
             controller_.removePane();
         });
 
+        button4.setOnMouseClicked(event -> {
+            controller_.removePane();
+        });
+
 
         root_.add(tablePlayerLabel, 0,0);
         root_.add(tableChallengerLabel, 1,0);
@@ -106,6 +111,7 @@ public class ChallengePlayerView extends View {
         root_.add(button2, 1,3);
         root_.add(button, 2, 3);
         root_.add(button3,0,4);
+        root_.add(button4, 0, 5);
 
         BackgroundImage image = new BackgroundImage(new Image("/assets/images/middle.png"), null, null,null, null);
         root_.setBackground(new Background(image));

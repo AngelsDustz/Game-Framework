@@ -21,20 +21,4 @@ public class ChallengePlayerController extends Controller {
         rootpane.getChildren().remove(removeAbleChallengerPane);
     }
 
-    public ArrayList<String> getPlayerList(){
-        ArrayList<String> list = new ArrayList<>();
-        list.add("SHONY");
-        list.add("BONY");
-        list.add("HONY");
-        System.out.println(list);
-        return list;
-    }
-
-    public HashMap<String, ArrayList<String>> getDate(){
-        return new HashMap<>();
-    }
-
-    public void sendText(String text){
-        //sending text
-    }
 }
