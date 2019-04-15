@@ -35,7 +35,7 @@ public class Connection implements Runnable {
         System.out.println("Connecting to server");
 
         try {
-            socket = new Socket("localhost", 7789);
+            socket = new Socket("145.33.225.170", 7791);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 
