@@ -133,19 +133,15 @@ public abstract class Game extends Scene {
     }
 
     public void playerMove(Player player, int x, int y) {
-        if (moveIsValid(player, x, y)) {
-            onPlayerMove(player, x, y);
+        onPlayerMove(player, x, y);
 
-            Move move = new Move(player, x, y);
+        Move move = new Move(player, x, y);
 
-            onMove.call(move);
+        onMove.call(move);
 
-            activePlayer.endTurn();
-
-            if (checkWin(move)) {
-                System.out.println(player.getName() + " wins the game!");
-                stop();
-            }
+        if (checkWin(move)) {
+            System.out.println(player.getName() + " wins the game!");
+            stop();
         }
     }
 

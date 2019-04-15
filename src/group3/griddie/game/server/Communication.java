@@ -7,6 +7,7 @@ import group3.griddie.game.Move;
 import group3.griddie.game.player.OnlinePlayer;
 import group3.griddie.game.player.Player;
 import group3.griddie.util.event.ArgEvent;
+import group3.griddie.util.event.Event;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -78,6 +79,7 @@ public class Communication {
     public final ArgEvent<Move> moveReceivedEvent;
     public final ArgEvent<String[]> playerListReceivedEvent;
     public final ArgEvent<Integer> challengeReceivedEvent;
+    public final Event onYourTurnReceivedEvent;
 
     private Command rootCommand;
     private Game game;
@@ -87,6 +89,7 @@ public class Communication {
         moveReceivedEvent = new ArgEvent<>();
         playerListReceivedEvent = new ArgEvent<>();
         challengeReceivedEvent = new ArgEvent<>();
+        onYourTurnReceivedEvent = new Event();
 
         this.game = game;
         this.connection = connection;
@@ -102,8 +105,7 @@ public class Communication {
         Command challangeCommand = new Command("CHALLENGE", this::handleChallenge);
         Command winCommand = new Command("WIN", this::handleWin);
         Command lossCommand = new Command("LOSS", this::handleLoss);
-        Command yourTurnCommand = new Command("YOURTURN", (data) -> {
-        });
+        Command yourTurnCommand = new Command("YOURTURN", this::handleYourTurn);
 
         rootCommand.addSubCommand(svrCommand);
 
@@ -173,6 +175,10 @@ public class Communication {
 
     public void sendMove(int move) {
         connection.send("MOVE " + move);
+    }
+
+    public void handleYourTurn(Map<String, String> data) {
+
     }
 
 }
