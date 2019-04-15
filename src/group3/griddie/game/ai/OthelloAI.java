@@ -104,7 +104,7 @@ public class OthelloAI implements AI {
             }
         }
 
-        if (depth >= 6) {
+        if (depth >= 4) {
             if (isMax) {
                 return 1000 - (depth*5) - lastMaxBest - (game.getCountByActor(newBoard, enemyType)/10);
             } else {

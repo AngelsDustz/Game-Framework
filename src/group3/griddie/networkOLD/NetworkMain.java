@@ -1,6 +1,6 @@
-package group3.griddie.network;
+package group3.griddie.networkOLD;
 
-import group3.griddie.network.producer.HostCreator;
+import group3.griddie.networkOLD.producer.HostCreator;
 
 import java.io.BufferedReader;
 import java.io.IOException;

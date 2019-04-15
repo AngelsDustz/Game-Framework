@@ -21,7 +21,7 @@ public class Griddie extends Application {
 
     private static Connection connection = new Connection();
 
-    public static final String NAME = "B3" + new Random().nextInt();
+    public static final String NAME = "B3";
 
     @Override
     public void start(Stage primaryStage) throws Exception {

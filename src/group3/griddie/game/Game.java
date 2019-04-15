@@ -12,6 +12,7 @@ import group3.griddie.model.board.actor.Actor;
 import group3.griddie.util.event.Event;
 import group3.griddie.util.event.ArgEvent;
 import group3.griddie.view.game.GameView;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 
@@ -118,8 +119,18 @@ public abstract class Game extends Scene {
             lobby.kick(player);
         }
 
-        this.setBoard(this.createBoard());
+        activePlayer = null;
 
+
+
+
+
+
+
+
+
+
+        this.setBoard(this.createBoard());
         System.out.println("Game ended");
         onStop();
     }

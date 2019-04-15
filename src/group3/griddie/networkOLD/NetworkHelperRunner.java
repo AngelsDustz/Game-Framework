@@ -1,4 +1,4 @@
-package group3.griddie.network;
+package group3.griddie.networkOLD;
 
 public class NetworkHelperRunner implements Runnable {
 
@@ -19,7 +19,7 @@ public class NetworkHelperRunner implements Runnable {
         this.looper.main();
     }
 
-    //access to the network runner
+    //access to the networkOLD runner
     public NetworkMain getNetworkRunner() {
         return this.looper;
     }
