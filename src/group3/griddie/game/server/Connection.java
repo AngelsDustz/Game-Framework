@@ -73,7 +73,7 @@ public class Connection implements Runnable {
     }
 
     public void login() {
-        out.println("login " + Griddie.NAME);
+        out.println("login " + Griddie.NAME + new Random().nextInt(30));
     }
 
     public void subscribe(String game) {

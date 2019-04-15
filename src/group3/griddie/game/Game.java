@@ -124,6 +124,8 @@ public abstract class Game extends Scene {
         System.out.println("Game ended");
         onEnd.call();
         onStop();
+
+        activePlayer = null;
     }
 
     public void setActivePlayer(Player player) {

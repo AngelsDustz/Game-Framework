@@ -50,7 +50,7 @@ public class GameView extends View {
         ChallengePlayerView challengePlayerView = new ChallengePlayerView(ChallengePlayer, new ChallengePlayerController(root_, ChallengePlayer), game);
         OpponentSelectView rightSidebar = new OpponentSelectView(this, root_, menu, (GridPane) challengePlayerView.getRoot());
         Pane topPane = new Pane();
-        QuitView quit = new QuitView(new Pane(), new QuitController(), game);
+        QuitView quit = new QuitView(new Pane(), new QuitController(game), game);
         RestartView restart = new RestartView(new Pane(), new MainMenuController(), game);
         VBox left = new VBox();
         Pane bottomPane = new Pane();

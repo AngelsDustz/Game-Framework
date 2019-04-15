@@ -18,7 +18,7 @@ public class Griddie extends Application {
     private static Game game;
     private static Connection connection;
 
-    public final static String NAME = "GRIDDIE" + new Random().nextInt();
+    public final static String NAME = "Griddie";
 
     @Override
     public void start(Stage primaryStage) throws Exception {
