@@ -119,12 +119,9 @@ public abstract class Game extends Scene {
             lobby.kick(player);
         }
 
-        activePlayer = null;
-
-        board.clear();
+        this.setBoard(this.createBoard());
 
         System.out.println("Game ended");
-
         onStop();
     }
 

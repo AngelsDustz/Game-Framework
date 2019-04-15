@@ -4,6 +4,7 @@ import group3.griddie.game.Game;
 import group3.griddie.game.ai.AI;
 import group3.griddie.model.board.Cell;
 import group3.griddie.model.board.actor.Actor;
+import javafx.application.Platform;
 
 public class AIPlayer extends Player {
     private Difficulty difficulty;
@@ -49,7 +50,8 @@ public class AIPlayer extends Player {
 
     @Override
     protected void onStartTurn() {
-        new Thread(() -> {
+        Platform.runLater(() -> {
+            new Thread(() -> {
             Cell predicted = this.gameAI.predictMove();
 
             if (predicted != null && getGame().moveIsValid(this, predicted.getX(), predicted.getY())) {
@@ -60,6 +62,7 @@ public class AIPlayer extends Player {
                 endTurn();
             }
         }).start();
+        });
     }
 
     @Override
