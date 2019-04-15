@@ -1,6 +1,6 @@
 package group3.griddie.game;
 
-import group3.griddie.Griddie;
+import group3.griddie.game.ai.OthelloAI;
 import group3.griddie.game.ai.TicTacToeAI;
 import group3.griddie.game.player.AIPlayer;
 import group3.griddie.game.player.HumanPlayer;
@@ -12,6 +12,7 @@ import group3.griddie.model.board.actor.Actor;
 import group3.griddie.util.event.Event;
 import group3.griddie.util.event.ArgEvent;
 import group3.griddie.view.game.GameView;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 
@@ -38,17 +39,15 @@ public abstract class Game extends Scene {
 
         onMove = new ArgEvent<>();
         onStart = new Event();
-        onEnd = new Event();
 
         lobby = new Lobby(2);
         board = createBoard();
-        thread = new GameThread(this);
     }
 
     public final void init(Connection connection) {
-
         this.connection = connection;
         communication = new Communication(this, connection);
+
         lobby.playerJoinedEvent.addListener(this::onPlayerJoined);
 
         createView();
@@ -63,7 +62,7 @@ public abstract class Game extends Scene {
     }
 
     public void startHumanVsRemote() {
-        connection.connect();
+        //connection.connect();
 
         if (!connection.isConnected()) {
             System.out.println("Not possible to create connection");
@@ -71,20 +70,18 @@ public abstract class Game extends Scene {
             HumanPlayer player = new HumanPlayer(Griddie.NAME);
             lobby.join(player);
 
-            connection.connect();
+            //connection.connect();
         }
     }
 
     public void startAiVsRemote() {
-        connection.connect();
+        //connection.connect();
 
         if (!connection.isConnected()) {
             System.out.println("Not possible to create connection");
         } else {
-            Player player = createAiPlayer();
-            lobby.join(player);
-
             connection.connect();
+            //connection.login(player);
         }
     }
 
@@ -92,9 +89,7 @@ public abstract class Game extends Scene {
         HumanPlayer player = new HumanPlayer("Jesse" + new Random().nextInt());
         lobby.join(player);
 
-        AIPlayer aiPlayer = new AIPlayer("AI", AIPlayer.Difficulty.DIFFICULTY_HARD);
-        aiPlayer.setGameAI(new TicTacToeAI(this, aiPlayer));
-        lobby.join(aiPlayer);
+        lobby.join(createAiPlayer());
 
         setActivePlayer(player);
     }
@@ -113,7 +108,7 @@ public abstract class Game extends Scene {
         onStart();
 
         started = true;
-
+        thread = new GameThread(this);
         thread.start();
         onStart.call();
     }
@@ -127,8 +122,17 @@ public abstract class Game extends Scene {
 
         activePlayer = null;
 
+
+
+
+
+
+
+
+
+
+        this.setBoard(this.createBoard());
         System.out.println("Game ended");
-        onEnd.call();
         onStop();
 
         activePlayer = null;
@@ -219,6 +223,6 @@ public abstract class Game extends Scene {
 
     protected abstract void onTick();
 
-    protected abstract AIPlayer createAiPlayer();
+    public abstract AIPlayer createAiPlayer();
 
 }

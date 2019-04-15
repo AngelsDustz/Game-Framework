@@ -21,6 +21,7 @@ public class HumanPlayer extends Player {
                 cell.addInteractListener(() -> {
                     if (isOnTurn() && getGame().moveIsValid(this, fX, fY)) {
                         getGame().playerMove(this, fX, fY);
+                        endTurn();
                     }
                 });
             }

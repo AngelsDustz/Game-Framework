@@ -1,4 +1,4 @@
-package group3.griddie.network.commands;
+package group3.griddie.networkOLD.commands;
 
 //command interface for the command classes
 @FunctionalInterface

@@ -20,11 +20,17 @@ public class Griddie extends Application {
 
     public final static String NAME = "Griddie";
 
+    private static Connection connection = new Connection();
+
+    public static final String NAME = "B3";
+
     @Override
     public void start(Stage primaryStage) throws Exception {
-        connection = new Connection();
         connection.connect();
-        connection.login();
+
+        if (connection.isConnected()) {
+            connection.login();
+        }
 
         Font.loadFont("assets/fonts/Fipps-Regular.otf", 12);
 

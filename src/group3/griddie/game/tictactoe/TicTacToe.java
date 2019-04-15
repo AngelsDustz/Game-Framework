@@ -110,8 +110,8 @@ public class TicTacToe extends Game {
     }
 
     @Override
-    protected AIPlayer createAiPlayer() {
-        AIPlayer aiPlayer = new AIPlayer(Griddie.NAME, AIPlayer.Difficulty.DIFFICULTY_HARD);
+    public AIPlayer createAiPlayer() {
+        AIPlayer aiPlayer = new AIPlayer("AI Player" + new Random().nextInt(), AIPlayer.Difficulty.DIFFICULTY_HARD);
         aiPlayer.setGameAI(new TicTacToeAI(this, aiPlayer));
         return aiPlayer;
     }

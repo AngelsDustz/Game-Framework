@@ -1,6 +1,6 @@
-package group3.griddie.network.commands;
+package group3.griddie.networkOLD.commands;
 
-import group3.griddie.network.NetworkMain;
+import group3.griddie.networkOLD.NetworkMain;
 
 public class SendForfeit implements Command {
     //access for the whole class

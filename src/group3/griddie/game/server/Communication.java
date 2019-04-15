@@ -153,6 +153,9 @@ public class Communication {
     }
 
     private void handleMatch(Map<String, String> data) {
+        Player player = game.createAiPlayer();
+        game.getLobby().join(player);
+
         OnlinePlayer onlinePlayer = new OnlinePlayer(data.get("OPPONENT"), this);
         game.getLobby().join(onlinePlayer);
 

@@ -35,7 +35,7 @@ public class Connection implements Runnable {
         System.out.println("Connecting to server");
 
         try {
-            socket = new Socket("145.33.225.170", 7791);
+            socket = new Socket("localhost", 7789);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 
@@ -73,7 +73,7 @@ public class Connection implements Runnable {
     }
 
     public void login() {
-        out.println("login " + Griddie.NAME + new Random().nextInt(30));
+        out.println("login " + Griddie.NAME);
     }
 
     public void subscribe(String game) {

@@ -1,8 +1,4 @@
-package group3.griddie.network;
-
-import group3.griddie.network.commands.SendCommandLogin;
-import group3.griddie.network.commands.SendCommandSubscribe;
-import group3.griddie.network.invoker.CommandInvoker;
+package group3.griddie.networkOLD;
 
 public class NetworkTester {
     private String IP = "134.209.93.232";

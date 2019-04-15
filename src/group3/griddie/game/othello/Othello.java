@@ -298,8 +298,8 @@ public class Othello extends Game {
     }
 
     @Override
-    protected AIPlayer createAiPlayer() {
-        AIPlayer aiPlayer = new AIPlayer("B3", AIPlayer.Difficulty.DIFFICULTY_HARD);
+    public AIPlayer createAiPlayer() {
+        AIPlayer aiPlayer = new AIPlayer(Griddie.NAME, AIPlayer.Difficulty.DIFFICULTY_HARD);
         aiPlayer.setGameAI(new OthelloAI(this, aiPlayer));
         return aiPlayer;
     }

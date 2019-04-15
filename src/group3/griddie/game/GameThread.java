@@ -9,10 +9,11 @@ public class GameThread extends Thread implements Runnable {
     public GameThread(Game game) {
         this.game = game;
     }
+    public boolean forceStop;
 
     @Override
     public void run() {
-        while (game.isRunning()) {
+        while (game.isRunning() && !forceStop) {
             Player currentPlayer = game.getActivePlayer();
             currentPlayer.turnEndEvent.addListener(this::touch);
 
@@ -32,6 +33,10 @@ public class GameThread extends Thread implements Runnable {
                 game.setActivePlayer(game.getNextPlayer());
             }
         }
+    }
+
+    public void setForceStop() {
+        forceStop = true;
     }
 
     private synchronized void touch() {
