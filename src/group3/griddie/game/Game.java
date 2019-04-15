@@ -121,6 +121,12 @@ public abstract class Game extends Scene {
     public final void stop() {
         started = false;
 
+        for (Player player : lobby.getPlayers()) {
+            lobby.kick(player);
+        }
+
+        activePlayer = null;
+
         System.out.println("Game ended");
         onEnd.call();
         onStop();
