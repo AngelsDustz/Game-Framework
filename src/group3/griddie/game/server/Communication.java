@@ -178,7 +178,7 @@ public class Communication {
     }
 
     public void handleYourTurn(Map<String, String> data) {
-
+        onYourTurnReceivedEvent.call();
     }
 
 }
