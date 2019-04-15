@@ -1,5 +1,6 @@
 package group3.griddie.view.game.sidebar;
 
+import group3.griddie.Griddie;
 import group3.griddie.controller.Controller;
 import group3.griddie.game.Game;
 import group3.griddie.view.View;
@@ -16,7 +17,7 @@ public class RestartView extends View {
         root_.getChildren().add(button);
 
         button.setOnMouseClicked(event -> {
-
-        });
+            Griddie.launchGame(game);
+    });
     }
 }

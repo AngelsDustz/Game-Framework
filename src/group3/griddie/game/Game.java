@@ -28,6 +28,7 @@ public abstract class Game extends Scene {
     private Board board;
     private GameThread thread;
     private boolean started;
+    public final Event onEnd;
 
     public Game(String name) {
         super(new AnchorPane());
@@ -36,6 +37,7 @@ public abstract class Game extends Scene {
 
         onMove = new ArgEvent<>();
         onStart = new Event();
+        onEnd = new Event();
 
         connection = new Connection();
         communication = new Communication(this, connection);
@@ -121,7 +123,7 @@ public abstract class Game extends Scene {
         started = false;
 
         System.out.println("Game ended");
-
+        onEnd.call();
         onStop();
     }
 
