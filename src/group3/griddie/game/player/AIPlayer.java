@@ -55,6 +55,7 @@ public class AIPlayer extends Player {
             if (predicted != null && getGame().moveIsValid(this, predicted.getX(), predicted.getY())) {
                 System.out.println("AI move: " + predicted);
                 this.getGame().playerMove(this, predicted.getX(), predicted.getY());
+                endTurn();
             } else if (predicted == null) {
                 endTurn();
             }
