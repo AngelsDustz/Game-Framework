@@ -40,7 +40,6 @@ public class OpponentSelectView extends View {
             ((LobbyController) controller).setRoot(pane);
             ((LobbyController) controller).setMenu(box);
             ((LobbyController) controller).removePane();
-
             gameView.getGame().startAiGame();
         });
 

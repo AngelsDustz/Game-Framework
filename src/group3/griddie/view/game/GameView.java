@@ -11,6 +11,7 @@ import group3.griddie.view.game.board.BoardView;
 import group3.griddie.view.game.menu.ChallengePlayerView;
 import group3.griddie.view.game.sidebar.OpponentSelectView;
 import group3.griddie.view.game.sidebar.QuitView;
+import group3.griddie.view.game.sidebar.RestartView;
 import group3.griddie.view.game.sidebar.RightBarGameView;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -49,6 +50,8 @@ public class GameView extends View {
         OpponentSelectView rightSidebar = new OpponentSelectView(this, root_, menu, (GridPane) challengePlayerView.getRoot());
         Pane topPane = new Pane();
         QuitView quit = new QuitView(new Pane(), new QuitController(), game);
+        RestartView restart = new RestartView(new Pane(), null, game);
+        VBox left = new VBox();
         Pane bottomPane = new Pane();
 
         //set sizes
@@ -86,7 +89,7 @@ public class GameView extends View {
         bottomMenuPane.setBackground(new Background(image));
         image = new BackgroundImage(new Image("/assets/images/middle.png"), null, null,null, null);
         boardView.setBackground(new Background(image));
-        quit.setBackground(new Background(image));
+        left.setBackground(new Background(image));
         rightSidebar.setBackground(new Background(image));
         boardViewRoot.setBackground(new Background(image));
 
@@ -97,7 +100,8 @@ public class GameView extends View {
         BorderPane.setAlignment(boardViewRoot, Pos.CENTER);
         root.setBottom(bottomPane);
         root.setTop(topPane);
-        root.setLeft(quit);
+        left.getChildren().addAll(quit, restart);
+        root.setLeft(left);
         if (game instanceof Othello){
             root.setRight(rightbarBox);
         }
