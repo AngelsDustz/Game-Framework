@@ -11,6 +11,6 @@ public class QuitController extends Controller {
         this.game = game;
     }
     public void quitGame(){
-        Griddie.launchGame(game);
+        Griddie.launchMenu();
     }
 }
