@@ -17,7 +17,7 @@ public class MainMenuButtonsView extends View {
         GridPane root_ = (GridPane) getRoot();
         MainMenuController controller_ = (MainMenuController) getController();
 
-        GameButton button1 = new GameButton("Orthello", GameButton.Size.MEDIUM, "text-button");
+        GameButton button1 = new GameButton("Othello", GameButton.Size.MEDIUM, "text-button");
         GameButton button2 = new GameButton("Tic-tac-toe", GameButton.Size.MEDIUM, "text-button");
         GameButton button3 = new GameButton("Quit", GameButton.Size.SMALL, "text-button");
 
