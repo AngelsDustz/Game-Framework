@@ -8,6 +8,7 @@ public class GameThread extends Thread implements Runnable {
 
     public GameThread(Game game) {
         this.game = game;
+        this.setDaemon(true);
     }
     public boolean forceStop;
 

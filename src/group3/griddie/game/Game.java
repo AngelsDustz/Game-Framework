@@ -94,6 +94,15 @@ public abstract class Game extends Scene {
         setActivePlayer(player);
     }
 
+    public void startHumanGame(){
+        HumanPlayer player = new HumanPlayer("Jesse" + new Random().nextInt());
+        lobby.join(player);
+
+        lobby.join(new HumanPlayer("Jesse" + new Random().nextInt()));
+
+        setActivePlayer(player);
+    }
+
     private void onPlayerJoined(Player player) {
         player.setGame(this);
         player.init();
